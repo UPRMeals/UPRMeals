@@ -5,6 +5,7 @@ import type { NextPage } from "next";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "@/styles/theme";
 import CssBaseline from "@mui/material/CssBaseline";
+import Navbar from "./components/navbar";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -20,6 +21,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return getLayout(
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Navbar />
       <Component {...pageProps} />
     </ThemeProvider>
   );

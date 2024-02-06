@@ -21,6 +21,7 @@ let theme = createTheme({
     background: {
       default: "#f0f0f0",
     },
+    // TODO: These colors are temporary
     primary: cyan,
     secondary: green,
   },
@@ -37,7 +38,6 @@ let theme = createTheme({
     MuiTypography: {
       defaultProps: {
         fontFamily: font,
-        color: "textPrimary",
       },
     },
   },
