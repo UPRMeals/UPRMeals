@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   TextField,
@@ -8,6 +8,7 @@ import {
   Stack,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { useAuthService } from "@/modules/auth/hooks/useAuthService";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -17,6 +18,17 @@ const LoginPage = () => {
     console.log("Username:", username);
     console.log("Password:", password);
   };
+
+  const authService = useAuthService();
+
+  useEffect(() => {
+    const callBackend = async () => {
+      const res = await authService.login({ test: "should reach the backend" });
+      console.log("res", res);
+    };
+
+    callBackend();
+  }, []);
 
   return (
     <Box sx={{ backgroundColor: "white", maxWidth: 500 }} padding={5}>
