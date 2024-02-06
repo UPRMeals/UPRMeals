@@ -1,12 +1,19 @@
-import { Controller, Post, Body } from '@nestjs/common';
-
-//we need security here with jwt bc these are not meant to be public
+import { Body, Controller, Get, Post, Request } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { Public } from './decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {
-  @Post('/login')
-  async login(@Body() dto): Promise<any> {
-    console.log('dto', dto);
-    return { result: 'first endpoint response' };
+  constructor(private authService: AuthService) {}
+
+  @Public()
+  @Post('login')
+  login(@Body() loginDto: Record<string, any>) {
+    return this.authService.login(loginDto.username, loginDto.password);
+  }
+
+  @Get('profile')
+  getProfile(@Request() req) {
+    return req.user;
   }
 }

@@ -12,8 +12,8 @@ export const useBaseAPI = () => {
   const request = async <T>(params: useBaseAPIProps) => {
     try {
       let url = `${backendUrl}/${params.url}`;
-      const request = await axios.request({ ...params, url });
-      return request.data.result as T;
+      const request = await axios.request<T>({ ...params, url });
+      return request.data;
     } catch (error: any) {
       console.log("AxiosError: ", error);
       throw error;
