@@ -22,4 +22,8 @@ After downloading Homebrew, you can use the following commands to download Yarn 
 
 To run the front-end, run the command `yarn dev` from the `UPRMeals/frontend` directory.
 
+## Backend
+
+To run the back-end, run the command `yarn start:dev` from the `UPRMeals/backend` directory.
+
 
