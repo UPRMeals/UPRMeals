@@ -22,12 +22,12 @@ const LoginPage = () => {
   const authService = useAuthService();
 
   useEffect(() => {
-    const callBackend = async () => {
-      const res = await authService.login({ test: "should reach the backend" });
-      console.log("res", res);
-    };
-
-    callBackend();
+    //TODO: Fix this
+    // const callBackend = async () => {
+    //   const res = await authService.login({ test: "should reach the backend" });
+    //   console.log("res", res);
+    // };
+    // callBackend();
   }, []);
 
   return (
