@@ -2,11 +2,10 @@ import { cyan, green } from "@mui/material/colors";
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 
 const font = [
-  "Sora",
+  "Roboto",
   "-apple-system",
   "BlinkMacSystemFont",
   '"Segoe UI"',
-  "Roboto",
   '"Helvetica Neue"',
   "Arial",
   "sans-serif",
@@ -22,8 +21,12 @@ let theme = createTheme({
       default: "#f0f0f0",
     },
     // TODO: These colors are temporary
-    primary: cyan,
-    secondary: green,
+    primary: {
+      main: "#35A576",
+    },
+    secondary: {
+      main: "#1B7F7D",
+    },
   },
   typography: {
     fontFamily: font,
