@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id              Int       @default(autoincrement()) @id
+  name            String?
+  lastName        String?
+  email           String    @unique
+  password        String   
+  createdAt       DateTime  @default(now())
+  studentNumber   String?   @unique
+  isStaff         Boolean   @default(false)
+  isAdmin         Boolean   @default(false)
+  removed         Boolean   @default(false)
+  orders          Order[]
+}
+
+model Order {
+  id              Int           @default(autoincrement()) @id
+  user            User?         @relation(fields: [userId], references: [id])
+  userId          Int?
+  status          String        @default("pending")
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @default(now())
+  removed         Boolean       @default(false)
+  orderItems      OrderItem[]
+}
+
+model OrderItem {
+  id              Int           @default(autoincrement()) @id
+  order           Order         @relation(fields: [orderId], references: [id])
+  orderId         Int
+  item            Item          @relation(fields: [itemId], references: [id])
+  itemId          Int
+  removed         Boolean       @default(false)
+}
+
+model Item {
+  id              Int           @default(autoincrement()) @id
+  name            String
+  description     String?
+  price           Float
+  type            String        @default("combo")
+  status          String        @default("available")
+  removed         Boolean       @default(false)
+  orders          OrderItem[]
+  menuItems       MenuItem[]
+}
+
+model Menu {
+  id              Int           @default(autoincrement()) @id
+  name            String
+  description     String
+  date            DateTime
+  removed         Boolean       @default(false)
+  menuItems       MenuItem[]
+}
+
+model MenuItem {
+  id              Int           @default(autoincrement()) @id
+  menu            Menu          @relation(fields: [menuId], references: [id])
+  menuId          Int
+  item            Item          @relation(fields: [itemId], references: [id])
+  itemId          Int
+  removed         Boolean       @default(false)
+}
