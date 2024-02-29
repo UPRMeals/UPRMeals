@@ -27,7 +27,7 @@ const devConfig = {
 };
 
 const prodConfig = {
-  nestBackendUrl: "",
+  nestBackendUrl: "https://uprmeals-backend.vercel.app",
 };
 
 const getApiConfig = (node_env: string) => {
