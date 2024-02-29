@@ -62,9 +62,9 @@ const Navbar = () => {
       color={"white"}
     >
       <Stack rowGap={2} pt={3}>
-        {navItems.map((item) => {
+        {navItems.map((item, index) => {
           return (
-            <Box>
+            <Box key={index}>
               <NavLink
                 title={item.text}
                 path={item.href}
@@ -103,8 +103,9 @@ const Navbar = () => {
           </Box>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             <Stack flexDirection={"row"} columnGap={2}>
-              {navItems.map((item: NavItemProps) => (
+              {navItems.map((item: NavItemProps, index) => (
                 <NavLink
+                  key={index}
                   title={item.text}
                   path={item.href}
                   currentPath={currentPath}
