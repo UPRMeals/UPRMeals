@@ -52,7 +52,7 @@ let theme = createTheme({
     },
     h3: {
       fontWeight: 400,
-      color: Colors.ColegioGreen,
+      color: Colors.Charcoal,
     },
     subtitle2: {
       fontWeight: 600,
