@@ -101,10 +101,10 @@ const Navbar = () => {
             maxHeight: 75,
           }}
         >
-          <Box mt={0.5}>
+          <Box mt={1}>
             <Link href={"/"}>
               <Image
-                src="/logo.jpeg"
+                src="/logo.png"
                 alt="UPRMeals"
                 layout="fixed"
                 objectFit="contain"

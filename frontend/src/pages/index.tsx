@@ -1,5 +1,6 @@
 import { Box, Button, Typography, Stack, useTheme } from "@mui/material";
 import Image from "next/legacy/image";
+import Link from "next/link";
 
 export default function HomePage() {
   const theme = useTheme();
@@ -68,23 +69,25 @@ export default function HomePage() {
             >
               Order Now
             </Button>
-            <Button
-              variant="outlined"
-              sx={{
-                color: "text.secondary",
-                borderColor: "text.secondary",
-                fontWeight: 600,
-                textTransform: "capitalize",
-                [theme.breakpoints.down("sm")]: {
-                  fontSize: 18,
-                },
-                [theme.breakpoints.up("sm")]: {
-                  fontSize: 20,
-                },
-              }}
-            >
-              View Menu
-            </Button>
+            <Link href="/menu">
+              <Button
+                variant="outlined"
+                sx={{
+                  color: "text.secondary",
+                  borderColor: "text.secondary",
+                  fontWeight: 600,
+                  textTransform: "capitalize",
+                  [theme.breakpoints.down("sm")]: {
+                    fontSize: 18,
+                  },
+                  [theme.breakpoints.up("sm")]: {
+                    fontSize: 20,
+                  },
+                }}
+              >
+                View Menu
+              </Button>
+            </Link>
           </Stack>
         </Stack>
       </Box>
