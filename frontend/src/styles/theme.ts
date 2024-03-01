@@ -1,5 +1,5 @@
-import { colors } from "@mui/material";
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
+import { createBreakpoints } from "@mui/system";
 
 enum Colors {
   Charcoal = "#042325",
@@ -10,6 +10,8 @@ enum Colors {
   OrangeSunset = "#C7421A",
   Red = "#E71D36",
 }
+
+const breakpoints = createBreakpoints({});
 
 let theme = createTheme({
   palette: {
@@ -41,6 +43,16 @@ let theme = createTheme({
     fontFamily: ["Poppins", "Bungee", "Open Sans"].join(","),
     h1: {
       fontWeight: 900,
+      color: Colors.Teal,
+    },
+    h2: {
+      fontWeight: 600,
+      color: Colors.Teal,
+      letterSpacing: 0.25,
+    },
+    h3: {
+      fontWeight: 400,
+      color: Colors.ColegioGreen,
     },
     subtitle2: {
       fontWeight: 600,
@@ -50,6 +62,41 @@ let theme = createTheme({
     MuiTypography: {
       defaultProps: {
         fontFamily: ["Poppins", "Bungee", "Open Sans"].join(","),
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          fontWeight: 600,
+          textTransform: "capitalize",
+          letterSpacing: 0.25,
+          [breakpoints.down("sm")]: {
+            fontSize: 18,
+          },
+          [breakpoints.up("sm")]: {
+            fontSize: 20,
+          },
+          "&.MuiButton-outlined": {
+            color: Colors.OrangeSunset,
+            borderColor: Colors.OrangeSunset,
+            "&:hover": {
+              backgroundColor: Colors.OrangeSunset,
+              color: "#ffff",
+            },
+          },
+          "&.MuiButton-contained": {
+            disableElevation: true,
+            color: "#fffdf9",
+            backgroundColor: Colors.OrangeSunset,
+            "&:hover": {
+              backgroundColor: Colors.Teal,
+              color: "#ffff",
+            },
+          },
+        },
+      },
+      defaultProps: {
+        disableElevation: true,
       },
     },
   },

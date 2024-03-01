@@ -80,7 +80,6 @@ const Navbar = () => {
                 currentPath={currentPath}
                 textProps={{
                   color: "white",
-                  fontWeight: 900,
                 }}
               />
             </Box>

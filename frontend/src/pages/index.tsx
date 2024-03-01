@@ -26,7 +26,7 @@ export default function HomePage() {
           />
         </Box>
         <Stack textAlign={"end"} alignItems="end">
-          <Typography variant="h1" fontFamily={"Bungee"} color="info.main">
+          <Typography variant="h1" fontFamily={"Bungee"}>
             ¿La fila está larga?
           </Typography>
           <Typography variant="h3">Pídelo aquí.</Typography>
@@ -51,42 +51,9 @@ export default function HomePage() {
             mt={5}
             alignSelf={{ xs: "center", md: "inherit" }}
           >
-            <Button
-              variant="contained"
-              disableElevation
-              sx={{
-                color: "#fffdf9",
-                backgroundColor: "text.secondary",
-                fontWeight: 600,
-                textTransform: "capitalize",
-                [theme.breakpoints.down("sm")]: {
-                  fontSize: 18,
-                },
-                [theme.breakpoints.up("sm")]: {
-                  fontSize: 20,
-                },
-              }}
-            >
-              Order Now
-            </Button>
+            <Button variant="contained">Order Now</Button>
             <Link href="/menu">
-              <Button
-                variant="outlined"
-                sx={{
-                  color: "text.secondary",
-                  borderColor: "text.secondary",
-                  fontWeight: 600,
-                  textTransform: "capitalize",
-                  [theme.breakpoints.down("sm")]: {
-                    fontSize: 18,
-                  },
-                  [theme.breakpoints.up("sm")]: {
-                    fontSize: 20,
-                  },
-                }}
-              >
-                View Menu
-              </Button>
+              <Button variant="outlined">View Menu</Button>
             </Link>
           </Stack>
         </Stack>

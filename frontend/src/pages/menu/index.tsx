@@ -87,9 +87,7 @@ export default function MenuPage() {
       </Stack>
 
       <Box pt={4}>
-        <Typography variant="h2" color="success.main">
-          Combinaciones
-        </Typography>
+        <Typography variant="h3">Combinaciones</Typography>
         <Stack
           direction={{ xs: "column", md: "row" }}
           gap={3}
@@ -107,9 +105,7 @@ export default function MenuPage() {
         </Stack>
       </Box>
       <Box pt={4}>
-        <Typography variant="h2" color="success.main">
-          Acompañantes
-        </Typography>
+        <Typography variant="h3">Acompañantes</Typography>
         <Stack
           flexDirection="row"
           display="flex"
@@ -123,9 +119,7 @@ export default function MenuPage() {
         </Stack>
       </Box>
       <Box pt={4}>
-        <Typography variant="h2" color="success.main">
-          Sandwiches
-        </Typography>
+        <Typography variant="h3">Sandwiches</Typography>
         <Stack
           direction={{ xs: "column", md: "row" }}
           gap={3}
