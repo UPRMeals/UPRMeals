@@ -1,15 +1,21 @@
 import React from "react";
-import { AppBar, Stack, SxProps, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  Stack,
+  SxProps,
+  Toolbar,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { Url } from "next/dist/shared/lib/router/router";
 import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-
-const drawerWidth = 240;
+import Image from "next/legacy/image";
 
 type NavItemProps = {
   text: string;
@@ -17,9 +23,8 @@ type NavItemProps = {
 };
 
 const navItems: NavItemProps[] = [
-  { text: "Orders", href: "/orders" },
-  { text: "Customers", href: "/customers" },
   { text: "Menu", href: "/menu" },
+  { text: "My Cart", href: "/cart" },
 ];
 
 const NavLink = ({
@@ -37,8 +42,10 @@ const NavLink = ({
   return (
     <Link href={path}>
       <Typography
-        color={isCurrentPath ? "primary" : "secondary"}
-        sx={{ ...textProps }}
+        fontSize={"1.25rem"}
+        fontWeight={600}
+        color={isCurrentPath ? "text.secondary" : "text.primary"}
+        sx={{ ...textProps, textTransform: "uppercase" }}
       >
         {title}
       </Typography>
@@ -50,6 +57,8 @@ const Navbar = () => {
   const router = useRouter();
   const currentPath = router.asPath;
   const [openDrawer, setOpenDrawer] = React.useState(false);
+  const theme = useTheme();
+  const largerScreen = useMediaQuery(theme.breakpoints.up("md"));
 
   const handleDrawerToggle = () => {
     setOpenDrawer((prevState) => !prevState);
@@ -83,24 +92,37 @@ const Navbar = () => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <AppBar>
-        <Toolbar sx={{ backgroundColor: "white" }}>
+      <AppBar elevation={0}>
+        <Toolbar
+          sx={{
+            backgroundColor: "background.default",
+            justifyContent: "space-between",
+            alignItems: "center",
+            maxHeight: 75,
+          }}
+        >
+          <Box mt={0.5}>
+            <Link href={"/"}>
+              <Image
+                src="/logo.jpeg"
+                alt="UPRMeals"
+                layout="fixed"
+                objectFit="contain"
+                height={largerScreen ? 100 : 55}
+                width={largerScreen ? 150 : 150}
+              />
+            </Link>
+          </Box>
           <IconButton
             color="primary"
             aria-label="open drawer"
-            edge="start"
+            edge="end"
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { sm: "none" } }}
           >
             <MenuIcon />
           </IconButton>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
-            <Link href={"/"}>
-              <Typography variant="h6" color={"primary.main"}>
-                UPRMeals
-              </Typography>
-            </Link>
-          </Box>
+
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             <Stack flexDirection={"row"} columnGap={2}>
               {navItems.map((item: NavItemProps, index) => (
@@ -119,6 +141,7 @@ const Navbar = () => {
         <Drawer
           open={openDrawer}
           onClose={handleDrawerToggle}
+          anchor="right"
           ModalProps={{
             keepMounted: true,
           }}
@@ -126,8 +149,8 @@ const Navbar = () => {
             display: { xs: "block", sm: "none" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
-              width: drawerWidth,
-              backgroundColor: "primary.main",
+              width: 300,
+              backgroundColor: "text.secondary",
             },
           }}
         >

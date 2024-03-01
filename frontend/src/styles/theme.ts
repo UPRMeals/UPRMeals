@@ -1,37 +1,46 @@
-import { cyan, green } from "@mui/material/colors";
+import { colors } from "@mui/material";
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 
-const font = [
-  "Roboto",
-  "-apple-system",
-  "BlinkMacSystemFont",
-  '"Segoe UI"',
-  '"Helvetica Neue"',
-  "Arial",
-  "sans-serif",
-  '"Apple Color Emoji"',
-  '"Segoe UI Emoji"',
-  '"Segoe UI Symbol"',
-].join(",");
+enum Colors {
+  Charcoal = "#042325",
+  BlueCharcoal = "#002A32",
+  ColegioGreen = "#009A44",
+  Teal = "#087F8C",
+  Gold = "#BB9F06",
+  OrangeSunset = "#C7421A",
+  Red = "#E71D36",
+}
 
 let theme = createTheme({
   palette: {
     mode: "light",
     background: {
-      default: "#f0f0f0",
+      default: "#fffdf9",
     },
-    // TODO: These colors are temporary
     primary: {
-      main: "#35A576",
+      main: Colors.Charcoal,
+    },
+    text: {
+      primary: Colors.Charcoal,
+      secondary: Colors.OrangeSunset,
     },
     secondary: {
-      main: "#1B7F7D",
+      main: Colors.BlueCharcoal,
+    },
+    warning: {
+      main: Colors.Red,
+    },
+    success: {
+      main: Colors.ColegioGreen,
+    },
+    info: {
+      main: Colors.Teal,
     },
   },
   typography: {
-    fontFamily: font,
+    fontFamily: ["Poppins", "Bungee", "Open Sans"].join(","),
     h1: {
-      fontWeight: 700,
+      fontWeight: 900,
     },
     subtitle2: {
       fontWeight: 600,
@@ -40,7 +49,7 @@ let theme = createTheme({
   components: {
     MuiTypography: {
       defaultProps: {
-        fontFamily: font,
+        fontFamily: ["Poppins", "Bungee", "Open Sans"].join(","),
       },
     },
   },
