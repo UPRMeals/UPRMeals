@@ -1,6 +1,6 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
-import type { ReactElement, ReactNode } from "react";
+import { useState, type ReactElement, type ReactNode, useEffect } from "react";
 import type { NextPage } from "next";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "@/styles/theme";
@@ -15,13 +15,20 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
+const noNavBarPaths = ["/"];
+
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
+  const [hasNavbar, setHasNavbar] = useState<boolean>(false);
   const getLayout = Component.getLayout ?? ((page) => page);
+
+  useEffect(() => {
+    setHasNavbar(!noNavBarPaths.includes(window?.location?.pathname ?? ""));
+  });
 
   return getLayout(
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Navbar />
+      {hasNavbar && <Navbar />}
       <Component {...pageProps} />
     </ThemeProvider>
   );
