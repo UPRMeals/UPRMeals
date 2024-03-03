@@ -15,7 +15,13 @@ export const signUpValidationSchema: Schema<SignUpFormType> = yup
     firstName: yup.string().required("First name is required"),
     lastName: yup.string().required("Last name is required"),
     email: yup.string().required("Email is required").email("Invalid email"),
-    password: yup.string().required("Password is required"),
+    password: yup
+      .string()
+      .required("Password is required")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
+        "Must contain 8 characters, one uppercase, one lowercase, and one number."
+      ),
     confirmPassword: yup.string().required("Password confirmation is required"),
   })
   .test("passwords-match", "Passwords must match.", function (values) {

@@ -6,10 +6,24 @@ import {
   signUpValidationSchema,
 } from "./config";
 import TextInput from "@/shared/components/inputs/TextInput";
+import { useAuthService } from "../hooks/useAuthService";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 const CustomerSignUp = () => {
-  const handleSubmit = (values: SignUpFormType) => {
-    console.log("submittinng values", values);
+  const [submitError, setSubmitError] = useState<string>("");
+
+  const authService = useAuthService();
+  const router = useRouter();
+
+  const handleSubmit = async (values: SignUpFormType) => {
+    const response = await authService.signUp(values);
+    if (response.error) {
+      setSubmitError(response.error);
+    } else {
+      localStorage.setItem("token", response.access_token);
+      router.push("/customers/menu");
+    }
   };
 
   const formik = useFormik<SignUpFormType>({
@@ -18,6 +32,7 @@ const CustomerSignUp = () => {
     onSubmit: handleSubmit,
   });
 
+  //TODO: Add Student number with the checkbox for being a student
   return (
     <Box
       display={"flex"}
@@ -30,6 +45,11 @@ const CustomerSignUp = () => {
       <Typography variant="h1" mb={5}>
         Sign Up
       </Typography>
+      {!!submitError && (
+        <Typography variant="body1" color="error">
+          {submitError}
+        </Typography>
+      )}
       <Stack direction="row" spacing={1} width="100%">
         <TextInput
           formik={formik}
