@@ -65,7 +65,7 @@ const CustomerLogIn = () => {
         Log In
       </Button>
       <Stack direction="row" gap={1} mt={2}>
-        <Typography variant="body1">Don't have an account?</Typography>
+        <Typography variant="body1">Don&apos;t have an account?</Typography>
         <Link
           component="button"
           variant="body1"
