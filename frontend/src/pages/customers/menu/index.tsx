@@ -9,13 +9,28 @@ import {
   CardHeader,
 } from "@mui/material";
 
-const ComboCards = ({ title, content }: { title: string; content: string }) => {
+const InfoCards = ({
+  title,
+  content,
+  price,
+}: {
+  title: string;
+  content: string;
+  price: number;
+}) => {
   return (
     <Card variant="outlined">
-      <CardHeader
-        title={title}
-        titleTypographyProps={{ color: "secondary.main" }}
-      />
+      <Box sx={{ p: 2 }}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Typography variant="h6">{title}</Typography>
+          <Typography variant="h6">${price}</Typography>
+        </Stack>
+      </Box>
+
       <CardContent>
         <Typography variant="body2">{content}</Typography>
       </CardContent>
@@ -29,16 +44,19 @@ export default function MenuPage() {
       title: "Combo Internacional",
       content: `This combo has the following things inside of it, lorem ipsum,
     lorem ipsum.`,
+      price: 4.99,
     },
     {
       title: "Combo Internacional",
       content: `This combo has the following things inside of it, lorem ipsum,
     lorem ipsum.`,
+      price: 4.99,
     },
     {
       title: "Combo Internacional",
       content: `This combo has the following things inside of it, lorem ipsum,
     lorem ipsum.`,
+      price: 4.99,
     },
   ];
 
@@ -47,16 +65,19 @@ export default function MenuPage() {
       title: "Jamon y Queso",
       content: `This combo has the following things inside of it, lorem ipsum,
     lorem ipsum.`,
+      price: 4.99,
     },
     {
       title: "Medianoche",
       content: `This combo has the following things inside of it, lorem ipsum,
     lorem ipsum.`,
+      price: 4.99,
     },
     {
       title: "Steak and Cheese",
       content: `This combo has the following things inside of it, lorem ipsum,
     lorem ipsum.`,
+      price: 4.99,
     },
   ];
 
@@ -96,10 +117,11 @@ export default function MenuPage() {
           pt={2}
         >
           {combos.map((combo) => (
-            <ComboCards
+            <InfoCards
               key={combo.title}
               title={combo.title}
               content={combo.content}
+              price={combo.price}
             />
           ))}
         </Stack>
@@ -128,10 +150,11 @@ export default function MenuPage() {
           pt={2}
         >
           {sandwiches.map((sandwich) => (
-            <ComboCards
+            <InfoCards
               key={sandwich.title}
               title={sandwich.title}
               content={sandwich.content}
+              price={sandwich.price}
             />
           ))}
         </Stack>
