@@ -16,15 +16,23 @@ import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Image from "next/legacy/image";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { grey } from "@mui/material/colors";
 
 type NavItemProps = {
   text: string;
   href: Url;
 };
 
-const navItems: NavItemProps[] = [
-  { text: "Menu", href: "/menu" },
+const navBarItems: NavItemProps[] = [
+  { text: "Menu", href: "/customers/menu" },
   { text: "My Cart", href: "/cart" },
+];
+
+const navDrawerItems: NavItemProps[] = [
+  { text: "Menu", href: "/customers/menu" },
+  { text: "My Cart", href: "/cart" },
+  { text: "Profile", href: "/customers/profile" },
 ];
 
 const NavLink = ({
@@ -71,7 +79,7 @@ const Navbar = () => {
       color={"white"}
     >
       <Stack rowGap={2} pt={3}>
-        {navItems.map((item, index) => {
+        {navDrawerItems.map((item, index) => {
           return (
             <Box key={index}>
               <NavLink
@@ -123,8 +131,8 @@ const Navbar = () => {
           </IconButton>
 
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            <Stack flexDirection={"row"} columnGap={2}>
-              {navItems.map((item: NavItemProps, index) => (
+            <Stack flexDirection={"row"} columnGap={2} alignItems={"center"}>
+              {navBarItems.map((item: NavItemProps, index) => (
                 <NavLink
                   key={index}
                   title={item.text}
@@ -132,6 +140,21 @@ const Navbar = () => {
                   currentPath={currentPath}
                 />
               ))}
+
+              <IconButton
+                onClick={() =>
+                  router.push(
+                    navDrawerItems.find((item) => item.text === "Profile")
+                      ?.href ?? ""
+                  )
+                }
+                sx={{ ml: 4 }}
+              >
+                <AccountCircleIcon
+                  fontSize={"large"}
+                  sx={{ color: grey[400] }}
+                />
+              </IconButton>
             </Stack>
           </Box>
         </Toolbar>
