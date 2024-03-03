@@ -25,6 +25,8 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     setHasNavbar(!noNavBarPaths.includes(window?.location?.pathname ?? ""));
   });
 
+  //TODO verify if authenticated
+
   return getLayout(
     <ThemeProvider theme={theme}>
       <CssBaseline />

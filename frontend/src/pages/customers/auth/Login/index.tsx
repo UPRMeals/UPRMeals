@@ -8,7 +8,7 @@ import {
   Stack,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { useAuthService } from "@/modules/auth/hooks/useAuthService";
+import { useAuthService } from "@/modules/customers/auth/hooks/useAuthService";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
