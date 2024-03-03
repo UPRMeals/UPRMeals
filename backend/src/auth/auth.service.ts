@@ -34,6 +34,7 @@ export class AuthService {
         isStaff: false,
         isActive: true,
         createdAt: new Date(),
+        lastLogin: new Date(),
       },
     });
     if (!user) {
@@ -49,20 +50,39 @@ export class AuthService {
     return { access_token };
   }
 
-  async login(
-    username: string,
-    pass: string,
-  ): Promise<{ access_token: string }> {
-    // const user = await this.usersService.findOne(username);
-    // //needs hashing, will probably use bcrypt
-    // if (user?.password !== pass) {
-    //   throw new UnauthorizedException();
-    // }
-    // const payload = { sub: user.userId, username: user.username };
-    return {
-      // access_token: await this.jwtService.signAsync(payload),
-      access_token: '',
+  async logIn(
+    userData: any,
+  ): Promise<{ access_token: string; error?: string }> {
+    const user = await this.prismaService.user.findUnique({
+      where: { email: userData.email.toLowerCase() },
+    });
+    if (!user) {
+      return {
+        access_token: '',
+        error: 'Email or password is incorrect.',
+      };
+    }
+
+    const passwordMatch = await this.comparePasswords(
+      userData.password,
+      user.password,
+    );
+    if (!passwordMatch) {
+      return { access_token: '', error: 'Email or password is incorrect.' };
+    }
+
+    await this.prismaService.user.update({
+      where: { id: user.id },
+      data: { isActive: true, lastLogin: new Date() },
+    });
+
+    const payload = {
+      userId: user.id,
+      sub: user.id.toString(),
+      username: user.username,
     };
+    const access_token = await this.jwtService.signAsync(payload);
+    return { access_token };
   }
 
   async hashPassword(password: string): Promise<string> {

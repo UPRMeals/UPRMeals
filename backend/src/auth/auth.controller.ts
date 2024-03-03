@@ -13,9 +13,9 @@ export class AuthController {
   }
 
   @Public()
-  @Post('login')
-  logIn(@Body() loginDto: Record<string, any>) {
-    return this.authService.login(loginDto.username, loginDto.password);
+  @Post('log-in')
+  logIn(@Body() loginDto: any) {
+    return this.authService.logIn(loginDto);
   }
 
   @Get('profile')
