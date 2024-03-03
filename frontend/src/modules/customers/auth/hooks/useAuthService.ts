@@ -1,5 +1,5 @@
 import { useBaseAPI } from "@/shared/hooks/useBaseAPI";
-import { SignUpFormType } from "../login/config";
+import { SignUpFormType } from "../signup/config";
 
 export const useAuthService = () => {
   const authControllerBase = "auth";
