@@ -1,22 +1,19 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/database/prisma.service';
 import * as bcrypt from 'bcrypt';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prismaService: PrismaService,
     private jwtService: JwtService,
+    private userService: UserService,
   ) {}
 
   async signUp(userData: any) {
-    const existingUser = await this.prismaService.user.findUnique({
-      where: {
-        email: userData.email.toLowerCase(),
-      },
-    });
+    const existingUser = await this.userService.getUserByEmail(userData.email);
 
     if (existingUser) {
       return { access_token: '', error: 'User already exists.' };
@@ -53,9 +50,8 @@ export class AuthService {
   async logIn(
     userData: any,
   ): Promise<{ access_token: string; error?: string }> {
-    const user = await this.prismaService.user.findUnique({
-      where: { email: userData.email.toLowerCase() },
-    });
+    const user = await this.userService.getUserByEmail(userData.email);
+
     if (!user) {
       return {
         access_token: '',
@@ -71,10 +67,7 @@ export class AuthService {
       return { access_token: '', error: 'Email or password is incorrect.' };
     }
 
-    await this.prismaService.user.update({
-      where: { id: user.id },
-      data: { isActive: true, lastLogin: new Date() },
-    });
+    await this.userService.logInUser(user.id);
 
     const payload = {
       userId: user.id,
