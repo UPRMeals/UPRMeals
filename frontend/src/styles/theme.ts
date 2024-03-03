@@ -13,7 +13,7 @@ enum Colors {
 
 const breakpoints = createBreakpoints({});
 
-let theme = createTheme({
+const defaultTheme = createTheme({
   palette: {
     mode: "light",
     background: {
@@ -76,22 +76,22 @@ let theme = createTheme({
           [breakpoints.up("sm")]: {
             fontSize: 20,
           },
-          "&.MuiButton-outlined": {
-            color: Colors.OrangeSunset,
-            borderColor: Colors.OrangeSunset,
-            "&:hover": {
-              backgroundColor: Colors.OrangeSunset,
-              color: "#ffff",
-            },
-          },
-          "&.MuiButton-contained": {
-            disableElevation: true,
-            color: "#fffdf9",
+        },
+        outlined: {
+          color: Colors.OrangeSunset,
+          borderColor: Colors.OrangeSunset,
+          "&:hover": {
             backgroundColor: Colors.OrangeSunset,
-            "&:hover": {
-              backgroundColor: Colors.Teal,
-              color: "#ffff",
-            },
+            color: "#ffff",
+          },
+        },
+        contained: {
+          disableElevation: true,
+          color: "#fffdf9",
+          backgroundColor: Colors.OrangeSunset,
+          "&:hover": {
+            backgroundColor: Colors.Teal,
+            color: "#ffff",
           },
         },
       },
@@ -99,9 +99,25 @@ let theme = createTheme({
         disableElevation: true,
       },
     },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          label: {
+            color: Colors.Charcoal,
+          },
+        },
+      },
+    },
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          color: Colors.Teal,
+        },
+      },
+    },
   },
 });
 
-theme = responsiveFontSizes(theme);
+const theme = responsiveFontSizes(defaultTheme);
 
 export default theme;

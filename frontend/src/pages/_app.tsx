@@ -16,6 +16,12 @@ type AppPropsWithLayout = AppProps & {
 };
 
 const noNavBarPaths = ["/"];
+const unAuthenticatedPaths = [
+  "/",
+  "/customers",
+  "customers/auth/login",
+  "customers/auth/signup",
+];
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const [hasNavbar, setHasNavbar] = useState<boolean>(false);

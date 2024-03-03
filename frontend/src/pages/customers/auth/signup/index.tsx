@@ -1,7 +1,7 @@
-import CustomerLogIn from "@/modules/customers/auth/login/CustomerLogIn";
+import CustomerSignUp from "@/modules/customers/auth/signup/CustomerSignUp";
 import { Box } from "@mui/material";
 
-const LoginPage = () => {
+const SignUpPage = () => {
   return (
     <Box
       py={10}
@@ -10,9 +10,9 @@ const LoginPage = () => {
       display={"flex"}
       justifyContent={"center"}
     >
-      <CustomerLogIn />
+      <CustomerSignUp />
     </Box>
   );
 };
 
-export default LoginPage;
+export default SignUpPage;
