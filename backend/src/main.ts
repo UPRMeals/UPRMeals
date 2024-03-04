@@ -13,7 +13,7 @@ async function bootstrap() {
     configService.get<string>('CORS_ALLOWED_LIST')?.split(',') ?? undefined;
 
   Logger.log(corsAllowedList, 'main.ts');
-  app.enableCors();
+  app.enableCors({ origin: corsAllowedList });
   await app.listen(3001);
 }
 
