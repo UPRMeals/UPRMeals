@@ -25,6 +25,7 @@ To run the front-end, run the command `yarn dev` from the `UPRMeals/frontend` di
 ## Backend
 
 To run the back-end, run the command `yarn start:dev` from the `UPRMeals/backend` directory.
+Make sure you have the database container running and have the latest migrations applied, to do this run `yarn prisma migrate dev` inside the backend directory.
 
 ### Database
 
