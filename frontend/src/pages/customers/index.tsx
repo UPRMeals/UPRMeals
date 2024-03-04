@@ -47,13 +47,13 @@ export default function CustomerHomePage() {
           </Box>
           <Stack
             direction="row"
-            spacing={3}
+            spacing={2}
             mt={5}
             alignSelf={{ xs: "center", md: "inherit" }}
           >
             <Button variant="contained">Order Now</Button>
             <Button
-              variant="outlined"
+              variant="text"
               onClick={() => router.push("/customers/menu")}
             >
               View Menu

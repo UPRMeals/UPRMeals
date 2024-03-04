@@ -29,7 +29,7 @@ const defaultTheme = createTheme({
     secondary: {
       main: Colors.BlueCharcoal,
     },
-    warning: {
+    error: {
       main: Colors.Red,
     },
     success: {
@@ -69,6 +69,7 @@ const defaultTheme = createTheme({
         root: {
           fontWeight: 600,
           textTransform: "capitalize",
+          borderRadius: 5,
           letterSpacing: 0.25,
           [breakpoints.down("sm")]: {
             fontSize: 18,
@@ -83,6 +84,7 @@ const defaultTheme = createTheme({
           "&:hover": {
             backgroundColor: Colors.OrangeSunset,
             color: "#ffff",
+            borderColor: Colors.OrangeSunset,
           },
         },
         contained: {
@@ -92,7 +94,11 @@ const defaultTheme = createTheme({
           "&:hover": {
             backgroundColor: Colors.Teal,
             color: "#ffff",
+            borderColor: Colors.Teal,
           },
+        },
+        text: {
+          color: Colors.OrangeSunset,
         },
       },
       defaultProps: {

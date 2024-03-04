@@ -1,6 +1,7 @@
 import React from "react";
 import {
   AppBar,
+  Badge,
   Stack,
   SxProps,
   Toolbar,
@@ -18,6 +19,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Image from "next/legacy/image";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { grey } from "@mui/material/colors";
+
+// TODO: Implement functionality
+export const isFlaggedAccount = true;
 
 type NavItemProps = {
   text: string;
@@ -150,10 +154,19 @@ const Navbar = () => {
                 }
                 sx={{ ml: 4 }}
               >
-                <AccountCircleIcon
-                  fontSize={"large"}
-                  sx={{ color: grey[400] }}
-                />
+                {isFlaggedAccount ? (
+                  <Badge badgeContent={1} color="error">
+                    <AccountCircleIcon
+                      fontSize={"large"}
+                      sx={{ color: grey[400] }}
+                    />
+                  </Badge>
+                ) : (
+                  <AccountCircleIcon
+                    fontSize={"large"}
+                    sx={{ color: grey[400] }}
+                  />
+                )}
               </IconButton>
             </Stack>
           </Box>
