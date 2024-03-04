@@ -73,8 +73,8 @@ export default function ProfilePage() {
         {isFlaggedAccount && (
           <Alert icon={<ErrorIcon fontSize="inherit" />} severity="error">
             Your account has been flagged. Please visit the cafeteria to resolve
-            this issue. You may resume acitivity upon the cafeteria staff
-            member's discretion.
+            this issue. You may resume acitivity upon the cafeteria staff member
+            {"'"}s discretion.
           </Alert>
         )}
 
