@@ -13,7 +13,7 @@ async function bootstrap() {
     configService.get<string>('CORS_ALLOWED_LIST')?.split(',') ?? undefined;
 
   Logger.log(corsAllowedList, 'main.ts');
-  app.enableCors({ allowedHeaders: ['content-type'], origin: corsAllowedList });
+  app.enableCors();
   await app.listen(3001);
 }
 
