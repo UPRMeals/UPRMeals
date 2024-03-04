@@ -43,7 +43,7 @@ export class AuthService {
       username: user.username,
       sub: user.id.toString(),
     };
-    const access_token = this.jwtService.signAsync(payload);
+    const access_token = await this.jwtService.signAsync(payload);
     return { access_token };
   }
 
