@@ -9,6 +9,7 @@ import {
   Tooltip,
   IconButton,
   Alert,
+  Grid,
 } from "@mui/material";
 import { deepPurple, amber, cyan, grey } from "@mui/material/colors";
 import PersonIcon from "@mui/icons-material/Person";
@@ -82,51 +83,65 @@ export default function ProfilePage() {
             <Box
               display="flex"
               justifyContent={{ xs: "center", md: "start" }}
-              p={{ md: 2 }}
+              p={{ xs: 3, md: 2 }}
             >
               <Stack>
-                <Stack
-                  direction={{ xs: "column", md: "row" }}
-                  display={"flex"}
-                  justifyContent={"space-between"}
-                >
-                  <Stack direction={{ xs: "column", md: "row" }}>
-                    <Stack alignSelf={{ xs: "center" }}>
-                      <Avatar
-                        sx={{
-                          bgcolor: pickIconColor(),
-                          width: 156,
-                          height: 156,
-                          fontSize: 120,
-                          fontFamily: "Bungee",
-                        }}
-                      >
-                        {name.charAt(0).toUpperCase()}
-                      </Avatar>
-                    </Stack>
-                    <Divider
-                      flexItem
-                      orientation="vertical"
-                      sx={{ display: { xs: "none", md: "block" }, mx: 4 }}
-                    />
-                    <Stack gap={3} alignSelf="center" mt={{ xs: 3, md: 0 }}>
-                      <IconDetailsRow icon={<PersonIcon />} text={name} />
-                      <IconDetailsRow icon={<EmailIcon />} text={email} />
-                      <IconDetailsRow
-                        icon={<PetsIcon />}
-                        text={formatStudentId(studentId)}
-                      />
-                    </Stack>
-                  </Stack>
-                  <Box
-                    justifySelf={"flex-end"}
-                    display={{ xs: "none", md: "block" }}
+                <Grid container>
+                  <Grid item order={{ xs: 1, md: 1 }} xs={10} md={2.5} lg={2}>
+                    <Avatar
+                      sx={{
+                        bgcolor: pickIconColor(),
+                        width: 156,
+                        height: 156,
+                        fontSize: 120,
+                        fontFamily: "Bungee",
+                      }}
+                    >
+                      {name.charAt(0).toUpperCase()}
+                    </Avatar>
+                  </Grid>
+                  <Grid
+                    item
+                    order={{ xs: 3, md: 2 }}
+                    xs={12}
+                    md={6.5}
+                    lg={8}
+                    display="flex"
+                    alignItems="center"
                   >
-                    <IconButton>
-                      <MoreVertIcon />
-                    </IconButton>
-                  </Box>
-                </Stack>
+                    <Box display="flex">
+                      <Divider
+                        flexItem
+                        orientation="vertical"
+                        sx={{ display: { xs: "none", md: "block" }, mx: 4 }}
+                      />
+
+                      <Stack gap={3} mt={{ xs: 3, md: 0 }}>
+                        <IconDetailsRow icon={<PersonIcon />} text={name} />
+                        <IconDetailsRow icon={<EmailIcon />} text={email} />
+                        <IconDetailsRow
+                          icon={<PetsIcon />}
+                          text={formatStudentId(studentId)}
+                        />
+                      </Stack>
+                    </Box>
+                  </Grid>
+                  <Grid
+                    item
+                    order={{ xs: 2, md: 3 }}
+                    xs={2}
+                    md={3}
+                    lg={2}
+                    display="flex"
+                    justifyContent={"flex-end"}
+                  >
+                    <Box>
+                      <IconButton>
+                        <MoreVertIcon />
+                      </IconButton>
+                    </Box>
+                  </Grid>
+                </Grid>
                 <Divider sx={{ display: { xs: "block", md: "none" }, mt: 3 }} />
                 <Stack mt={3}>
                   <Box display="flex" flexDirection="row" alignItems={"center"}>
