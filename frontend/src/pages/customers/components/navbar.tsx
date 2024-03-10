@@ -30,12 +30,12 @@ type NavItemProps = {
 
 const navBarItems: NavItemProps[] = [
   { text: "Menu", href: "/customers/menu" },
-  { text: "My Cart", href: "/cart" },
+  { text: "My Cart", href: "/customers/cart" },
 ];
 
 const navDrawerItems: NavItemProps[] = [
   { text: "Menu", href: "/customers/menu" },
-  { text: "My Cart", href: "/cart" },
+  { text: "My Cart", href: "/customers/cart" },
   { text: "Profile", href: "/customers/profile" },
 ];
 
