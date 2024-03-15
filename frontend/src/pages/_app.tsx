@@ -21,12 +21,14 @@ const noNavBarPaths = ["/"];
 const unAuthenticatedPaths = [
   "/",
   "/customers",
+  "/customers/menu",
   "/customers/auth/login",
   "/customers/auth/signup",
 ];
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const [hasNavbar, setHasNavbar] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const getLayout = Component.getLayout ?? ((page) => page);
 
   const isTokenValid = JWTUtils.isTokenValid;
@@ -36,15 +38,17 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     const checkAuth = async () => {
       const token = localStorage.getItem("token");
       const valid = isTokenValid(token);
-      if (!valid) {
+      if (
+        !valid &&
+        !unAuthenticatedPaths.includes(window?.location?.pathname ?? "")
+      ) {
         router.push(
           `/customers/auth/login?redirect=${window?.location?.pathname ?? ""}`
         );
       }
+      setIsAuthenticated(valid);
     };
-    if (!unAuthenticatedPaths.includes(window?.location?.pathname ?? "")) {
-      checkAuth();
-    }
+    checkAuth();
   }, [isTokenValid, router]);
 
   useEffect(() => {
@@ -54,7 +58,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return getLayout(
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {hasNavbar && <Navbar />}
+      {hasNavbar && <Navbar authenticated={isAuthenticated} />}
       <Component {...pageProps} />
     </ThemeProvider>
   );
