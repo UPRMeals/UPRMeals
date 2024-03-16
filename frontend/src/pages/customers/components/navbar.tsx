@@ -26,17 +26,12 @@ export const isFlaggedAccount = true;
 type NavItemProps = {
   text: string;
   href: Url;
+  requiresAuthentication: boolean;
 };
 
 const navBarItems: NavItemProps[] = [
-  { text: "Menu", href: "/customers/menu" },
-  { text: "My Cart", href: "/cart" },
-];
-
-const navDrawerItems: NavItemProps[] = [
-  { text: "Menu", href: "/customers/menu" },
-  { text: "My Cart", href: "/cart" },
-  { text: "Profile", href: "/customers/profile" },
+  { text: "Menu", href: "/customers/menu", requiresAuthentication: false },
+  { text: "My Cart", href: "/cart", requiresAuthentication: true },
 ];
 
 const NavLink = ({
@@ -65,7 +60,7 @@ const NavLink = ({
   );
 };
 
-const Navbar = () => {
+const Navbar = ({ authenticated }: { authenticated: boolean }) => {
   const router = useRouter();
   const currentPath = router.asPath;
   const [openDrawer, setOpenDrawer] = React.useState(false);
@@ -83,8 +78,9 @@ const Navbar = () => {
       color={"white"}
     >
       <Stack rowGap={2} pt={3}>
-        {navDrawerItems.map((item, index) => {
-          return (
+        {navBarItems.map((item: NavItemProps, index) =>
+          !item.requiresAuthentication ||
+          (item.requiresAuthentication && authenticated) ? (
             <Box key={index}>
               <NavLink
                 title={item.text}
@@ -95,8 +91,16 @@ const Navbar = () => {
                 }}
               />
             </Box>
-          );
-        })}
+          ) : null
+        )}
+        <NavLink
+          title={authenticated ? "Profile" : "Log In"}
+          path={authenticated ? "/customers/profile" : "/customers/auth/login"}
+          currentPath={currentPath}
+          textProps={{
+            color: "white",
+          }}
+        />
       </Stack>
     </Box>
   );
@@ -136,38 +140,44 @@ const Navbar = () => {
 
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             <Stack flexDirection={"row"} columnGap={2} alignItems={"center"}>
-              {navBarItems.map((item: NavItemProps, index) => (
-                <NavLink
-                  key={index}
-                  title={item.text}
-                  path={item.href}
-                  currentPath={currentPath}
-                />
-              ))}
+              {navBarItems.map((item: NavItemProps, index) =>
+                !item.requiresAuthentication ||
+                (item.requiresAuthentication && authenticated) ? (
+                  <NavLink
+                    key={index}
+                    title={item.text}
+                    path={item.href}
+                    currentPath={currentPath}
+                  />
+                ) : null
+              )}
 
-              <IconButton
-                onClick={() =>
-                  router.push(
-                    navDrawerItems.find((item) => item.text === "Profile")
-                      ?.href ?? ""
-                  )
-                }
-                sx={{ ml: 4 }}
-              >
-                {isFlaggedAccount ? (
-                  <Badge badgeContent={1} color="error">
+              {authenticated ? (
+                <IconButton
+                  onClick={() => router.push("/customers/profile")}
+                  sx={{ ml: 4 }}
+                >
+                  {isFlaggedAccount ? (
+                    <Badge badgeContent={1} color="error">
+                      <AccountCircleIcon
+                        fontSize={"large"}
+                        sx={{ color: grey[400] }}
+                      />
+                    </Badge>
+                  ) : (
                     <AccountCircleIcon
                       fontSize={"large"}
                       sx={{ color: grey[400] }}
                     />
-                  </Badge>
-                ) : (
-                  <AccountCircleIcon
-                    fontSize={"large"}
-                    sx={{ color: grey[400] }}
-                  />
-                )}
-              </IconButton>
+                  )}
+                </IconButton>
+              ) : (
+                <NavLink
+                  title={"Log In"}
+                  path={"/customers/auth/login"}
+                  currentPath={currentPath}
+                />
+              )}
             </Stack>
           </Box>
         </Toolbar>

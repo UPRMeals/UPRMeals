@@ -15,6 +15,7 @@ const CustomerLogIn = () => {
 
   const authService = useAuthService();
   const router = useRouter();
+  const redirectUrl = (router.query["redirect"] as string) ?? null;
 
   const handleSubmit = async (values: LogInFormType) => {
     const response = await authService.logIn(values);
@@ -22,7 +23,7 @@ const CustomerLogIn = () => {
       setSubmitError(response.error);
     } else {
       localStorage.setItem("token", response.access_token);
-      router.push("/customers/menu");
+      router.push(redirectUrl ?? "/customers/menu");
     }
   };
 

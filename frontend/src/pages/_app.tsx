@@ -6,6 +6,8 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "@/styles/theme";
 import CssBaseline from "@mui/material/CssBaseline";
 import Navbar from "./customers/components/navbar";
+import { JWTUtils } from "@/shared/utils/jwtUtils";
+import { useRouter } from "next/router";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -19,13 +21,35 @@ const noNavBarPaths = ["/"];
 const unAuthenticatedPaths = [
   "/",
   "/customers",
-  "customers/auth/login",
-  "customers/auth/signup",
+  "/customers/menu",
+  "/customers/auth/login",
+  "/customers/auth/signup",
 ];
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const [hasNavbar, setHasNavbar] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const getLayout = Component.getLayout ?? ((page) => page);
+
+  const isTokenValid = JWTUtils.isTokenValid;
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem("token");
+      const valid = isTokenValid(token);
+      if (
+        !valid &&
+        !unAuthenticatedPaths.includes(window?.location?.pathname ?? "")
+      ) {
+        router.push(
+          `/customers/auth/login?redirect=${window?.location?.pathname ?? ""}`
+        );
+      }
+      setIsAuthenticated(valid);
+    };
+    checkAuth();
+  }, [isTokenValid, router]);
 
   useEffect(() => {
     setHasNavbar(!noNavBarPaths.includes(window?.location?.pathname ?? ""));
@@ -34,7 +58,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return getLayout(
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {hasNavbar && <Navbar />}
+      {hasNavbar && <Navbar authenticated={isAuthenticated} />}
       <Component {...pageProps} />
     </ThemeProvider>
   );
