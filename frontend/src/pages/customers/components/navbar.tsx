@@ -154,12 +154,7 @@ const Navbar = ({ authenticated }: { authenticated: boolean }) => {
 
               {authenticated ? (
                 <IconButton
-                  onClick={() =>
-                    router.push(
-                      navBarItems.find((item) => item.text === "Profile")
-                        ?.href ?? ""
-                    )
-                  }
+                  onClick={() => router.push("/customers/profile")}
                   sx={{ ml: 4 }}
                 >
                   {isFlaggedAccount ? (
