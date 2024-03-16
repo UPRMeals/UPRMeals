@@ -10,15 +10,17 @@ import {
   IconButton,
   Alert,
   Grid,
+  CardActions,
+  Button,
 } from "@mui/material";
 import { deepPurple, amber, cyan, grey } from "@mui/material/colors";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
-import PetsIcon from "@mui/icons-material/Pets";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ErrorIcon from "@mui/icons-material/Error";
 import { isFlaggedAccount } from "../components/navbar";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { useRouter } from "next/router";
 
 const accountIconColors = [
   deepPurple[200],
@@ -44,6 +46,7 @@ const IconDetailsRow = ({
 };
 
 export default function ProfilePage() {
+  const router = useRouter();
   const name = "Tony Presidio";
   const email = "tony.presidio@upr.edu";
   const studentId = "802195678";
@@ -65,6 +68,11 @@ export default function ProfilePage() {
     );
 
     return formattedStudentId;
+  }
+
+  function handleLogout() {
+    localStorage.removeItem("token");
+    router.push("/customers");
   }
 
   return (
@@ -119,10 +127,6 @@ export default function ProfilePage() {
                       <Stack gap={3} mt={{ xs: 3, md: 0 }}>
                         <IconDetailsRow icon={<PersonIcon />} text={name} />
                         <IconDetailsRow icon={<EmailIcon />} text={email} />
-                        <IconDetailsRow
-                          icon={<PetsIcon />}
-                          text={formatStudentId(studentId)}
-                        />
                       </Stack>
                     </Box>
                   </Grid>
@@ -164,6 +168,11 @@ export default function ProfilePage() {
                 </Stack>
               </Stack>
             </Box>
+            <CardActions>
+              <Button variant="contained" onClick={handleLogout}>
+                Log Out
+              </Button>
+            </CardActions>
           </CardContent>
         </Card>
       </Stack>

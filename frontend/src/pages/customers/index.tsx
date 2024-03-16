@@ -61,7 +61,6 @@ export default function CustomerHomePage() {
           </Stack>
         </Stack>
       </Box>
-      {/* <LoginPage /> */}
     </Box>
   );
 }
