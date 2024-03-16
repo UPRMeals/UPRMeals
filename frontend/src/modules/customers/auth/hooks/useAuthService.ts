@@ -16,12 +16,12 @@ export const useAuthService = () => {
   ): Promise<{ access_token: string; error?: string }> =>
     baseApi({ url: `${authControllerBase}/log-in`, method: "POST", data });
 
-  const getProfile = async () =>
+  const logOut = async () =>
     baseApi({
-      url: `${authControllerBase}/profile`,
-      method: "GET",
+      url: `${authControllerBase}/log-out`,
+      method: "POST",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
 
-  return { signUp, logIn, getProfile };
+  return { signUp, logIn, logOut };
 };

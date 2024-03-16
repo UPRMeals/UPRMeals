@@ -18,6 +18,11 @@ export class AuthController {
     return this.authService.logIn(loginDto);
   }
 
+  @Post('log-out')
+  logOut(@Request() req) {
+    return this.authService.logOut(req.user.userId);
+  }
+
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;

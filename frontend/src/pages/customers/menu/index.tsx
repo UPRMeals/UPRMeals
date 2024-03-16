@@ -41,19 +41,19 @@ const InfoCards = ({
 export default function MenuPage() {
   const combos = [
     {
-      title: "Combo Internacional",
+      title: "Combo Internacional 1",
       content: `This combo has the following things inside of it, lorem ipsum,
     lorem ipsum.`,
       price: 4.99,
     },
     {
-      title: "Combo Internacional",
+      title: "Combo Internacional 2",
       content: `This combo has the following things inside of it, lorem ipsum,
     lorem ipsum.`,
       price: 4.99,
     },
     {
-      title: "Combo Internacional",
+      title: "Combo Internacional 3",
       content: `This combo has the following things inside of it, lorem ipsum,
     lorem ipsum.`,
       price: 4.99,
@@ -82,18 +82,18 @@ export default function MenuPage() {
   ];
 
   const sides = [
-    "Arroz con habichuelas",
-    "Papas majadas",
-    "tostones",
-    "ensalada de papa",
-    "Arroz con habichuelas",
-    "Papas majadas",
-    "tostones",
-    "ensalada de papa",
-    "Arroz con habichuelas",
-    "Papas majadas",
-    "tostones",
-    "ensalada de papa",
+    "Arroz con habichuelas 1",
+    "Papas majadas 1",
+    "tostones 1",
+    "ensalada de papa 1",
+    "Arroz con habichuelas 2",
+    "Papas majadas 2",
+    "tostones 2",
+    "ensalada de papa 2",
+    "Arroz con habichuelas 3",
+    "Papas majadas 3",
+    "tostones 3",
+    "ensalada de papa 3",
   ];
 
   return (
