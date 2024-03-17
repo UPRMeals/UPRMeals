@@ -2,17 +2,15 @@ import { Box, Button, Link, Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import TextInput from "@/shared/components/inputs/TextInput";
 import { useAuthService } from "../hooks/useAuthService";
-import { useState } from "react";
 import { useRouter } from "next/router";
 import {
   LogInFormType,
   logInInitialValues,
   logInValidationSchema,
 } from "./config";
+import toast from "react-hot-toast";
 
 const CustomerLogIn = () => {
-  const [submitError, setSubmitError] = useState<string>("");
-
   const authService = useAuthService();
   const router = useRouter();
   const redirectUrl = (router.query["redirect"] as string) ?? null;
@@ -20,7 +18,7 @@ const CustomerLogIn = () => {
   const handleSubmit = async (values: LogInFormType) => {
     const response = await authService.logIn(values);
     if (response.error) {
-      setSubmitError(response.error);
+      toast.error(response.error);
     } else {
       localStorage.setItem("token", response.access_token);
       router.push(redirectUrl ?? "/customers/menu");
@@ -45,11 +43,6 @@ const CustomerLogIn = () => {
       <Typography variant="h1" mb={5}>
         Log In
       </Typography>
-      {!!submitError && (
-        <Typography variant="body1" color="error">
-          {submitError}
-        </Typography>
-      )}
       <TextInput formik={formik} name="email" label="Email" required />
       <TextInput
         formik={formik}

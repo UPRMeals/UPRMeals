@@ -14,12 +14,19 @@ export const signUpValidationSchema: Schema<SignUpFormType> = yup
   .shape({
     firstName: yup.string().required("First name is required"),
     lastName: yup.string().required("Last name is required"),
-    email: yup.string().required("Email is required").email("Invalid email"),
+    email: yup
+      .string()
+      .required("Email is required")
+      .email("Invalid email")
+      .test("upr-email", "Email must belong to the UPR domain.", (value) => {
+        if (!value) return true;
+        return value.endsWith("@upr.edu");
+      }),
     password: yup
       .string()
       .required("Password is required")
       .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?!.*\s)(?=.{8,})/,
         "Must contain 8 characters, one uppercase, one lowercase, and one number."
       ),
     confirmPassword: yup.string().required("Password confirmation is required"),

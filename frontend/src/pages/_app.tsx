@@ -8,6 +8,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Navbar from "./customers/components/navbar";
 import { JWTUtils } from "@/shared/utils/jwtUtils";
 import { useRouter } from "next/router";
+import { Toaster } from "react-hot-toast";
+import ErrorProvider from "@/shared/providers/ErrorProvider";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -59,7 +61,17 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       {hasNavbar && <Navbar authenticated={isAuthenticated} />}
-      <Component {...pageProps} />
+      <ErrorProvider>
+        <Component {...pageProps} />
+      </ErrorProvider>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            padding: "12px",
+          },
+        }}
+      />
     </ThemeProvider>
   );
 }
