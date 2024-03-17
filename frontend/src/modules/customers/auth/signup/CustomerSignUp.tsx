@@ -7,12 +7,10 @@ import {
 } from "./config";
 import TextInput from "@/shared/components/inputs/TextInput";
 import { useAuthService } from "../hooks/useAuthService";
-import { useState } from "react";
 import { useRouter } from "next/router";
+import { toast } from "react-hot-toast";
 
 const CustomerSignUp = () => {
-  const [submitError, setSubmitError] = useState<string>("");
-
   const authService = useAuthService();
   const router = useRouter();
   const redirectUrl = (router.query["redirect"] as string) ?? null;
@@ -20,7 +18,7 @@ const CustomerSignUp = () => {
   const handleSubmit = async (values: SignUpFormType) => {
     const response = await authService.signUp(values);
     if (response.error) {
-      setSubmitError(response.error);
+      toast.error(response.error);
     } else {
       localStorage.setItem("token", response.access_token);
       router.push(redirectUrl ?? "/customers/menu");
@@ -45,11 +43,6 @@ const CustomerSignUp = () => {
       <Typography variant="h1" mb={5}>
         Sign Up
       </Typography>
-      {!!submitError && (
-        <Typography variant="body1" color="error">
-          {submitError}
-        </Typography>
-      )}
       <Stack direction="row" spacing={1} width="100%">
         <TextInput
           formik={formik}
