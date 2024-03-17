@@ -45,6 +45,7 @@ const NavLink = ({
   currentPath: string;
   textProps?: SxProps;
 }) => {
+  currentPath = currentPath.split("?")[0];
   const isCurrentPath = path === currentPath;
   return (
     <Link href={path}>
