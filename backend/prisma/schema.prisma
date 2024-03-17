@@ -17,7 +17,6 @@ model User {
   password        String   
   createdAt       DateTime  @default(now())
   lastLogin       DateTime  @default(now())
-  studentNumber   String?   @unique
   isStaff         Boolean   @default(false)
   isAdmin         Boolean   @default(false)
   isActive        Boolean   @default(false)
