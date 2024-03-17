@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../database/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { UserService } from '../user/user.service';
+import { LogInDto, SignUpDto } from './auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -16,21 +17,28 @@ export class AuthService {
     private userService: UserService,
   ) {}
 
-  async signUp(userData: any) {
+  async signUp(userData: SignUpDto) {
+    if (!userData.email.endsWith('@upr.edu')) {
+      return {
+        access_token: '',
+        error: 'Email must belong to the UPR domain.',
+      };
+    }
+
     const existingUser = await this.userService.getUserByEmail(userData.email);
 
     if (existingUser) {
       return { access_token: '', error: 'User already exists.' };
     }
 
-    const password = await this.hashPassword(userData.password);
+    const password = await this.hashPassword(userData.password.trim());
     const user = await this.prismaService.user.create({
       data: {
-        username: userData.email.toLowerCase(),
-        email: userData.email.toLowerCase(),
+        username: userData.email.toLowerCase().trim(),
+        email: userData.email.toLowerCase().trim(),
         password: password,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
+        firstName: userData.firstName.trim(),
+        lastName: userData.lastName.trim(),
         isAdmin: false,
         isStaff: false,
         isActive: true,
@@ -52,7 +60,7 @@ export class AuthService {
   }
 
   async logIn(
-    userData: any,
+    userData: LogInDto,
   ): Promise<{ access_token: string; error?: string }> {
     const user = await this.userService.getUserByEmail(userData.email);
 
@@ -64,8 +72,8 @@ export class AuthService {
     }
 
     const passwordMatch = await this.comparePasswords(
-      userData.password,
-      user.password,
+      userData.password.trim(),
+      user.password.trim(),
     );
     if (!passwordMatch) {
       return { access_token: '', error: 'Email or password is incorrect.' };

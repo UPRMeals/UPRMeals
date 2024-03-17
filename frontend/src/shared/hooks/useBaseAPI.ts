@@ -20,6 +20,7 @@ export const useBaseAPI = () => {
     } catch (error: any) {
       errorContext.displayError(error);
       console.log("AxiosError: ", error);
+      return error as T;
     }
   };
   return request;
