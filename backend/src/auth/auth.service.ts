@@ -73,7 +73,7 @@ export class AuthService {
 
     const passwordMatch = await this.comparePasswords(
       userData.password.trim(),
-      user.password.trim(),
+      user.password,
     );
     if (!passwordMatch) {
       return { access_token: '', error: 'Email or password is incorrect.' };
