@@ -33,7 +33,6 @@ const CustomerSignUp = () => {
     onSubmit: handleSubmit,
   });
 
-  //TODO: Add Student number with the checkbox for being a student
   return (
     <Box
       display={"flex"}

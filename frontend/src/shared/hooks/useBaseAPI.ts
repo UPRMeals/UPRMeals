@@ -1,4 +1,6 @@
 import axios, { Method } from "axios";
+import { useErrorContext } from "../providers/ErrorProvider";
+import toast from "react-hot-toast";
 
 interface useBaseAPIProps {
   url: string;
@@ -8,6 +10,7 @@ interface useBaseAPIProps {
 }
 
 export const useBaseAPI = () => {
+  const errorContext = useErrorContext();
   const backendUrl = getApiConfig(process.env.NODE_ENV).nestBackendUrl;
   const request = async <T>(params: useBaseAPIProps) => {
     try {
@@ -15,8 +18,8 @@ export const useBaseAPI = () => {
       const request = await axios.request<T>({ ...params, url });
       return request.data;
     } catch (error: any) {
+      errorContext.displayError(error);
       console.log("AxiosError: ", error);
-      throw error;
     }
   };
   return request;
