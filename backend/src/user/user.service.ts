@@ -51,4 +51,15 @@ export class UserService {
       isAdmin: user.isAdmin,
     };
   }
+
+  async removeUser(userId: number): Promise<{ success: boolean }> {
+    const user = await this.prismaService.user.update({
+      where: { id: userId },
+      data: { isActive: false, removed: true },
+    });
+
+    return {
+      success: user.removed,
+    };
+  }
 }

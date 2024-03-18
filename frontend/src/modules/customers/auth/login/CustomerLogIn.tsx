@@ -37,7 +37,7 @@ const CustomerLogIn = () => {
       flexDirection={"column"}
       justifyContent="center"
       alignItems="center"
-      width="40%"
+      width={{ xs: "70%", sm: "40%" }}
       rowGap={2}
     >
       <Typography variant="h1" mb={5}>
@@ -55,10 +55,11 @@ const CustomerLogIn = () => {
         variant="contained"
         onClick={formik.submitForm}
         disabled={!formik.isValid}
+        sx={{ width: { xs: "100%", sm: "auto" } }}
       >
         Log In
       </Button>
-      <Stack direction="row" gap={1} mt={2}>
+      <Stack direction="row" gap={1} mt={2} whiteSpace="nowrap">
         <Typography variant="body1">Don&apos;t have an account?</Typography>
         <Link
           component="button"
