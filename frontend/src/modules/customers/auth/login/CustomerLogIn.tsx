@@ -17,8 +17,10 @@ const CustomerLogIn = () => {
 
   const handleSubmit = async (values: LogInFormType) => {
     const response = await authService.logIn(values);
-    if (response.error) {
-      toast.error(response.error);
+    if (response?.error || !response?.access_token) {
+      toast.error(
+        response?.error ?? "An error occurred. Please try again later."
+      );
     } else {
       localStorage.setItem("token", response.access_token);
       router.push(redirectUrl ?? "/customers/menu");

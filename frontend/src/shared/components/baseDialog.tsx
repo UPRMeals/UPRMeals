@@ -71,7 +71,9 @@ export default function BaseDialog({
     >
       <DialogTitle id="responsive-dialog-title">{dialogTitle}</DialogTitle>
       <DialogContent>
-        <DialogContentText>{dialogContent}</DialogContentText>
+        <DialogContentText color={"text.primary"}>
+          {dialogContent}
+        </DialogContentText>
       </DialogContent>
       <DialogActions>
         {buttonDetails.primary.position === "left" ? (

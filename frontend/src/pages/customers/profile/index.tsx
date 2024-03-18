@@ -260,6 +260,9 @@ export default function ProfilePage() {
         }}
         handleSubmit={handleDelete}
         dialogTitle="Are you sure you would like to delete your account?"
+        dialogContent={`If you delete your account, you will no longer
+          be able to create an account with us using the same email address.
+           Please remember all email addresses must be a part of the UPR domain (@upr.edu).`}
         buttonDetails={{
           primary: { text: "No", position: "left" },
           secondary: { text: "Yes" },
