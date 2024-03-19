@@ -13,9 +13,16 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Grid from "@mui/material/Grid";
+import { Tooltip } from "@mui/material";
 
 const cartItems = [
-  { id: 1, title: "Combo Internacional", price: 4.99, quantity: 1 },
+  {
+    id: 1,
+    title: "Combo Internacional de Pollo con Papas Fritas",
+    price: 4.99,
+    quantity: 1,
+  },
   { id: 2, title: "Jamon y Queso", price: 4.99, quantity: 2 },
   // Add more items here
 ];
@@ -43,28 +50,41 @@ const CartItem = ({
   return (
     <Card variant="outlined" sx={{ mb: 2 }}>
       <CardContent>
-        <Stack
-          direction="row"
-          justifyContent="space-between"
+        <Grid
+          container
+          spacing={2}
           alignItems="center"
+          justifyContent="space-between"
         >
-          <Typography variant="h6">{item.title}</Typography>
-          <Stack direction="row" alignItems="center" spacing={1}>
+          <Grid item xs={4}>
+            <Tooltip title={item.title} placement="top" arrow>
+              <Typography variant="h6" noWrap>
+                {item.title}
+              </Typography>
+            </Tooltip>
+          </Grid>
+          <Grid item xs={4} textAlign="center">
             <IconButton onClick={() => onRemove(item)} size="small">
               <RemoveIcon />
             </IconButton>
-            <Typography>{item.quantity}</Typography>
+            <Typography sx={{ display: "inline", mx: 1 }}>
+              {item.quantity}
+            </Typography>
             <IconButton onClick={() => onAdd(item)} size="small">
               <AddIcon />
             </IconButton>
+          </Grid>
+          <Grid item xs={3} textAlign="right">
+            <Typography variant="h6">
+              ${(item.price * item.quantity).toFixed(2)}
+            </Typography>
+          </Grid>
+          <Grid item xs={1}>
             <IconButton onClick={() => onDelete(item)} size="small">
               <DeleteIcon />
             </IconButton>
-          </Stack>
-          <Typography variant="h6">
-            ${(item.price * item.quantity).toFixed(2)}
-          </Typography>
-        </Stack>
+          </Grid>
+        </Grid>
       </CardContent>
     </Card>
   );
@@ -122,7 +142,7 @@ export default function MyCartPage() {
             <Typography variant="h5" textAlign="right">
               Total: ${totalPrice.toFixed(2)}
             </Typography>
-            <Button variant="contained" fullWidth>
+            <Button variant="contained" fullWidth sx={{ mt: 2 }}>
               Order Now
             </Button>
           </Stack>
