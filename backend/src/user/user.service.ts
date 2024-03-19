@@ -21,6 +21,7 @@ export class UserService {
     const user = await this.prismaService.user.findUnique({
       where: {
         email: email.toLowerCase(),
+        removed: false,
       },
     });
 
@@ -49,6 +50,17 @@ export class UserService {
       isActive: user.isActive,
       isStaff: user.isStaff,
       isAdmin: user.isAdmin,
+    };
+  }
+
+  async removeUser(userId: number): Promise<{ success: boolean }> {
+    const user = await this.prismaService.user.update({
+      where: { id: userId },
+      data: { isActive: false, removed: true },
+    });
+
+    return {
+      success: user.removed,
     };
   }
 }

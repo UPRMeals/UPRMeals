@@ -13,12 +13,14 @@ import {
   CardActions,
   Button,
   CircularProgress,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import { deepPurple, amber, cyan, grey } from "@mui/material/colors";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import ErrorIcon from "@mui/icons-material/Error";
+import WarningIcon from "@mui/icons-material/Warning";
 import { isFlaggedAccount } from "../components/navbar";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useRouter } from "next/router";
@@ -26,8 +28,10 @@ import { useUserService } from "@/modules/customers/user/hooks/useUserService";
 import { useEffect, useState } from "react";
 import { UserProfile } from "../../../../../backend/src/user/user.dto";
 import { useAuthService } from "@/modules/customers/auth/hooks/useAuthService";
+import toast from "react-hot-toast";
+import BaseDialog from "@/shared/components/baseDialog";
 
-const accountIconColors = [
+const accountIconColors: string[] = [
   deepPurple[200],
   deepPurple[300],
   amber[400],
@@ -52,12 +56,31 @@ const IconDetailsRow = ({
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { getProfile } = useUserService();
+  const { getProfile, removeUser } = useUserService();
   const { logOut } = useAuthService();
+  const [letterColor, setLetterColor] = useState<string>();
   const [currUser, setCurrUser] = useState<UserProfile>();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const open = Boolean(anchorEl);
 
   const notes =
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  async function handleDelete() {
+    await removeUser();
+    toast.success("Successfully deleted account.");
+    localStorage.removeItem("token");
+    router.push("/customers");
+  }
 
   function pickIconColor() {
     const randNumber = Math.floor(Math.random() * accountIconColors.length);
@@ -70,6 +93,11 @@ export default function ProfilePage() {
     localStorage.removeItem("token");
     router.push("/customers");
   }
+
+  useEffect(() => {
+    const color = pickIconColor();
+    setLetterColor(color);
+  }, []);
 
   useEffect(() => {
     const getUserProfile = async () => {
@@ -87,7 +115,7 @@ export default function ProfilePage() {
       {currUser ? (
         <Stack gap={2}>
           {isFlaggedAccount && (
-            <Alert icon={<ErrorIcon fontSize="inherit" />} severity="error">
+            <Alert icon={<WarningIcon fontSize="inherit" />} severity="warning">
               Your account has been flagged. Please visit the cafeteria to
               resolve this issue. You may resume acitivity upon the cafeteria
               staff member
@@ -107,14 +135,14 @@ export default function ProfilePage() {
                     <Grid item order={{ xs: 1, md: 1 }} xs={10} md={2.5} lg={2}>
                       <Avatar
                         sx={{
-                          bgcolor: pickIconColor(),
+                          bgcolor: letterColor,
                           width: 156,
                           height: 156,
                           fontSize: 120,
                           fontFamily: "Bungee",
                         }}
                       >
-                        {currUser?.firstName.charAt(0).toUpperCase()}
+                        {currUser?.firstName?.charAt(0).toUpperCase()}
                       </Avatar>
                     </Grid>
                     <Grid
@@ -155,9 +183,34 @@ export default function ProfilePage() {
                       justifyContent={"flex-end"}
                     >
                       <Box>
-                        <IconButton>
+                        <IconButton onClick={handleMenuOpen}>
                           <MoreVertIcon />
                         </IconButton>
+                        <Menu
+                          id="basic-menu"
+                          anchorEl={anchorEl}
+                          open={open}
+                          onClose={handleMenuClose}
+                          MenuListProps={{
+                            "aria-labelledby": "basic-button",
+                          }}
+                          transformOrigin={{
+                            vertical: "top",
+                            horizontal: "right",
+                          }}
+                          anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "right",
+                          }}
+                          elevation={3}
+                        >
+                          <MenuItem
+                            onClick={() => setOpenDialog(true)}
+                            sx={{ color: "error.main" }}
+                          >
+                            Delete account
+                          </MenuItem>
+                        </Menu>
                       </Box>
                     </Grid>
                   </Grid>
@@ -200,6 +253,21 @@ export default function ProfilePage() {
       ) : (
         <CircularProgress />
       )}
+      <BaseDialog
+        open={openDialog}
+        handleClose={() => {
+          setOpenDialog(false);
+        }}
+        handleSubmit={handleDelete}
+        dialogTitle="Are you sure you would like to delete your account?"
+        dialogContent={`If you delete your account, you will no longer
+          be able to create an account with us using the same email address.
+           Please remember all email addresses must be a part of the UPR domain (@upr.edu).`}
+        buttonDetails={{
+          primary: { text: "No", position: "left" },
+          secondary: { text: "Yes" },
+        }}
+      />
     </Box>
   );
 }
