@@ -53,7 +53,8 @@ model Item {
   status          String        @default("available")
   removed         Boolean       @default(false)
   orders          OrderItem[]
-  menuItems       MenuItem[]
+  menuId          Int
+  menu            Menu        @relation(fields: [menuId], references: [id])
 }
 
 model Menu {
@@ -61,15 +62,7 @@ model Menu {
   name            String
   description     String
   date            DateTime
-  removed         Boolean       @default(false)
-  menuItems       MenuItem[]
+  removed         Boolean       @default(false)     
+  items           Item[]
 }
 
-model MenuItem {
-  id              Int           @default(autoincrement()) @id
-  menu            Menu          @relation(fields: [menuId], references: [id])
-  menuId          Int
-  item            Item          @relation(fields: [itemId], references: [id])
-  itemId          Int
-  removed         Boolean       @default(false)
-}
