@@ -60,7 +60,7 @@ model Item {
 model Menu {
   id              Int           @default(autoincrement()) @id
   name            String
-  description     String
+  description     String?
   date            DateTime
   createdAt       DateTime      @default(now())
   removed         Boolean       @default(false)     
