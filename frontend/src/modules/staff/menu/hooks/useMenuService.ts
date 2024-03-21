@@ -3,21 +3,26 @@ import {
   CreateMenuData,
   CreateMenuItemData,
   CreateMenuItemResponse,
-  CreateMenuResponse,
+  MenuResponse,
 } from "../../../../../../backend/src/menu/menu.dto";
 
 export const useMenuService = () => {
   const menuControllerBase = "menu";
   const baseApi = useBaseAPI();
 
-  const createMenu = async (
-    data: CreateMenuData
-  ): Promise<CreateMenuResponse> =>
+  const createMenu = async (data: CreateMenuData): Promise<MenuResponse> =>
     baseApi({
       url: `${menuControllerBase}/`,
       method: "POST",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       data,
+    });
+
+  const getMenu = async (menuId: number): Promise<MenuResponse> =>
+    baseApi({
+      url: `${menuControllerBase}/${menuId}/menu`,
+      method: "GET",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
 
   // TODO: Make sure this works - WIP
@@ -32,5 +37,5 @@ export const useMenuService = () => {
       data,
     });
 
-  return { createMenu, createMenuItem };
+  return { createMenu, getMenu, createMenuItem };
 };

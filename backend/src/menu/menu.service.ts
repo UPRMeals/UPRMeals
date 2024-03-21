@@ -1,14 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
-import { CreateMenuItemResponse, CreateMenuResponse } from './menu.dto';
+import { CreateMenuItemResponse, MenuResponse } from './menu.dto';
 
 @Injectable()
 export class MenuService {
   constructor(private prismaService: PrismaService) {}
 
-  async createMenu(data: Prisma.MenuCreateArgs): Promise<CreateMenuResponse> {
+  async createMenu(data: Prisma.MenuCreateArgs): Promise<MenuResponse> {
     const menu = await this.prismaService.menu.create(data);
+    return menu;
+  }
+
+  async getMenuById(menuId: number): Promise<MenuResponse> {
+    const menu = await this.prismaService.menu.findUnique({
+      where: { id: menuId, removed: false },
+    });
     return menu;
   }
 

@@ -4,7 +4,7 @@ export interface CreateMenuData {
   date: Date;
 }
 
-export interface CreateMenuResponse {
+export interface MenuResponse {
   id: number;
   name: string;
   description: string;
