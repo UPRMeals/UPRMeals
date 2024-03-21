@@ -10,17 +10,28 @@ import {
   IconButton,
   Alert,
   Grid,
+  CardActions,
+  Button,
+  CircularProgress,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import { deepPurple, amber, cyan, grey } from "@mui/material/colors";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
-import PetsIcon from "@mui/icons-material/Pets";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import ErrorIcon from "@mui/icons-material/Error";
+import WarningIcon from "@mui/icons-material/Warning";
 import { isFlaggedAccount } from "../components/navbar";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { useRouter } from "next/router";
+import { useUserService } from "@/modules/customers/user/hooks/useUserService";
+import { useEffect, useState } from "react";
+import { UserProfile } from "../../../../../backend/src/user/user.dto";
+import { useAuthService } from "@/modules/customers/auth/hooks/useAuthService";
+import toast from "react-hot-toast";
+import BaseDialog from "@/shared/components/baseDialog";
 
-const accountIconColors = [
+const accountIconColors: string[] = [
   deepPurple[200],
   deepPurple[300],
   amber[400],
@@ -44,11 +55,32 @@ const IconDetailsRow = ({
 };
 
 export default function ProfilePage() {
-  const name = "Tony Presidio";
-  const email = "tony.presidio@upr.edu";
-  const studentId = "802195678";
+  const router = useRouter();
+  const { getProfile, removeUser } = useUserService();
+  const { logOut } = useAuthService();
+  const [letterColor, setLetterColor] = useState<string>();
+  const [currUser, setCurrUser] = useState<UserProfile>();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const open = Boolean(anchorEl);
+
   const notes =
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  async function handleDelete() {
+    await removeUser();
+    toast.success("Successfully deleted account.");
+    localStorage.removeItem("token");
+    router.push("/customers");
+  }
 
   function pickIconColor() {
     const randNumber = Math.floor(Math.random() * accountIconColors.length);
@@ -56,117 +88,186 @@ export default function ProfilePage() {
     return accountIconColors[randNumber];
   }
 
-  function formatStudentId(studentId: string) {
-    const cleanStudentId = studentId.replace(/\D/g, "");
-
-    const formattedStudentId = cleanStudentId.replace(
-      /(\d{3})(\d{2})(\d{4})/,
-      "$1-$2-$3"
-    );
-
-    return formattedStudentId;
+  async function handleLogout() {
+    await logOut();
+    localStorage.removeItem("token");
+    router.push("/customers");
   }
+
+  useEffect(() => {
+    const color = pickIconColor();
+    setLetterColor(color);
+  }, []);
+
+  useEffect(() => {
+    const getUserProfile = async () => {
+      const user = await getProfile();
+      setCurrUser(user);
+    };
+
+    if (!currUser) {
+      getUserProfile();
+    }
+  }, [getProfile]);
 
   return (
     <Box mt={15} pb={10} px={5} justifyContent="center" display="flex">
-      <Stack gap={2}>
-        {isFlaggedAccount && (
-          <Alert icon={<ErrorIcon fontSize="inherit" />} severity="error">
-            Your account has been flagged. Please visit the cafeteria to resolve
-            this issue. You may resume acitivity upon the cafeteria staff member
-            {"'"}s discretion.
-          </Alert>
-        )}
+      {currUser ? (
+        <Stack gap={2}>
+          {isFlaggedAccount && (
+            <Alert icon={<WarningIcon fontSize="inherit" />} severity="warning">
+              Your account has been flagged. Please visit the cafeteria to
+              resolve this issue. You may resume acitivity upon the cafeteria
+              staff member
+              {"'"}s discretion.
+            </Alert>
+          )}
 
-        <Card sx={{ minWidth: "70%" }}>
-          <CardContent>
-            <Box
-              display="flex"
-              justifyContent={{ xs: "center", md: "start" }}
-              p={{ xs: 3, md: 2 }}
-            >
-              <Stack>
-                <Grid container>
-                  <Grid item order={{ xs: 1, md: 1 }} xs={10} md={2.5} lg={2}>
-                    <Avatar
-                      sx={{
-                        bgcolor: pickIconColor(),
-                        width: 156,
-                        height: 156,
-                        fontSize: 120,
-                        fontFamily: "Bungee",
-                      }}
+          <Card sx={{ minWidth: "70%" }}>
+            <CardContent>
+              <Box
+                display="flex"
+                justifyContent={{ xs: "center", md: "start" }}
+                p={{ xs: 3, md: 2 }}
+              >
+                <Stack>
+                  <Grid container>
+                    <Grid item order={{ xs: 1, md: 1 }} xs={10} md={2.5} lg={2}>
+                      <Avatar
+                        sx={{
+                          bgcolor: letterColor,
+                          width: 156,
+                          height: 156,
+                          fontSize: 120,
+                          fontFamily: "Bungee",
+                        }}
+                      >
+                        {currUser?.firstName?.charAt(0).toUpperCase()}
+                      </Avatar>
+                    </Grid>
+                    <Grid
+                      item
+                      order={{ xs: 3, md: 2 }}
+                      xs={12}
+                      md={6.5}
+                      lg={8}
+                      display="flex"
+                      alignItems="center"
                     >
-                      {name.charAt(0).toUpperCase()}
-                    </Avatar>
-                  </Grid>
-                  <Grid
-                    item
-                    order={{ xs: 3, md: 2 }}
-                    xs={12}
-                    md={6.5}
-                    lg={8}
-                    display="flex"
-                    alignItems="center"
-                  >
-                    <Box display="flex">
-                      <Divider
-                        flexItem
-                        orientation="vertical"
-                        sx={{ display: { xs: "none", md: "block" }, mx: 4 }}
-                      />
+                      <Box display="flex">
+                        <Divider
+                          flexItem
+                          orientation="vertical"
+                          sx={{ display: { xs: "none", md: "block" }, mx: 4 }}
+                        />
 
-                      <Stack gap={3} mt={{ xs: 3, md: 0 }}>
-                        <IconDetailsRow icon={<PersonIcon />} text={name} />
-                        <IconDetailsRow icon={<EmailIcon />} text={email} />
-                        <IconDetailsRow
-                          icon={<PetsIcon />}
-                          text={formatStudentId(studentId)}
-                        />
-                      </Stack>
-                    </Box>
-                  </Grid>
-                  <Grid
-                    item
-                    order={{ xs: 2, md: 3 }}
-                    xs={2}
-                    md={3}
-                    lg={2}
-                    display="flex"
-                    justifyContent={"flex-end"}
-                  >
-                    <Box>
-                      <IconButton>
-                        <MoreVertIcon />
-                      </IconButton>
-                    </Box>
-                  </Grid>
-                </Grid>
-                <Divider sx={{ display: { xs: "block", md: "none" }, mt: 3 }} />
-                <Stack mt={3}>
-                  <Box display="flex" flexDirection="row" alignItems={"center"}>
-                    <Typography variant="h6">
-                      <b>Notes</b>
-                    </Typography>
-                    <Tooltip
-                      title="These notes are added to your account by the cafeteria staff or an admin user."
-                      placement="top"
+                        <Stack gap={3} mt={{ xs: 3, md: 0 }}>
+                          <IconDetailsRow
+                            icon={<PersonIcon />}
+                            text={currUser.firstName + " " + currUser.lastName}
+                          />
+                          <IconDetailsRow
+                            icon={<EmailIcon />}
+                            text={currUser.email}
+                          />
+                        </Stack>
+                      </Box>
+                    </Grid>
+                    <Grid
+                      item
+                      order={{ xs: 2, md: 3 }}
+                      xs={2}
+                      md={3}
+                      lg={2}
+                      display="flex"
+                      justifyContent={"flex-end"}
                     >
-                      <IconButton>
-                        <InfoOutlinedIcon
-                          fontSize="small"
-                          sx={{ color: grey[400] }}
-                        />
-                      </IconButton>
-                    </Tooltip>
-                  </Box>
-                  <Typography> {notes}</Typography>
+                      <Box>
+                        <IconButton onClick={handleMenuOpen}>
+                          <MoreVertIcon />
+                        </IconButton>
+                        <Menu
+                          id="basic-menu"
+                          anchorEl={anchorEl}
+                          open={open}
+                          onClose={handleMenuClose}
+                          MenuListProps={{
+                            "aria-labelledby": "basic-button",
+                          }}
+                          transformOrigin={{
+                            vertical: "top",
+                            horizontal: "right",
+                          }}
+                          anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "right",
+                          }}
+                          elevation={3}
+                        >
+                          <MenuItem
+                            onClick={() => setOpenDialog(true)}
+                            sx={{ color: "error.main" }}
+                          >
+                            Delete account
+                          </MenuItem>
+                        </Menu>
+                      </Box>
+                    </Grid>
+                  </Grid>
+                  <Divider
+                    sx={{ display: { xs: "block", md: "none" }, mt: 3 }}
+                  />
+                  <Stack mt={3}>
+                    <Box
+                      display="flex"
+                      flexDirection="row"
+                      alignItems={"center"}
+                    >
+                      <Typography variant="h6">
+                        <b>Notes</b>
+                      </Typography>
+                      <Tooltip
+                        title="These notes are added to your account by the cafeteria staff or an admin user."
+                        placement="top"
+                      >
+                        <IconButton>
+                          <InfoOutlinedIcon
+                            fontSize="small"
+                            sx={{ color: grey[400] }}
+                          />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+                    <Typography> {notes}</Typography>
+                  </Stack>
                 </Stack>
-              </Stack>
-            </Box>
-          </CardContent>
-        </Card>
-      </Stack>
+              </Box>
+              <CardActions>
+                <Button variant="contained" onClick={handleLogout}>
+                  Log Out
+                </Button>
+              </CardActions>
+            </CardContent>
+          </Card>
+        </Stack>
+      ) : (
+        <CircularProgress />
+      )}
+      <BaseDialog
+        open={openDialog}
+        handleClose={() => {
+          setOpenDialog(false);
+        }}
+        handleSubmit={handleDelete}
+        dialogTitle="Are you sure you would like to delete your account?"
+        dialogContent={`If you delete your account, you will no longer
+          be able to create an account with us using the same email address.
+           Please remember all email addresses must be a part of the UPR domain (@upr.edu).`}
+        buttonDetails={{
+          primary: { text: "No", position: "left" },
+          secondary: { text: "Yes" },
+        }}
+      />
     </Box>
   );
 }

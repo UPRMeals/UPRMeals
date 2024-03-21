@@ -7,22 +7,23 @@ import {
 } from "./config";
 import TextInput from "@/shared/components/inputs/TextInput";
 import { useAuthService } from "../hooks/useAuthService";
-import { useState } from "react";
 import { useRouter } from "next/router";
+import { toast } from "react-hot-toast";
 
 const CustomerSignUp = () => {
-  const [submitError, setSubmitError] = useState<string>("");
-
   const authService = useAuthService();
   const router = useRouter();
+  const redirectUrl = (router.query["redirect"] as string) ?? null;
 
   const handleSubmit = async (values: SignUpFormType) => {
     const response = await authService.signUp(values);
-    if (response.error) {
-      setSubmitError(response.error);
+    if (response?.error || !response?.access_token) {
+      toast.error(
+        response?.error ?? "An error occurred. Please try again later."
+      );
     } else {
       localStorage.setItem("token", response.access_token);
-      router.push("/customers/menu");
+      router.push(redirectUrl ?? "/customers/menu");
     }
   };
 
@@ -32,25 +33,19 @@ const CustomerSignUp = () => {
     onSubmit: handleSubmit,
   });
 
-  //TODO: Add Student number with the checkbox for being a student
   return (
     <Box
       display={"flex"}
       flexDirection={"column"}
       justifyContent="center"
       alignItems="center"
-      width="40%"
+      width={{ xs: "70%", sm: "40%" }}
       rowGap={2}
     >
       <Typography variant="h1" mb={5}>
         Sign Up
       </Typography>
-      {!!submitError && (
-        <Typography variant="body1" color="error">
-          {submitError}
-        </Typography>
-      )}
-      <Stack direction="row" spacing={1} width="100%">
+      <Stack direction={{ xs: "column", sm: "row" }} gap={2} width="100%">
         <TextInput
           formik={formik}
           name="firstName"
@@ -78,10 +73,11 @@ const CustomerSignUp = () => {
         variant="contained"
         onClick={formik.submitForm}
         disabled={!formik.isValid}
+        sx={{ width: { xs: "100%", sm: "auto" } }}
       >
         Sign Up
       </Button>
-      <Stack direction="row" gap={1} mt={2}>
+      <Stack direction="row" gap={1} mt={2} whiteSpace="nowrap">
         <Typography variant="body1">Already have an account?</Typography>
         <Link
           component="button"

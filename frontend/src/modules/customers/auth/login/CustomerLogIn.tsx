@@ -2,27 +2,28 @@ import { Box, Button, Link, Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import TextInput from "@/shared/components/inputs/TextInput";
 import { useAuthService } from "../hooks/useAuthService";
-import { useState } from "react";
 import { useRouter } from "next/router";
 import {
   LogInFormType,
   logInInitialValues,
   logInValidationSchema,
 } from "./config";
+import toast from "react-hot-toast";
 
 const CustomerLogIn = () => {
-  const [submitError, setSubmitError] = useState<string>("");
-
   const authService = useAuthService();
   const router = useRouter();
+  const redirectUrl = (router.query["redirect"] as string) ?? null;
 
   const handleSubmit = async (values: LogInFormType) => {
     const response = await authService.logIn(values);
-    if (response.error) {
-      setSubmitError(response.error);
+    if (response?.error || !response?.access_token) {
+      toast.error(
+        response?.error ?? "An error occurred. Please try again later."
+      );
     } else {
       localStorage.setItem("token", response.access_token);
-      router.push("/customers/menu");
+      router.push(redirectUrl ?? "/customers/menu");
     }
   };
 
@@ -38,17 +39,12 @@ const CustomerLogIn = () => {
       flexDirection={"column"}
       justifyContent="center"
       alignItems="center"
-      width="40%"
+      width={{ xs: "70%", sm: "40%" }}
       rowGap={2}
     >
       <Typography variant="h1" mb={5}>
         Log In
       </Typography>
-      {!!submitError && (
-        <Typography variant="body1" color="error">
-          {submitError}
-        </Typography>
-      )}
       <TextInput formik={formik} name="email" label="Email" required />
       <TextInput
         formik={formik}
@@ -61,10 +57,11 @@ const CustomerLogIn = () => {
         variant="contained"
         onClick={formik.submitForm}
         disabled={!formik.isValid}
+        sx={{ width: { xs: "100%", sm: "auto" } }}
       >
         Log In
       </Button>
-      <Stack direction="row" gap={1} mt={2}>
+      <Stack direction="row" gap={1} mt={2} whiteSpace="nowrap">
         <Typography variant="body1">Don&apos;t have an account?</Typography>
         <Link
           component="button"

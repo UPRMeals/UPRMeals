@@ -17,7 +17,6 @@ model User {
   password        String   
   createdAt       DateTime  @default(now())
   lastLogin       DateTime  @default(now())
-  studentNumber   String?   @unique
   isStaff         Boolean   @default(false)
   isAdmin         Boolean   @default(false)
   isActive        Boolean   @default(false)
@@ -34,6 +33,7 @@ model Order {
   updatedAt       DateTime      @default(now())
   removed         Boolean       @default(false)
   orderItems      OrderItem[]
+  orderCombos     OrderCombo[]
 }
 
 model OrderItem {
@@ -45,32 +45,63 @@ model OrderItem {
   removed         Boolean       @default(false)
 }
 
+model OrderCombo {
+  id              Int           @default(autoincrement()) @id
+  order           Order         @relation(fields: [orderId], references: [id])
+  orderId         Int
+  combo           Combo          @relation(fields: [comboId], references: [id])
+  comboId         Int
+  removed         Boolean       @default(false)
+}
+
+model Combo {
+  id              Int           @default(autoincrement()) @id
+  name            String
+  description     String?
+  price           Float
+  status          String        @default("available")
+  removed         Boolean       @default(false)
+  orders          OrderCombo[]
+  menuId          Int
+  menu            Menu          @relation(fields: [menuId], references: [id])
+  items           ComboItem[]
+}
+
+model ComboItem {
+  id              Int           @default(autoincrement()) @id
+  combo           Combo         @relation(fields: [comboId], references: [id])
+  comboId         Int
+  item            Item          @relation(fields: [itemId], references: [id])
+  itemId          Int
+  removed         Boolean       @default(false)
+}
+
 model Item {
   id              Int           @default(autoincrement()) @id
   name            String
   description     String?
   price           Float
-  type            String        @default("combo")
+  type            ItemType      
   status          String        @default("available")
   removed         Boolean       @default(false)
   orders          OrderItem[]
-  menuItems       MenuItem[]
+  menuId          Int
+  menu            Menu          @relation(fields: [menuId], references: [id])
+  combos          ComboItem[]
 }
 
 model Menu {
   id              Int           @default(autoincrement()) @id
   name            String
-  description     String
+  description     String?
   date            DateTime
-  removed         Boolean       @default(false)
-  menuItems       MenuItem[]
+  createdAt       DateTime      @default(now())
+  removed         Boolean       @default(false)     
+  items           Item[]
+  combos          Combo[]
 }
 
-model MenuItem {
-  id              Int           @default(autoincrement()) @id
-  menu            Menu          @relation(fields: [menuId], references: [id])
-  menuId          Int
-  item            Item          @relation(fields: [itemId], references: [id])
-  itemId          Int
-  removed         Boolean       @default(false)
+enum ItemType {
+  SIDE
+  PROTEIN
 }
