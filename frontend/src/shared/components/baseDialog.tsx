@@ -30,7 +30,7 @@ export default function BaseDialog({
   handleClose: () => void;
   dialogTitle: string;
   buttonDetails: ButtonDetails;
-  dialogContent?: string;
+  dialogContent?: string | JSX.Element;
 }) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
