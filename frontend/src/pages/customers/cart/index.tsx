@@ -2,19 +2,28 @@ import React, { useState } from "react";
 import {
   Box,
   Typography,
-  Stack,
   Button,
-  Card,
-  CardContent,
   IconButton,
-  Divider,
   Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Tooltip,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Grid from "@mui/material/Grid";
-import { Tooltip } from "@mui/material";
+
+type CartItemType = {
+  id: number;
+  title: string;
+  price: number;
+  quantity: number;
+};
 
 const cartItems = [
   {
@@ -27,93 +36,31 @@ const cartItems = [
   // Add more items here
 ];
 
-type CartItemType = {
-  id: number;
-  title: string;
-  price: number;
-  quantity: number;
-};
-
-type CartItemArray = CartItemType[];
-
-const CartItem = ({
-  item,
-  onAdd,
-  onRemove,
-  onDelete,
-}: {
-  item: CartItemType;
-  onAdd: (item: CartItemType) => void;
-  onRemove: (item: CartItemType) => void;
-  onDelete: (item: CartItemType) => void;
-}) => {
-  return (
-    <Card variant="outlined" sx={{ mb: 2 }}>
-      <CardContent>
-        <Grid
-          container
-          spacing={2}
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <Grid item xs={4}>
-            <Tooltip title={item.title} placement="top" arrow>
-              <Typography variant="h6" noWrap>
-                {item.title}
-              </Typography>
-            </Tooltip>
-          </Grid>
-          <Grid item xs={4} textAlign="center">
-            <IconButton onClick={() => onRemove(item)} size="small">
-              <RemoveIcon />
-            </IconButton>
-            <Typography sx={{ display: "inline", mx: 1 }}>
-              {item.quantity}
-            </Typography>
-            <IconButton onClick={() => onAdd(item)} size="small">
-              <AddIcon />
-            </IconButton>
-          </Grid>
-          <Grid item xs={3} textAlign="right">
-            <Typography variant="h6">
-              ${(item.price * item.quantity).toFixed(2)}
-            </Typography>
-          </Grid>
-          <Grid item xs={1}>
-            <IconButton onClick={() => onDelete(item)} size="small">
-              <DeleteIcon />
-            </IconButton>
-          </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
-  );
-};
-
 export default function MyCartPage() {
-  const [items, setItems] = useState<CartItemArray>(cartItems);
+  const [items, setItems] = useState(cartItems);
 
   const handleAdd = (item: CartItemType) => {
-    const newItems = items.map((i) =>
-      i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+    setItems((prevItems) =>
+      prevItems.map((i) =>
+        i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+      )
     );
-    setItems(newItems);
   };
 
   const handleRemove = (item: CartItemType) => {
-    const newItems = items
-      .map((i) => (i.id === item.id ? { ...i, quantity: i.quantity - 1 } : i))
-      .filter((i) => i.quantity > 0);
-    setItems(newItems);
+    setItems((prevItems) =>
+      prevItems
+        .map((i) => (i.id === item.id ? { ...i, quantity: i.quantity - 1 } : i))
+        .filter((i) => i.quantity > 0)
+    );
   };
 
   const handleDelete = (item: CartItemType) => {
-    const newItems = items.filter((i) => i.id !== item.id);
-    setItems(newItems);
+    setItems((prevItems) => prevItems.filter((i) => i.id !== item.id));
   };
 
   const totalPrice = items.reduce(
-    (acc, item: CartItemType) => acc + item.quantity * item.price,
+    (acc, item) => acc + item.quantity * item.price,
     0
   );
 
@@ -122,32 +69,67 @@ export default function MyCartPage() {
       <Typography variant="h2" textAlign="center" mb={4}>
         My Cart
       </Typography>
-      <Box sx={{ background: "#f5f5f5", p: 3, borderRadius: "10px" }}>
-        {items.length === 0 ? (
-          <Typography variant="h6" textAlign="center">
-            Your cart is empty.
-          </Typography>
-        ) : (
-          <Stack spacing={3}>
+      <TableContainer
+        component={Paper}
+        sx={{ boxShadow: 3, overflowX: "auto" }}
+      >
+        <Table aria-label="cart table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Item</TableCell>
+              <TableCell align="center">Quantity</TableCell>
+              <TableCell align="right">Price</TableCell>
+              <TableCell align="right"></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {items.map((item) => (
-              <CartItem
-                key={item.id}
-                item={item}
-                onAdd={handleAdd}
-                onRemove={handleRemove}
-                onDelete={handleDelete}
-              />
+              <TableRow key={item.id}>
+                <TableCell component="th" scope="row">
+                  <Tooltip
+                    title={item.title}
+                    placement="top"
+                    enterDelay={500}
+                    leaveDelay={200}
+                  >
+                    <Typography noWrap>{item.title}</Typography>
+                  </Tooltip>
+                </TableCell>
+                <TableCell align="center">
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <IconButton onClick={() => handleRemove(item)} size="small">
+                      <RemoveIcon />
+                    </IconButton>
+                    <Typography sx={{ mx: 2 }}>{item.quantity}</Typography>
+                    <IconButton onClick={() => handleAdd(item)} size="small">
+                      <AddIcon />
+                    </IconButton>
+                  </Box>
+                </TableCell>
+                <TableCell align="right">
+                  ${(item.price * item.quantity).toFixed(2)}
+                </TableCell>
+                <TableCell align="right">
+                  <IconButton onClick={() => handleDelete(item)} size="small">
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
             ))}
-            <Divider />
-            <Typography variant="h5" textAlign="right">
-              Total: ${totalPrice.toFixed(2)}
-            </Typography>
-            <Button variant="contained" fullWidth sx={{ mt: 2 }}>
-              Order Now
-            </Button>
-          </Stack>
-        )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Box display="flex" justifyContent="space-between" my={2}>
+        <Typography variant="h5">Total:</Typography>
+        <Typography variant="h5">${totalPrice.toFixed(2)}</Typography>
       </Box>
+      <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
+        Order Now
+      </Button>
     </Container>
   );
 }
