@@ -32,10 +32,9 @@ export class MenuController {
   ) {
     // TODO: Validation for Req
     // TODO: Make sure this works - WIP
-    const menuItem = await this.menuService.createMenuItem({
-      data: { ...menuItemData, menuId: menuId },
-    });
-
-    return menuItem;
+    // const menuItem = await this.menuService.createMenuItem({
+    //   data: { ...menuItemData, menuId: menuId },
+    // });
+    // return menuItem;
   }
 }
