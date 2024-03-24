@@ -51,7 +51,12 @@ export default function CustomerHomePage() {
             mt={5}
             alignSelf={{ xs: "center", md: "inherit" }}
           >
-            <Button variant="contained">Order Now</Button>
+            <Button
+              variant="contained"
+              onClick={() => router.push("/customers/order")}
+            >
+              Order Now
+            </Button>
             <Button
               variant="text"
               onClick={() => router.push("/customers/menu")}

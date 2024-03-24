@@ -55,6 +55,7 @@ const defaultTheme = createTheme({
       color: Colors.Charcoal,
     },
     subtitle2: {
+      color: Colors.Charcoal,
       fontWeight: 600,
     },
   },

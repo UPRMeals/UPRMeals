@@ -1,10 +1,11 @@
 import { useBaseAPI } from "@/shared/hooks/useBaseAPI";
 import {
+  ActiveMenuResponse,
   CreateMenuData,
   CreateMenuItemData,
   CreateMenuItemResponse,
   MenuResponse,
-} from "../../../../../../backend/src/menu/menu.dto";
+} from "../../../../backend/src/menu/menu.dto";
 
 export const useMenuService = () => {
   const menuControllerBase = "menu";
@@ -25,6 +26,13 @@ export const useMenuService = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
 
+  const getActiveMenu = async (): Promise<ActiveMenuResponse> =>
+    baseApi({
+      url: `${menuControllerBase}/active-menu`,
+      method: "GET",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+
   // TODO: Make sure this works - WIP
   const createMenuItem = async (
     menuId: number,
@@ -37,5 +45,5 @@ export const useMenuService = () => {
       data,
     });
 
-  return { createMenu, getMenu, createMenuItem };
+  return { createMenu, getMenu, getActiveMenu, createMenuItem };
 };
