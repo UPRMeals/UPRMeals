@@ -24,18 +24,22 @@ export class MenuController {
     return menu;
   }
 
-  @Post(':menuId/item')
-  async createMenuItem(
+  @Get('menus')
+  async getAllMenus(@Request() req): Promise<MenuResponse[]> {
+    // TODO: Validation for Req
+    const menu = await this.menuService.getAllMenus();
+
+    return menu;
+  }
+
+  @Post('menus/:menuId/delete')
+  async deleteMenu(
     @Request() req,
     @Param('menuId') menuId: number,
-    @Body() menuItemData: CreateMenuItemData,
-  ) {
+  ): Promise<MenuResponse> {
     // TODO: Validation for Req
-    // TODO: Make sure this works - WIP
-    const menuItem = await this.menuService.createMenuItem({
-      data: { ...menuItemData, menuId: menuId },
-    });
+    const menu = await this.menuService.deleteMenu(menuId);
 
-    return menuItem;
+    return menu;
   }
 }

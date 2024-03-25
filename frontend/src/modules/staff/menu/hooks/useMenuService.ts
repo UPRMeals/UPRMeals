@@ -25,17 +25,19 @@ export const useMenuService = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
 
-  // TODO: Make sure this works - WIP
-  const createMenuItem = async (
-    menuId: number,
-    data: CreateMenuItemData
-  ): Promise<CreateMenuItemResponse> =>
+  const getAllMenus = async (): Promise<MenuResponse[]> =>
     baseApi({
-      url: `${menuControllerBase}/${menuId}/item`,
-      method: "POST",
+      url: `${menuControllerBase}/menus`,
+      method: "GET",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      data,
     });
 
-  return { createMenu, getMenu, createMenuItem };
+  const deleteMenu = async (menuId: number): Promise<MenuResponse> =>
+    baseApi({
+      url: `${menuControllerBase}/menus/${menuId}/delete`,
+      method: "POST",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+
+  return { createMenu, getMenu, getAllMenus, deleteMenu };
 };

@@ -19,13 +19,21 @@ export class MenuService {
     return menu;
   }
 
-  // TODO: Make sure this works - WIP
-  // This needs a menu item type
-  async createMenuItem(
-    data: Prisma.ItemCreateArgs,
-  ): Promise<CreateMenuItemResponse> {
-    const menuItem = await this.prismaService.item.create(data);
+  async getAllMenus(): Promise<MenuResponse[]> {
+    const menus = await this.prismaService.menu.findMany({
+      where: { removed: false },
+      orderBy: { date: 'desc' },
+    });
 
-    return menuItem;
+    return menus;
+  }
+
+  async deleteMenu(menuId: number): Promise<MenuResponse> {
+    const menu = await this.prismaService.menu.update({
+      where: { id: Number(menuId) },
+      data: { removed: true },
+    });
+
+    return menu;
   }
 }

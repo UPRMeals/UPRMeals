@@ -30,6 +30,7 @@ import { UserProfile } from "../../../../../backend/src/user/user.dto";
 import { useAuthService } from "@/modules/customers/auth/hooks/useAuthService";
 import toast from "react-hot-toast";
 import BaseDialog from "@/shared/components/baseDialog";
+import DropdownMenu from "@/shared/components/DropdownMenu";
 
 const accountIconColors: string[] = [
   deepPurple[200],
@@ -60,20 +61,10 @@ export default function ProfilePage() {
   const { logOut } = useAuthService();
   const [letterColor, setLetterColor] = useState<string>();
   const [currUser, setCurrUser] = useState<UserProfile>();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const open = Boolean(anchorEl);
 
   const notes =
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
-
-  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
 
   async function handleDelete() {
     await removeUser();
@@ -182,36 +173,14 @@ export default function ProfilePage() {
                       display="flex"
                       justifyContent={"flex-end"}
                     >
-                      <Box>
-                        <IconButton onClick={handleMenuOpen}>
-                          <MoreVertIcon />
-                        </IconButton>
-                        <Menu
-                          id="basic-menu"
-                          anchorEl={anchorEl}
-                          open={open}
-                          onClose={handleMenuClose}
-                          MenuListProps={{
-                            "aria-labelledby": "basic-button",
-                          }}
-                          transformOrigin={{
-                            vertical: "top",
-                            horizontal: "right",
-                          }}
-                          anchorOrigin={{
-                            vertical: "bottom",
-                            horizontal: "right",
-                          }}
-                          elevation={3}
-                        >
-                          <MenuItem
-                            onClick={() => setOpenDialog(true)}
-                            sx={{ color: "error.main" }}
-                          >
-                            Delete account
-                          </MenuItem>
-                        </Menu>
-                      </Box>
+                      <DropdownMenu
+                        menuItems={[
+                          {
+                            title: "Delete Account",
+                            onClick: () => setOpenDialog(true),
+                          },
+                        ]}
+                      />
                     </Grid>
                   </Grid>
                   <Divider
