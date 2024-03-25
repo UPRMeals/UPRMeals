@@ -48,6 +48,7 @@ const DropdownMenu = ({
         {menuItems.map((item) => {
           return (
             <MenuItem
+              key={item.title}
               onClick={() => handleMenuClose(item.onClick)}
               sx={{ color: "error.main" }}
             >

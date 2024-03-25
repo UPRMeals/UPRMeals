@@ -88,7 +88,11 @@ export default function MenusPage() {
             <TableHead>
               <TableRow>
                 {tableHeaders.map((header) => {
-                  return <TableCell variant="head">{header}</TableCell>;
+                  return (
+                    <TableCell key={header} variant="head">
+                      {header}
+                    </TableCell>
+                  );
                 })}
               </TableRow>
             </TableHead>
