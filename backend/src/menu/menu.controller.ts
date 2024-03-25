@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Request } from '@nestjs/common';
-import { CreateMenuData, CreateMenuItemData, MenuResponse } from './menu.dto';
+import { CreateMenuData, MenuResponse } from './menu.dto';
 import { MenuService } from './menu.service';
 
 @Controller('menu')
