@@ -1,4 +1,4 @@
-import { Item } from '@prisma/client';
+import { Item as PrismaItem } from '@prisma/client';
 
 export interface CreateMenuData {
   description?: string | null;
@@ -50,3 +50,5 @@ export interface Combo {
   proteins: Item[];
   sides: Item[];
 }
+
+export interface Item extends PrismaItem {}
