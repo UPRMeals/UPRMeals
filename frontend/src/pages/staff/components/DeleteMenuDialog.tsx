@@ -1,5 +1,5 @@
-import BaseDialog from "@/shared/components/baseDialog";
-import { useMenuService } from "@/modules/staff/menu/hooks/useMenuService";
+import BaseDialog from "../../../shared/components/baseDialog";
+import { useMenuService } from "../../../shared/hooks/useMenuService";
 import toast from "react-hot-toast";
 
 export default function DeleteMenuDialog({

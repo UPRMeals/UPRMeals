@@ -16,7 +16,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import { useEffect, useState } from "react";
 import CreateMenuDialog from "../components/CreateMenuDialog";
-import { useMenuService } from "@/modules/staff/menu/hooks/useMenuService";
+import { useMenuService } from "../../../shared/hooks/useMenuService";
 import { MenuResponse } from "../../../../../backend/src/menu/menu.dto";
 import { useRouter } from "next/router";
 import DropdownMenu from "@/shared/components/DropdownMenu";

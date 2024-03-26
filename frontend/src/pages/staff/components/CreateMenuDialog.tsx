@@ -1,7 +1,7 @@
 import { Stack } from "@mui/material";
-import BaseDialog from "@/shared/components/baseDialog";
-import { useMenuService } from "@/modules/staff/menu/hooks/useMenuService";
-import TextInput from "@/shared/components/inputs/TextInput";
+import BaseDialog from "../../../shared/components/baseDialog";
+import { useMenuService } from "../../../shared/hooks/useMenuService";
+import TextInput from "../../../shared/components/inputs/TextInput";
 import { useFormik } from "formik";
 import { Schema } from "yup";
 import * as yup from "yup";

@@ -1,9 +1,7 @@
-import { useBaseAPI } from "@/shared/hooks/useBaseAPI";
+import { useBaseAPI } from "../../shared/hooks/useBaseAPI";
 import {
   ActiveMenuResponse,
   CreateMenuData,
-  CreateMenuItemData,
-  CreateMenuItemResponse,
   MenuResponse,
 } from "../../../../backend/src/menu/menu.dto";
 
