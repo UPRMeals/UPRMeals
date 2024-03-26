@@ -1,7 +1,7 @@
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 import { createBreakpoints } from "@mui/system";
 
-enum Colors {
+export enum Colors {
   Charcoal = "#042325",
   BlueCharcoal = "#002A32",
   ColegioGreen = "#009A44",
@@ -17,7 +17,7 @@ const defaultTheme = createTheme({
   palette: {
     mode: "light",
     background: {
-      default: "#fffdf9",
+      default: "#f8f8fc",
     },
     primary: {
       main: Colors.Charcoal,
@@ -51,10 +51,11 @@ const defaultTheme = createTheme({
       letterSpacing: 0.25,
     },
     h3: {
-      fontWeight: 400,
-      color: Colors.Charcoal,
+      fontWeight: 500,
+      color: Colors.Teal,
     },
     subtitle2: {
+      color: Colors.Charcoal,
       fontWeight: 600,
     },
   },
