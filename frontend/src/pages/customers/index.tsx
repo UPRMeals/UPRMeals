@@ -1,3 +1,4 @@
+import { Colors } from "@/styles/theme";
 import { Box, Button, Typography, Stack } from "@mui/material";
 import Image from "next/legacy/image";
 import { useRouter } from "next/router";
@@ -29,7 +30,9 @@ export default function CustomerHomePage() {
           <Typography variant="h1" fontFamily={"Bungee"}>
             ¿La fila está larga?
           </Typography>
-          <Typography variant="h3">Pídelo aquí.</Typography>
+          <Typography variant="h3" color={Colors.Charcoal} fontWeight={400}>
+            Pídelo aquí.
+          </Typography>
           <Box
             sx={{ position: "relative" }}
             display={{ xs: "block", md: "none" }}
