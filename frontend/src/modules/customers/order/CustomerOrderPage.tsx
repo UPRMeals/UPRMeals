@@ -37,8 +37,8 @@ const CustomerOrderPage = () => {
         flexWrap="wrap"
         mb={2}
       >
-        {activeMenu?.combos?.map((combo: any) => (
-          <ComboCard combo={combo} />
+        {activeMenu?.combos?.map((combo: any, index) => (
+          <ComboCard key={index} combo={combo} />
         ))}
       </Stack>
       <Typography variant="h3">Proteinas</Typography>
@@ -52,8 +52,8 @@ const CustomerOrderPage = () => {
         flexWrap="wrap"
         mb={2}
       >
-        {activeMenu?.proteins?.map((protein: any) => (
-          <ItemCard item={protein} />
+        {activeMenu?.proteins?.map((protein: any, index) => (
+          <ItemCard key={index} item={protein} />
         ))}
       </Stack>
       <Typography variant="h3">Acompañantes</Typography>
@@ -67,8 +67,8 @@ const CustomerOrderPage = () => {
         flexWrap="wrap"
         pb={5}
       >
-        {activeMenu?.sides?.map((side: any) => (
-          <ItemCard item={side} />
+        {activeMenu?.sides?.map((side: any, index) => (
+          <ItemCard key={index} item={side} />
         ))}
       </Stack>
     </Box>

@@ -42,8 +42,9 @@ const ComboCard = ({ combo }: { combo: Combo }) => {
           Proteinas ({combo.proteinCount}):
         </Typography>
         <Stack direction="row" spacing={1} mt={1} useFlexGap flexWrap="wrap">
-          {combo.proteins.map((protein) => (
+          {combo.proteins.map((protein, index) => (
             <Chip
+              key={index}
               sx={{
                 backgroundColor: Colors.OrangeSunset + "33",
                 fontWeight: 600,
@@ -56,8 +57,9 @@ const ComboCard = ({ combo }: { combo: Combo }) => {
           Acompañantes ({combo.sideCount}):
         </Typography>
         <Stack direction="row" spacing={1} mt={1} useFlexGap flexWrap="wrap">
-          {combo.sides.map((side) => (
+          {combo.sides.map((side, index) => (
             <Chip
+              key={index}
               sx={{
                 backgroundColor: Colors.Teal + "33",
                 fontWeight: 600,
