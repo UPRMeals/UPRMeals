@@ -1,3 +1,5 @@
+import { Item as PrismaItem } from '@prisma/client';
+
 export interface CreateMenuData {
   description?: string | null;
   name: string;
@@ -30,3 +32,23 @@ export interface CreateMenuItemResponse {
   removed: boolean;
   menuId: number;
 }
+
+export interface ActiveMenuResponse {
+  name: string;
+  date: Date;
+  proteins: Item[];
+  sides: Item[];
+  combos: Combo[];
+}
+
+export interface Combo {
+  name: string;
+  description: string;
+  price: number;
+  proteinCount: number;
+  sideCount: number;
+  proteins: Item[];
+  sides: Item[];
+}
+
+export interface Item extends PrismaItem {}

@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Post, Request } from '@nestjs/common';
 import { CreateMenuData, MenuResponse } from './menu.dto';
 import { MenuService } from './menu.service';
+import { ItemType } from '@prisma/client';
 
 @Controller('menu')
 export class MenuController {
@@ -41,5 +42,10 @@ export class MenuController {
     const menu = await this.menuService.deleteMenu(menuId);
 
     return menu;
+  }
+
+  @Get('active-menu')
+  async getActiveMenu() {
+    return await this.menuService.getActiveMenu();
   }
 }

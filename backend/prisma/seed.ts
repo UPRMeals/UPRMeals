@@ -6,6 +6,7 @@ async function main() {
     data: {
       name: 'Menu Marzo 21, 2024',
       date: new Date('2024-03-21'),
+      isActive: true,
     },
   });
 
@@ -16,18 +17,24 @@ async function main() {
         description: 'Incluye agua o refresco de maquina.',
         price: 5.99,
         menuId: menu.id,
+        proteinCount: 1,
+        sideCount: 2,
       },
       {
         name: 'Estadounidense',
         description: 'Incluye agua o refresco de maquina.',
         price: 4.99,
         menuId: menu.id,
+        proteinCount: 1,
+        sideCount: 2,
       },
       {
         name: 'Mediterraneo',
         description: 'Incluye agua o refresco de maquina.',
         price: 6.49,
         menuId: menu.id,
+        proteinCount: 1,
+        sideCount: 2,
       },
     ],
   });

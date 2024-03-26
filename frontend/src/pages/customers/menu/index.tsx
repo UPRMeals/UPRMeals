@@ -8,6 +8,7 @@ import {
   Chip,
   CardHeader,
 } from "@mui/material";
+import { useRouter } from "next/router";
 
 const InfoCards = ({
   title,
@@ -39,6 +40,7 @@ const InfoCards = ({
 };
 
 export default function MenuPage() {
+  const router = useRouter();
   const combos = [
     {
       title: "Combo Internacional 1",
@@ -103,7 +105,12 @@ export default function MenuPage() {
           <Typography variant="h2">Menu de Hoy</Typography>
         </Box>
         <Box justifyContent={"center"} display="flex">
-          <Button variant="contained">Order Now</Button>
+          <Button
+            variant="contained"
+            onClick={() => router.push("/customers/order")}
+          >
+            Order Now
+          </Button>
         </Box>
       </Stack>
 

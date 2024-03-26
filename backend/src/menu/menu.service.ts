@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { ItemType, Prisma } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
-import { CreateMenuItemResponse, MenuResponse } from './menu.dto';
+import { ActiveMenuResponse, MenuResponse } from './menu.dto';
 
 @Injectable()
 export class MenuService {
@@ -24,8 +24,55 @@ export class MenuService {
       where: { removed: false },
       orderBy: { date: 'desc' },
     });
-
     return menus;
+  }
+
+  async getActiveMenu(): Promise<ActiveMenuResponse> {
+    const tempMenuResponse = await this.prismaService.menu.findFirst({
+      where: { isActive: true, removed: false },
+      include: {
+        items: true,
+        combos: {
+          include: { items: { include: { item: true } } },
+          orderBy: { price: 'asc' },
+        },
+      },
+    });
+    const sides = tempMenuResponse.items.filter(
+      (item) => item.type === ItemType.SIDE,
+    );
+
+    const proteins = tempMenuResponse.items.filter(
+      (item) => item.type === ItemType.PROTEIN,
+    );
+
+    const combos = tempMenuResponse.combos.map((combo) => {
+      return {
+        name: combo.name,
+        description: combo.description,
+        price: combo.price,
+        proteinCount: combo.proteinCount,
+        sideCount: combo.sideCount,
+        proteins: combo.items
+          .map(({ item }) => {
+            if (item.type === ItemType.PROTEIN) return item;
+          })
+          .filter(Boolean),
+        sides: combo.items
+          .map(({ item }) => {
+            if (item.type === ItemType.SIDE) return item;
+          })
+          .filter(Boolean),
+      };
+    });
+
+    return {
+      name: tempMenuResponse.name,
+      date: tempMenuResponse.date,
+      proteins,
+      sides,
+      combos,
+    };
   }
 
   async deleteMenu(menuId: number): Promise<MenuResponse> {
