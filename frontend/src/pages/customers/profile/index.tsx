@@ -178,6 +178,7 @@ export default function ProfilePage() {
                           {
                             title: "Delete Account",
                             onClick: () => setOpenDialog(true),
+                            color: "error.main",
                           },
                         ]}
                       />

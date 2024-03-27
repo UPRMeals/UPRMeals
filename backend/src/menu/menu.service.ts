@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ItemType, Prisma } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
-import { ActiveMenuResponse, MenuResponse } from './menu.dto';
+import {
+  ActiveMenuResponse,
+  MenuResponse,
+  GetAllMenusResponse,
+} from './menu.dto';
 
 @Injectable()
 export class MenuService {
@@ -19,11 +23,53 @@ export class MenuService {
     return menu;
   }
 
-  async getAllMenus(): Promise<MenuResponse[]> {
-    const menus = await this.prismaService.menu.findMany({
+  async getAllMenus(): Promise<GetAllMenusResponse[]> {
+    const menusResponse = await this.prismaService.menu.findMany({
       where: { removed: false },
       orderBy: { date: 'desc' },
+      include: {
+        items: { orderBy: { type: 'asc' } },
+        combos: {
+          include: { items: { include: { item: true } } },
+          orderBy: { price: 'asc' },
+        },
+      },
     });
+
+    const menus = menusResponse.map((menu) => {
+      const combos = menu.combos.map((combo) => {
+        return {
+          name: combo.name,
+          description: combo.description,
+          price: combo.price,
+          proteinCount: combo.proteinCount,
+          sideCount: combo.sideCount,
+          proteins: combo.items
+            .map(({ item }) => {
+              if (item.type === ItemType.PROTEIN) return item;
+            })
+            .filter(Boolean),
+          sides: combo.items
+            .map(({ item }) => {
+              if (item.type === ItemType.SIDE) return item;
+            })
+            .filter(Boolean),
+        };
+      });
+
+      return {
+        id: menu.id,
+        name: menu.name,
+        description: menu.description,
+        date: menu.date,
+        createdAt: menu.createdAt,
+        removed: menu.removed,
+        isActive: menu.isActive,
+        items: menu.items,
+        combos: combos,
+      };
+    });
+
     return menus;
   }
 
@@ -79,6 +125,21 @@ export class MenuService {
     const menu = await this.prismaService.menu.update({
       where: { id: Number(menuId) },
       data: { removed: true },
+    });
+
+    return menu;
+  }
+
+  async activateMenu(menuId: number): Promise<MenuResponse> {
+    // Deactivate any active menus
+    await this.prismaService.menu.updateMany({
+      where: { isActive: true },
+      data: { isActive: false },
+    });
+
+    const menu = await this.prismaService.menu.update({
+      where: { id: Number(menuId) },
+      data: { isActive: true },
     });
 
     return menu;

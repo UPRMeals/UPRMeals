@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { Box, IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { Colors } from "@/styles/theme";
 
-const DropdownMenu = ({
-  menuItems,
-}: {
-  menuItems: { title: string; onClick: () => void }[];
-}) => {
+export type MenuOptionType = {
+  title: string;
+  onClick: () => void;
+  color?: string;
+};
+
+const DropdownMenu = ({ menuItems }: { menuItems: MenuOptionType[] }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [open, setOpen] = useState(false);
 
@@ -50,7 +53,7 @@ const DropdownMenu = ({
             <MenuItem
               key={item.title}
               onClick={() => handleMenuClose(item.onClick)}
-              sx={{ color: "error.main" }}
+              sx={{ color: item.color ?? Colors.Charcoal }}
             >
               {item.title}
             </MenuItem>

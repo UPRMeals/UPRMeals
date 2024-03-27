@@ -2,7 +2,7 @@ import BaseDialog from "../../../shared/components/baseDialog";
 import { useMenuService } from "../../../shared/hooks/useMenuService";
 import toast from "react-hot-toast";
 
-export default function DeleteMenuDialog({
+export default function ActivateMenuDialog({
   open,
   handleClose,
   menuId,
@@ -11,13 +11,13 @@ export default function DeleteMenuDialog({
   handleClose: () => void;
   menuId: number;
 }) {
-  const { deleteMenu } = useMenuService();
+  const { activateMenu } = useMenuService();
 
   async function handleSubmit() {
-    const menu = await deleteMenu(menuId);
+    const menu = await activateMenu(menuId);
 
     if (menu.id) {
-      toast.success("Menú borrado.");
+      toast.success("Menú activado.");
     }
 
     handleClose();
@@ -28,11 +28,11 @@ export default function DeleteMenuDialog({
       open={open}
       handleClose={handleClose}
       handleSubmit={handleSubmit}
-      dialogTitle="¿Borrar menu?"
-      dialogContent={`¿Estás seguro de que deseas eliminar este menú? Una vez borrado, no se podrá acceder a él.`}
+      dialogTitle="¿Activar menu?"
+      dialogContent={`¿Estás seguro de que deseas activar este menú? Se desactivara el menu actual.`}
       buttonDetails={{
-        primary: { text: "No", position: "left" },
-        secondary: { text: "Sí" },
+        primary: { text: "Sí", position: "right" },
+        secondary: { text: "No" },
       }}
     />
   );

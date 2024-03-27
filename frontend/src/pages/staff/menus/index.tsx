@@ -12,27 +12,29 @@ import {
   IconButton,
   Collapse,
   Typography,
+  Stack,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useEffect, useState } from "react";
 import CreateMenuDialog from "../components/CreateMenuDialog";
 import { useMenuService } from "../../../shared/hooks/useMenuService";
-import { MenuResponse } from "../../../../../backend/src/menu/menu.dto";
+import { GetAllMenusResponse } from "../../../../../backend/src/menu/menu.dto";
 import { useRouter } from "next/router";
-import DropdownMenu from "@/shared/components/DropdownMenu";
+import DropdownMenu, { MenuOptionType } from "@/shared/components/DropdownMenu";
 import DeleteMenuDialog from "../components/DeleteMenuDialog";
 import { lightGreen } from "@mui/material/colors";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { Colors } from "@/styles/theme";
-import { cyan } from "@mui/material/colors";
+import { indigo } from "@mui/material/colors";
+import ActivateMenuDialog from "../components/ActivateMenuDialog";
 
 export default function MenusPage() {
   const { getAllMenus } = useMenuService();
   const [openCreateMenuDialog, setOpenCreateMenuDialog] = useState(false);
   const [openDeleteMenuDialog, setOpenDeleteMenuDialog] = useState(false);
+  const [openActivateMenuDialog, setOpenActivateMenuDialog] = useState(false);
   const [selectedMenuId, setSelectedMenuId] = useState<number>();
-  const [allMenus, setAllMenus] = useState<MenuResponse[]>();
+  const [allMenus, setAllMenus] = useState<GetAllMenusResponse[]>();
   const router = useRouter();
 
   useEffect(() => {
@@ -56,34 +58,37 @@ export default function MenusPage() {
     switch (selectedOption) {
       case "delete":
         setOpenDeleteMenuDialog(true);
+        break;
+      case "activate":
+        setOpenActivateMenuDialog(true);
+        break;
     }
   }
 
-  const Row = ({ menu }: { menu: MenuResponse }) => {
+  const Row = ({ menu }: { menu: GetAllMenusResponse }) => {
     const [openRow, setOpenRow] = useState(false);
     const selectedGrey = "#f1f1f166";
-    const menuStatus: "Active" | "Inactive" = "Active";
 
-    //Placeholder Items
-    const menuItems = [
+    const dropdownMenuOptions: MenuOptionType[] = [
       {
-        name: "Arroz Blanco",
-        price: 1.99,
-        type: "side",
-      },
-      {
-        name: "Arroz Blanco",
-        price: 1.99,
-        type: "side",
+        title: "Delete Menu",
+        onClick: () => handleMenuOptionsClick("delete", menu.id),
+        color: "error.main",
       },
     ];
+
+    if (!menu.isActive) {
+      dropdownMenuOptions.push({
+        title: "Marcar como activo",
+        onClick: () => handleMenuOptionsClick("activate", menu.id),
+      });
+    }
 
     return (
       <>
         <TableRow
           key={menu.name}
           sx={{
-            //"&:last-child td, &:last-child th": { border: 0 },
             "& > *": {
               borderBottom: "unset",
             },
@@ -103,10 +108,9 @@ export default function MenusPage() {
           <TableCell>{new Date(menu.date).toLocaleDateString()}</TableCell>
           <TableCell>
             <Chip
-              label="Active"
+              label={menu.isActive ? "Activo" : "Inactivo"}
               sx={{
-                backgroundColor:
-                  menuStatus === "Active" ? lightGreen[600] : cyan[400],
+                backgroundColor: menu.isActive ? lightGreen[500] : indigo[400],
                 color: "white",
               }}
             />
@@ -128,51 +132,81 @@ export default function MenusPage() {
             </ButtonBase>
           </TableCell>
           <TableCell sx={{ width: 4 }}>
-            <DropdownMenu
-              menuItems={[
-                {
-                  title: "Delete Menu",
-                  onClick: () => handleMenuOptionsClick("delete", menu.id),
-                },
-              ]}
-            />
+            <DropdownMenu menuItems={dropdownMenuOptions} />
           </TableCell>
         </TableRow>
         <TableRow sx={{ backgroundColor: openRow ? selectedGrey : null }}>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
             <Collapse in={openRow} timeout="auto" unmountOnExit>
               <Box sx={{ my: 2, pl: "10%" }} width="90%">
-                <Typography
-                  gutterBottom
-                  component="div"
-                  sx={{
-                    fontSize: 18,
-                    fontWeight: 600,
-                    color: Colors.Charcoal,
-                  }}
-                >
-                  Contenido
-                </Typography>
-                <Table size="small" aria-label="purchases">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Nombre</TableCell>
-                      <TableCell>Tipo</TableCell>
-                      <TableCell align="right">Precio</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {menuItems.map((item) => (
-                      <TableRow key={item.name}>
-                        <TableCell component="th" scope="row">
-                          {item.name}
-                        </TableCell>
-                        <TableCell>{item.type}</TableCell>
-                        <TableCell align="right">{item.price}</TableCell>
+                {menu?.description?.length > 0 ? (
+                  <Stack direction="row" pb={2} mt={-1}>
+                    <Typography
+                      component="div"
+                      variant="body2"
+                      sx={{ fontWeight: 600 }}
+                    >
+                      Descripción: &nbsp;
+                    </Typography>
+                    <Typography component="div" variant="body2">
+                      {menu.description}
+                    </Typography>
+                  </Stack>
+                ) : (
+                  <></>
+                )}
+
+                {menu.items.length > 0 && (
+                  <Table size="small" aria-label="purchases">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Nombre</TableCell>
+                        <TableCell>Tipo</TableCell>
+                        <TableCell align="right">Precio</TableCell>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHead>
+                    <TableBody>
+                      {menu.items.map((item) => (
+                        <TableRow key={item.name}>
+                          <TableCell component="th" scope="row">
+                            {item.name}
+                          </TableCell>
+                          <TableCell>{item.type}</TableCell>
+                          <TableCell align="right">{item.price}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
+                {menu.combos.length > 0 && (
+                  <Box sx={{ pt: 4 }}>
+                    <Typography sx={{ fontWeight: 600, mb: 1 }}>
+                      Combinaciones:
+                    </Typography>
+                    <Table size="small" aria-label="purchases">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Nombre</TableCell>
+                          <TableCell># Proteínas</TableCell>
+                          <TableCell># Acompañantes</TableCell>
+                          <TableCell align="right">Precio</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {menu.combos.map((combo) => (
+                          <TableRow key={combo.name}>
+                            <TableCell component="th" scope="row">
+                              {combo.name}
+                            </TableCell>
+                            <TableCell>{combo.proteinCount}</TableCell>
+                            <TableCell>{combo.sideCount}</TableCell>
+                            <TableCell align="right">{combo.price}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </Box>
+                )}
               </Box>
             </Collapse>
           </TableCell>
@@ -232,7 +266,7 @@ export default function MenusPage() {
             </TableHead>
             <TableBody>
               {allMenus ? (
-                allMenus.map((menu: MenuResponse) => <Row menu={menu} />)
+                allMenus.map((menu: GetAllMenusResponse) => <Row menu={menu} />)
               ) : (
                 <></>
               )}
@@ -248,14 +282,24 @@ export default function MenusPage() {
         }}
       />
       {selectedMenuId ? (
-        <DeleteMenuDialog
-          open={openDeleteMenuDialog}
-          handleClose={async () => {
-            setOpenDeleteMenuDialog(false);
-            setAllMenus(await getAllMenus());
-          }}
-          menuId={selectedMenuId}
-        />
+        <>
+          <DeleteMenuDialog
+            open={openDeleteMenuDialog}
+            handleClose={async () => {
+              setOpenDeleteMenuDialog(false);
+              setAllMenus(await getAllMenus());
+            }}
+            menuId={selectedMenuId}
+          />
+          <ActivateMenuDialog
+            open={openActivateMenuDialog}
+            handleClose={async () => {
+              setOpenActivateMenuDialog(false);
+              setAllMenus(await getAllMenus());
+            }}
+            menuId={selectedMenuId}
+          />
+        </>
       ) : null}
     </Box>
   );

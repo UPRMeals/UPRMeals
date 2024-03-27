@@ -3,6 +3,7 @@ import {
   ActiveMenuResponse,
   CreateMenuData,
   MenuResponse,
+  GetAllMenusResponse,
 } from "../../../../backend/src/menu/menu.dto";
 
 export const useMenuService = () => {
@@ -31,7 +32,7 @@ export const useMenuService = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
 
-  const getAllMenus = async (): Promise<MenuResponse[]> =>
+  const getAllMenus = async (): Promise<GetAllMenusResponse[]> =>
     baseApi({
       url: `${menuControllerBase}/menus`,
       method: "GET",
@@ -45,5 +46,19 @@ export const useMenuService = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
 
-  return { createMenu, getMenu, getAllMenus, deleteMenu, getActiveMenu };
+  const activateMenu = async (menuId: number): Promise<MenuResponse> =>
+    baseApi({
+      url: `${menuControllerBase}/menus/${menuId}/activate`,
+      method: "POST",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+
+  return {
+    createMenu,
+    getMenu,
+    getAllMenus,
+    deleteMenu,
+    getActiveMenu,
+    activateMenu,
+  };
 };

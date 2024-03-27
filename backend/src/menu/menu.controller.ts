@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Param, Post, Request } from '@nestjs/common';
-import { CreateMenuData, MenuResponse } from './menu.dto';
+import { CreateMenuData, MenuResponse, GetAllMenusResponse } from './menu.dto';
 import { MenuService } from './menu.service';
-import { ItemType } from '@prisma/client';
 
 @Controller('menu')
 export class MenuController {
@@ -26,7 +25,7 @@ export class MenuController {
   }
 
   @Get('menus')
-  async getAllMenus(@Request() req): Promise<MenuResponse[]> {
+  async getAllMenus(@Request() req): Promise<GetAllMenusResponse[]> {
     // TODO: Validation for Req
     const menu = await this.menuService.getAllMenus();
 
@@ -40,6 +39,17 @@ export class MenuController {
   ): Promise<MenuResponse> {
     // TODO: Validation for Req
     const menu = await this.menuService.deleteMenu(menuId);
+
+    return menu;
+  }
+
+  @Post('menus/:menuId/activate')
+  async activateMenu(
+    @Request() req,
+    @Param('menuId') menuId: number,
+  ): Promise<MenuResponse> {
+    // TODO: Validation for Req
+    const menu = await this.menuService.activateMenu(menuId);
 
     return menu;
   }
