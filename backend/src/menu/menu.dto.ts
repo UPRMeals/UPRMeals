@@ -15,6 +15,18 @@ export interface MenuResponse {
   removed: boolean;
 }
 
+export interface GetAllMenusResponse {
+  id: number;
+  name: string;
+  description: string;
+  date: Date;
+  createdAt: Date;
+  removed: boolean;
+  isActive: boolean;
+  items: Item[];
+  combos: Combo[];
+}
+
 export interface CreateMenuItemData {
   price: number;
   description: string;
