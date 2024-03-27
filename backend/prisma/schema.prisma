@@ -60,6 +60,8 @@ model Combo {
   description     String?
   price           Float
   status          String        @default("available")
+  proteinCount    Int
+  sideCount       Int
   removed         Boolean       @default(false)
   orders          OrderCombo[]
   menuId          Int
@@ -96,7 +98,8 @@ model Menu {
   description     String?
   date            DateTime
   createdAt       DateTime      @default(now())
-  removed         Boolean       @default(false)     
+  removed         Boolean       @default(false)
+  isActive        Boolean       @default(false)
   items           Item[]
   combos          Combo[]
 }
