@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, Request } from '@nestjs/common';
 import { CreateMenuData, MenuResponse, GetAllMenusResponse } from './menu.dto';
 import { MenuService } from './menu.service';
-import { StaffOnly } from 'src/auth/decorators/isStaff.decorator';
+import { StaffOnly } from '../auth/decorators/isStaff.decorator';
 
 @Controller('menu')
 export class MenuController {
