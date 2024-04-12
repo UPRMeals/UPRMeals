@@ -8,7 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from './decorators/public.decorator';
-import { IS_STAFF_KEY } from './decorators/isStaff.decorator';
+import { STAFF_ONLY } from './decorators/isStaff.decorator';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -26,7 +26,7 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    const isStaff = this.reflector.getAllAndOverride<boolean>(IS_STAFF_KEY, [
+    const isStaffOnly = this.reflector.getAllAndOverride<boolean>(STAFF_ONLY, [
       context.getHandler(),
       context.getClass(),
     ]);
@@ -46,7 +46,7 @@ export class AuthGuard implements CanActivate {
         username: payload.username,
         isStaff: payload.isStaff ?? false,
       };
-      if (isStaff && !payload?.isStaff) {
+      if (isStaffOnly && !payload?.isStaff) {
         throw new UnauthorizedException();
       }
     } catch {

@@ -1,13 +1,13 @@
 import { Body, Controller, Get, Param, Post, Request } from '@nestjs/common';
 import { CreateMenuData, MenuResponse, GetAllMenusResponse } from './menu.dto';
 import { MenuService } from './menu.service';
-import { IsStaff } from 'src/auth/decorators/isStaff.decorator';
+import { StaffOnly } from 'src/auth/decorators/isStaff.decorator';
 
 @Controller('menu')
 export class MenuController {
   constructor(private menuService: MenuService) {}
 
-  @IsStaff()
+  @StaffOnly()
   @Post('')
   async createMenu(@Body() data: CreateMenuData): Promise<MenuResponse> {
     // TODO: Validation for Req
@@ -15,7 +15,7 @@ export class MenuController {
     return menu;
   }
 
-  @IsStaff()
+  @StaffOnly()
   @Get(':menuId/menu')
   async getMenu(
     @Request() req,
@@ -26,14 +26,14 @@ export class MenuController {
     return menu;
   }
 
-  @IsStaff()
+  @StaffOnly()
   @Get('menus')
   async getAllMenus(@Request() req): Promise<GetAllMenusResponse[]> {
     const menu = await this.menuService.getAllMenus();
     return menu;
   }
 
-  @IsStaff()
+  @StaffOnly()
   @Post('menus/:menuId/delete')
   async deleteMenu(
     @Request() req,
@@ -44,7 +44,7 @@ export class MenuController {
     return menu;
   }
 
-  @IsStaff()
+  @StaffOnly()
   @Post('menus/:menuId/activate')
   async activateMenu(
     @Request() req,
