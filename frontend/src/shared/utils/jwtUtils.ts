@@ -19,7 +19,7 @@ export class JWTUtils {
     return false;
   }
 
-  public static isUserStaff(token: string | null): boolean {
+  public static isStaffUser(token: string | null): boolean {
     if (token !== null) {
       try {
         const [header, payload, signature] = token.split(".");
