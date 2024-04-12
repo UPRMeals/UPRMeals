@@ -55,10 +55,10 @@ export default function CustomerHomePage() {
               variant="contained"
               onClick={() => router.push("/staff/orders")}
             >
-              Orders
+              Pedidos
             </Button>
-            <Button variant="text" onClick={() => router.push("/staff/menu")}>
-              View Menu
+            <Button variant="text" onClick={() => router.push("/staff/menus")}>
+              Acceder Menus
             </Button>
           </Stack>
         </Stack>
