@@ -34,6 +34,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
 
   const isTokenValid = JWTUtils.isTokenValid;
+  const isStaffUser = JWTUtils.isStaffUser;
   const router = useRouter();
 
   useEffect(() => {
@@ -52,6 +53,17 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     };
     checkAuth();
   }, [isTokenValid, router]);
+
+  useEffect(() => {
+    const checkIsStaff = async () => {
+      const token = localStorage.getItem("token");
+      const isStaff = isStaffUser(token);
+      if (!isStaff && window?.location?.pathname?.includes("staff")) {
+        router.push("/customers");
+      }
+    };
+    checkIsStaff();
+  }, [isStaffUser, router]);
 
   useEffect(() => {
     setHasNavbar(!noNavBarPaths.includes(window?.location?.pathname ?? ""));

@@ -1,8 +1,9 @@
+import { Colors } from "@/styles/theme";
 import { Box, Button, Typography, Stack } from "@mui/material";
 import Image from "next/legacy/image";
 import { useRouter } from "next/router";
 
-export default function CustomerHomePage() {
+export default function StaffHomePage() {
   const router = useRouter();
 
   return (
@@ -29,7 +30,9 @@ export default function CustomerHomePage() {
           <Typography variant="h1" fontFamily={"Bungee"}>
             Bienvenido al Equipo!
           </Typography>
-          <Typography variant="h3">Gestiona los pedidos aquí.</Typography>
+          <Typography variant="h3" color={Colors.Charcoal} fontWeight={400}>
+            Gestiona los pedidos aquí.
+          </Typography>
           <Box
             sx={{ position: "relative" }}
             display={{ xs: "block", md: "none" }}
