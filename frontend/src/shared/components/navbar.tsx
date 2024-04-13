@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import {
   AppBar,
   Badge,
@@ -29,9 +29,14 @@ type NavItemProps = {
   requiresAuthentication: boolean;
 };
 
-const navBarItems: NavItemProps[] = [
+const customerNavBarItems: NavItemProps[] = [
   { text: "Menu", href: "/customers/menu", requiresAuthentication: false },
   { text: "My Cart", href: "/customers/cart", requiresAuthentication: true },
+];
+
+const staffNavBarItems: NavItemProps[] = [
+  { text: "Menus", href: "/staff/menus", requiresAuthentication: true },
+  { text: "Pedidos", href: "/staff/orders", requiresAuthentication: true },
 ];
 
 const NavLink = ({
@@ -64,9 +69,17 @@ const NavLink = ({
 const Navbar = ({ authenticated }: { authenticated: boolean }) => {
   const router = useRouter();
   const currentPath = router.asPath;
-  const [openDrawer, setOpenDrawer] = React.useState(false);
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const [isStaffPage, setIsStaffPage] = useState<boolean>(false);
   const theme = useTheme();
   const largerScreen = useMediaQuery(theme.breakpoints.up("md"));
+  const navBarItemsToDisplay = isStaffPage
+    ? staffNavBarItems
+    : customerNavBarItems;
+
+  useEffect(() => {
+    setIsStaffPage(window.location.pathname.includes("staff"));
+  });
 
   const handleDrawerToggle = () => {
     setOpenDrawer((prevState) => !prevState);
@@ -79,7 +92,7 @@ const Navbar = ({ authenticated }: { authenticated: boolean }) => {
       color={"white"}
     >
       <Stack rowGap={2} pt={3}>
-        {navBarItems.map((item: NavItemProps, index) =>
+        {navBarItemsToDisplay.map((item: NavItemProps, index) =>
           !item.requiresAuthentication ||
           (item.requiresAuthentication && authenticated) ? (
             <Box key={index}>
@@ -118,7 +131,7 @@ const Navbar = ({ authenticated }: { authenticated: boolean }) => {
           }}
         >
           <Box mt={1}>
-            <Link href={"/"}>
+            <Link href={isStaffPage ? "/staff" : "/customers"}>
               <Image
                 src="/logo.png"
                 alt="UPRMeals"
@@ -141,7 +154,7 @@ const Navbar = ({ authenticated }: { authenticated: boolean }) => {
 
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             <Stack flexDirection={"row"} columnGap={2} alignItems={"center"}>
-              {navBarItems.map((item: NavItemProps, index) =>
+              {navBarItemsToDisplay.map((item: NavItemProps, index) =>
                 !item.requiresAuthentication ||
                 (item.requiresAuthentication && authenticated) ? (
                   <NavLink
