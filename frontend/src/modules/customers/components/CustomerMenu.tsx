@@ -1,9 +1,9 @@
 import { useMenuService } from "@/shared/hooks/useMenuService";
 import { Box, Divider, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import ComboCard from "./components/ComboCard";
+import ComboCard from "../order/components/ComboCard";
 import { ActiveMenuResponse } from "../../../../../backend/src/menu/menu.dto";
-import { ItemCard } from "./components/ItemCard";
+import { ItemCard } from "../order/components/ItemCard";
 
 const CustomerMenu = ({ isOrderPage }: { isOrderPage: boolean }) => {
   const { getActiveMenu } = useMenuService();

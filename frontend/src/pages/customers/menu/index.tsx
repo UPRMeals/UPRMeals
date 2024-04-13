@@ -1,4 +1,4 @@
-import CustomerMenu from "@/modules/customers/order/CustomerOrderPage";
+import CustomerMenu from "@/modules/customers/components/CustomerMenu";
 import { Height } from "@mui/icons-material";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
