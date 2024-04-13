@@ -30,7 +30,7 @@ export default function CustomerHomePage() {
           <Typography variant="h1" fontFamily={"Bungee"}>
             ¿La fila está larga?
           </Typography>
-          <Typography variant="h3" color={Colors.Charcoal} fontWeight={400}>
+          <Typography variant="h3" fontWeight={400}>
             Pídelo aquí.
           </Typography>
           <Box

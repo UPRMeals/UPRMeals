@@ -1,4 +1,4 @@
-import CustomerMenu from "@/modules/customers/components/CustomerMenu";
+import CustomerMenu from "@/modules/customers/components/menu/CustomerMenu";
 import { Box } from "@mui/material";
 
 export default function OrderPage() {
