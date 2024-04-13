@@ -1,5 +1,5 @@
 import { useMenuService } from "@/shared/hooks/useMenuService";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, CircularProgress, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ComboCard from "./ComboCard";
 import { ActiveMenuResponse } from "../../../../../../backend/src/menu/menu.dto";
@@ -17,7 +17,12 @@ const CustomerMenu = ({ isOrderPage }: { isOrderPage: boolean }) => {
     if (!activeMenu) fetchMenu();
   }, [getActiveMenu]);
 
-  return (
+  return !activeMenu ? (
+    <CircularProgress
+      sx={{ justifySelf: "center", alignSelf: "center" }}
+      size={80}
+    />
+  ) : (
     <Box
       display={"flex"}
       flexDirection={"column"}
