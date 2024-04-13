@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   AppBar,
   Badge,
@@ -66,20 +66,23 @@ const NavLink = ({
   );
 };
 
-const Navbar = ({
-  authenticated,
-  isStaff,
-}: {
-  authenticated: boolean;
-  isStaff: boolean;
-}) => {
+const Navbar = ({ authenticated }: { authenticated: boolean }) => {
   const router = useRouter();
   const currentPath = router.asPath;
   const [openDrawer, setOpenDrawer] = React.useState(false);
+  const [isStaffPage, setIsStaffPage] = React.useState(false);
   const theme = useTheme();
   const largerScreen = useMediaQuery(theme.breakpoints.up("md"));
-  const homepageLink = isStaff ? "/staff" : "/";
-  const navBarItemsToDisplay = isStaff ? staffNavBarItems : customerNavBarItems;
+  const homepageLink = isStaffPage ? "/staff" : "/";
+  const navBarItemsToDisplay = isStaffPage
+    ? staffNavBarItems
+    : customerNavBarItems;
+
+  useEffect(() => {
+    if (window.location.pathname.includes("staff")) {
+      setIsStaffPage(true);
+    }
+  }, []);
 
   const handleDrawerToggle = () => {
     setOpenDrawer((prevState) => !prevState);

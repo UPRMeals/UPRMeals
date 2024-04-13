@@ -1,5 +1,5 @@
 import { Colors } from "@/styles/theme";
-import { Box, Button, Typography, Stack } from "@mui/material";
+import { Box, Button, Typography, Stack, ButtonGroup } from "@mui/material";
 import Image from "next/legacy/image";
 import { useRouter } from "next/router";
 
@@ -48,21 +48,16 @@ export default function StaffHomePage() {
               width={173}
             />
           </Box>
-          <Stack
-            direction="row"
-            spacing={2}
-            mt={5}
-            alignSelf={{ xs: "center", md: "inherit" }}
-          >
-            <Button
-              variant="contained"
-              onClick={() => router.push("/staff/orders")}
-            >
-              Pedidos
-            </Button>
-            <Button variant="text" onClick={() => router.push("/staff/menus")}>
-              Acceder Menus
-            </Button>
+          <Stack mt={5} alignSelf={{ xs: "center", md: "inherit" }}>
+            <ButtonGroup variant="text">
+              <Button onClick={() => router.push("/staff/orders")}>
+                Pedidos
+              </Button>
+              <Button onClick={() => router.push("/staff/menus")}>Menus</Button>
+              <Button onClick={() => router.push("/")}>
+                Portal de Estudiantes
+              </Button>
+            </ButtonGroup>
           </Stack>
         </Stack>
       </Box>
