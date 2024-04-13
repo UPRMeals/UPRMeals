@@ -265,7 +265,7 @@ export default function MenusPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {allMenus ? (
+              {allMenus && allMenus?.length > 0 ? (
                 allMenus.map((menu: GetAllMenusResponse) => (
                   <Row key={menu.id} menu={menu} />
                 ))

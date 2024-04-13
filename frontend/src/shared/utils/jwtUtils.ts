@@ -18,4 +18,20 @@ export class JWTUtils {
     }
     return false;
   }
+
+  public static isStaffUser(token: string | null): boolean {
+    if (token !== null) {
+      try {
+        const [header, payload, signature] = token.split(".");
+        const decodedPayload = JSON.parse(
+          Buffer.from(payload, "base64").toString("utf-8")
+        );
+        return decodedPayload?.isStaff;
+      } catch (error) {
+        console.error("Error decoding token.", error);
+        return false;
+      }
+    }
+    return false;
+  }
 }
