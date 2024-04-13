@@ -1,4 +1,4 @@
-import CustomerOrderPage from "@/modules/customers/order/CustomerOrderPage";
+import CustomerMenu from "@/modules/customers/order/CustomerOrderPage";
 import { Height } from "@mui/icons-material";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
@@ -28,7 +28,7 @@ export default function MenuPage() {
           Order Now
         </Button>
       </Stack>
-      <CustomerOrderPage isOrderPage={false} />
+      <CustomerMenu isOrderPage={false} />
     </Box>
   );
 }

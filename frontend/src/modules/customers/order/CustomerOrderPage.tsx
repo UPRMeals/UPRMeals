@@ -5,7 +5,7 @@ import ComboCard from "./components/ComboCard";
 import { ActiveMenuResponse } from "../../../../../backend/src/menu/menu.dto";
 import { ItemCard } from "./components/ItemCard";
 
-const CustomerOrderPage = ({ isOrderPage }: { isOrderPage: boolean }) => {
+const CustomerMenu = ({ isOrderPage }: { isOrderPage: boolean }) => {
   const { getActiveMenu } = useMenuService();
   const [activeMenu, setActiveMenu] = useState<ActiveMenuResponse>();
 
@@ -72,4 +72,4 @@ const CustomerOrderPage = ({ isOrderPage }: { isOrderPage: boolean }) => {
   );
 };
 
-export default CustomerOrderPage;
+export default CustomerMenu;
