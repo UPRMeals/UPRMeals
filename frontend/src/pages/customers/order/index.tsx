@@ -1,5 +1,5 @@
 import CustomerOrderPage from "@/modules/customers/order/CustomerOrderPage";
-import { Box, Divider } from "@mui/material";
+import { Box } from "@mui/material";
 
 export default function OrderPage() {
   return (
@@ -10,7 +10,7 @@ export default function OrderPage() {
       display={"flex"}
       justifyContent={"center"}
     >
-      <CustomerOrderPage />
+      <CustomerOrderPage isOrderPage={true} />
     </Box>
   );
 }

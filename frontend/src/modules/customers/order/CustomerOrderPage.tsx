@@ -3,9 +3,9 @@ import { Box, Divider, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ComboCard from "./components/ComboCard";
 import { ActiveMenuResponse } from "../../../../../backend/src/menu/menu.dto";
-import ItemCard from "./components/ItemCard";
+import { ItemCard } from "./components/ItemCard";
 
-const CustomerOrderPage = () => {
+const CustomerOrderPage = ({ isOrderPage }: { isOrderPage: boolean }) => {
   const { getActiveMenu } = useMenuService();
   const [activeMenu, setActiveMenu] = useState<ActiveMenuResponse>();
 
@@ -26,41 +26,38 @@ const CustomerOrderPage = () => {
       width={"95%"}
       rowGap={2}
     >
-      <Typography variant="h3">Combos</Typography>
-      <Divider flexItem sx={{ mb: 2 }} />
+      <Typography variant="h4">Combos</Typography>
       <Stack
         direction={{ md: "column", lg: "row" }}
-        justifyContent={"center"}
         width="100%"
         spacing={{ xs: 2, md: 3 }}
         useFlexGap
         flexWrap="wrap"
         mb={2}
+        px="2%"
       >
         {activeMenu?.combos?.map((combo: any, index) => (
-          <ComboCard key={index} combo={combo} />
+          <ComboCard key={index} combo={combo} isOrderPage={isOrderPage} />
         ))}
       </Stack>
-      <Typography variant="h3">Proteinas</Typography>
-      <Divider flexItem sx={{ mb: 2 }} />
+      <Typography variant="h4">Proteinas</Typography>
       <Stack
         direction={{ xs: "column", md: "row" }}
-        justifyContent={"center"}
         width="100%"
         spacing={{ xs: 2, md: 3 }}
         useFlexGap
         flexWrap="wrap"
         mb={2}
+        px="2%"
       >
         {activeMenu?.proteins?.map((protein: any, index) => (
-          <ItemCard key={index} item={protein} />
+          <ItemCard key={index} item={protein} isOrderPage={isOrderPage} />
         ))}
       </Stack>
-      <Typography variant="h3">Acompañantes</Typography>
-      <Divider flexItem sx={{ mb: 2 }} />
+      <Typography variant="h4">Acompañantes</Typography>
       <Stack
         direction={{ xs: "column", md: "row" }}
-        justifyContent={"center"}
+        px="2%"
         width="100%"
         spacing={{ xs: 2, md: 3 }}
         useFlexGap
@@ -68,7 +65,7 @@ const CustomerOrderPage = () => {
         pb={5}
       >
         {activeMenu?.sides?.map((side: any, index) => (
-          <ItemCard key={index} item={side} />
+          <ItemCard key={index} item={side} isOrderPage={isOrderPage} />
         ))}
       </Stack>
     </Box>
