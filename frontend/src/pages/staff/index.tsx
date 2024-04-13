@@ -54,7 +54,7 @@ export default function StaffHomePage() {
                 Pedidos
               </Button>
               <Button onClick={() => router.push("/staff/menus")}>Menus</Button>
-              <Button onClick={() => router.push("/")}>
+              <Button onClick={() => router.push("/customers")}>
                 Portal de Estudiantes
               </Button>
             </ButtonGroup>

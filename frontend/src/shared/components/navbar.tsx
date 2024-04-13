@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   AppBar,
   Badge,
@@ -69,20 +69,17 @@ const NavLink = ({
 const Navbar = ({ authenticated }: { authenticated: boolean }) => {
   const router = useRouter();
   const currentPath = router.asPath;
-  const [openDrawer, setOpenDrawer] = React.useState(false);
-  const [isStaffPage, setIsStaffPage] = React.useState(false);
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const [isStaffPage, setIsStaffPage] = useState<boolean>(false);
   const theme = useTheme();
   const largerScreen = useMediaQuery(theme.breakpoints.up("md"));
-  const homepageLink = isStaffPage ? "/staff" : "/";
   const navBarItemsToDisplay = isStaffPage
     ? staffNavBarItems
     : customerNavBarItems;
 
   useEffect(() => {
-    if (window.location.pathname.includes("staff")) {
-      setIsStaffPage(true);
-    }
-  }, []);
+    setIsStaffPage(window.location.pathname.includes("staff"));
+  });
 
   const handleDrawerToggle = () => {
     setOpenDrawer((prevState) => !prevState);
@@ -134,7 +131,7 @@ const Navbar = ({ authenticated }: { authenticated: boolean }) => {
           }}
         >
           <Box mt={1}>
-            <Link href={homepageLink}>
+            <Link href={isStaffPage ? "/staff" : "/customers"}>
               <Image
                 src="/logo.png"
                 alt="UPRMeals"
