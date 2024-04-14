@@ -1,28 +1,16 @@
-import { useMenuService } from "@/shared/hooks/useMenuService";
-import { Box, CircularProgress, Stack, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Box, Stack, Typography } from "@mui/material";
 import ComboCard from "./ComboCard";
-import { ActiveMenuResponse } from "../../../../../../backend/src/menu/menu.dto";
+import { Menu } from "../../../../../../backend/src/menu/menu.dto";
 import { ItemCard } from "./ItemCard";
 
-const CustomerMenu = ({ isOrderPage }: { isOrderPage: boolean }) => {
-  const { getActiveMenu } = useMenuService();
-  const [activeMenu, setActiveMenu] = useState<ActiveMenuResponse>();
-
-  useEffect(() => {
-    const fetchMenu = async () => {
-      const menu = await getActiveMenu();
-      setActiveMenu(menu as any);
-    };
-    if (!activeMenu) fetchMenu();
-  }, [getActiveMenu]);
-
-  return !activeMenu ? (
-    <CircularProgress
-      sx={{ justifySelf: "center", alignSelf: "center" }}
-      size={80}
-    />
-  ) : (
+const CustomerMenu = ({
+  isOrderPage,
+  menu,
+}: {
+  isOrderPage: boolean;
+  menu: Menu;
+}) => {
+  return (
     <Box
       display={"flex"}
       flexDirection={"column"}
@@ -41,7 +29,7 @@ const CustomerMenu = ({ isOrderPage }: { isOrderPage: boolean }) => {
         mb={2}
         px="2%"
       >
-        {activeMenu?.combos?.map((combo: any, index) => (
+        {menu?.combos?.map((combo: any, index) => (
           <ComboCard key={index} combo={combo} isOrderPage={isOrderPage} />
         ))}
       </Stack>
@@ -55,7 +43,7 @@ const CustomerMenu = ({ isOrderPage }: { isOrderPage: boolean }) => {
         mb={2}
         px="2%"
       >
-        {activeMenu?.proteins?.map((protein: any, index) => (
+        {menu?.proteins?.map((protein: any, index) => (
           <ItemCard key={index} item={protein} isOrderPage={isOrderPage} />
         ))}
       </Stack>
@@ -69,7 +57,7 @@ const CustomerMenu = ({ isOrderPage }: { isOrderPage: boolean }) => {
         flexWrap="wrap"
         pb={5}
       >
-        {activeMenu?.sides?.map((side: any, index) => (
+        {menu?.sides?.map((side: any, index) => (
           <ItemCard key={index} item={side} isOrderPage={isOrderPage} />
         ))}
       </Stack>

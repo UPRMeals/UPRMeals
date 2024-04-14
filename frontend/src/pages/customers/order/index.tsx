@@ -1,7 +1,21 @@
 import CustomerMenu from "@/modules/customers/components/menu/CustomerMenu";
-import { Box } from "@mui/material";
+import { useMenuService } from "@/shared/hooks/useMenuService";
+import { Box, CircularProgress } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Menu } from "../../../../../backend/src/menu/menu.dto";
 
 export default function OrderPage() {
+  const { getActiveMenu } = useMenuService();
+  const [activeMenu, setActiveMenu] = useState<Menu>();
+
+  useEffect(() => {
+    const fetchMenu = async () => {
+      const menu = await getActiveMenu();
+      setActiveMenu(menu as any);
+    };
+    if (!activeMenu) fetchMenu();
+  }, [getActiveMenu]);
+
   return (
     <Box
       py={10}
@@ -10,7 +24,11 @@ export default function OrderPage() {
       display={"flex"}
       justifyContent={"center"}
     >
-      <CustomerMenu isOrderPage={true} />
+      {!activeMenu ? (
+        <CircularProgress size={80} />
+      ) : (
+        <CustomerMenu menu={activeMenu} isOrderPage={true} />
+      )}
     </Box>
   );
 }

@@ -1,10 +1,28 @@
 import CustomerMenu from "@/modules/customers/components/menu/CustomerMenu";
-import { Height } from "@mui/icons-material";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { useMenuService } from "@/shared/hooks/useMenuService";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import { Menu } from "../../../../../backend/src/menu/menu.dto";
 import { useRouter } from "next/router";
 
 export default function MenuPage() {
   const router = useRouter();
+  const { getActiveMenu } = useMenuService();
+  const [activeMenu, setActiveMenu] = useState<Menu>();
+
+  useEffect(() => {
+    const fetchMenu = async () => {
+      const menu = await getActiveMenu();
+      setActiveMenu(menu as any);
+    };
+    if (!activeMenu) fetchMenu();
+  }, [getActiveMenu]);
 
   return (
     <Box
@@ -28,7 +46,11 @@ export default function MenuPage() {
           Order Now
         </Button>
       </Stack>
-      <CustomerMenu isOrderPage={false} />
+      {!activeMenu ? (
+        <CircularProgress size={80} />
+      ) : (
+        <CustomerMenu menu={activeMenu} isOrderPage={false} />
+      )}
     </Box>
   );
 }
