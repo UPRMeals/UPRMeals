@@ -1,11 +1,10 @@
-import { Box, Stack, Alert, CircularProgress } from "@mui/material";
-import WarningIcon from "@mui/icons-material/Warning";
+import { Box, Stack, CircularProgress, Button } from "@mui/material";
 import { useRouter } from "next/router";
 import { useUserService } from "@/shared/hooks/useUserService";
 import { useEffect, useState } from "react";
 import ProfileCard from "@/shared/components/profileCard";
 import { UserProfile } from "../../../../../../backend/src/user/user.dto";
-import { string } from "yup";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function ClientProfilePage() {
   const router = useRouter();
@@ -35,6 +34,17 @@ export default function ClientProfilePage() {
     >
       {currUser ? (
         <Stack gap={2}>
+          <Box>
+            <Button
+              onClick={() => {
+                router.push("/staff/clients");
+              }}
+              startIcon={<ArrowBackIcon />}
+            >
+              Regresar
+            </Button>
+          </Box>
+
           <ProfileCard user={currUser} />
         </Stack>
       ) : (
