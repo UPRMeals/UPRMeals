@@ -1,4 +1,11 @@
-import { Box, Button, Link, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Link,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useFormik } from "formik";
 import TextInput from "@/shared/inputs/TextInput";
 import { useAuthService } from "../../../../shared/hooks/useAuthService";
@@ -6,6 +13,7 @@ import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import * as yup from "yup";
 import { Schema } from "yup";
+import { useState } from "react";
 
 export interface LogInFormType {
   email: string;
@@ -26,8 +34,10 @@ const CustomerLogIn = () => {
   const authService = useAuthService();
   const router = useRouter();
   const redirectUrl = (router.query["redirect"] as string) ?? null;
+  const [isValidating, setIsValidating] = useState<boolean>(false);
 
   const handleSubmit = async (values: LogInFormType) => {
+    setIsValidating(true);
     const response = await authService.logIn(values);
     if (response?.error || !response?.access_token) {
       toast.error(
@@ -37,6 +47,7 @@ const CustomerLogIn = () => {
       localStorage.setItem("token", response.access_token);
       router.push(redirectUrl ?? "/customers/menu");
     }
+    setIsValidating(false);
   };
 
   const formik = useFormik<LogInFormType>({
@@ -68,10 +79,14 @@ const CustomerLogIn = () => {
       <Button
         variant="contained"
         onClick={formik.submitForm}
-        disabled={!formik.isValid}
+        disabled={!formik.isValid || isValidating}
         sx={{ width: { xs: "100%", sm: "auto" } }}
       >
-        Log In
+        {isValidating ? (
+          <CircularProgress size={18} sx={{ color: "white", my: 1, mx: 2.5 }} />
+        ) : (
+          "Log In"
+        )}
       </Button>
       <Stack direction="row" gap={1} mt={2} whiteSpace="nowrap">
         <Typography variant="body1">Don&apos;t have an account?</Typography>
