@@ -1,4 +1,4 @@
-import { useBaseAPI } from "@/shared/hooks/useBaseAPI";
+import { useBaseAPI } from "../../shared/hooks/useBaseAPI";
 import { SignUpDto } from "../../../../backend/src/auth/auth.dto";
 import { LogInDto } from "../../../../backend/src/auth/auth.dto";
 

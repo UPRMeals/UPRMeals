@@ -1,4 +1,4 @@
-import { useBaseAPI } from "@/shared/hooks/useBaseAPI";
+import { useBaseAPI } from "../../shared/hooks/useBaseAPI";
 import { UserProfile } from "../../../../backend/src/user/user.dto";
 
 export const useUserService = () => {
@@ -8,6 +8,13 @@ export const useUserService = () => {
   const getProfile = async (): Promise<UserProfile> =>
     baseApi({
       url: `${userControllerBase}/profile`,
+      method: "GET",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+
+  const getProfileById = async (userId: number): Promise<UserProfile> =>
+    baseApi({
+      url: `${userControllerBase}/profile/${userId}`,
       method: "GET",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
@@ -33,9 +40,9 @@ export const useUserService = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
 
-  const createEmployee = async (userId: number): Promise<UserProfile> =>
+  const setEmployee = async (userId: number): Promise<UserProfile> =>
     baseApi({
-      url: `${userControllerBase}/employee/${userId}/create`,
+      url: `${userControllerBase}/employee/${userId}/set`,
       method: "POST",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
@@ -49,10 +56,11 @@ export const useUserService = () => {
 
   return {
     getProfile,
+    getProfileById,
     removeUser,
     getCustomerProfiles,
     getEmployeeProfiles,
-    createEmployee,
+    setEmployee,
     removeEmployee,
   };
 };

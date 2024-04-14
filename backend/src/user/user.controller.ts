@@ -1,5 +1,12 @@
-import { Controller, Get, Param, Post, Request } from '@nestjs/common';
-import { StaffOnly } from 'src/auth/decorators/isStaff.decorator';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Request,
+} from '@nestjs/common';
+import { StaffOnly } from '../auth/decorators/isStaff.decorator';
 import { UserProfile } from './user.dto';
 
 import { UserService } from './user.service';
@@ -11,6 +18,15 @@ export class UserController {
   @Get('profile')
   async getProfile(@Request() req): Promise<UserProfile> {
     const user = await this.userService.getProfile(req.user.userId);
+
+    return user;
+  }
+
+  @Get('profile/:userId')
+  async getProfileById(
+    @Param('userId', ParseIntPipe) userId: number,
+  ): Promise<UserProfile> {
+    const user = await this.userService.getProfile(userId);
 
     return user;
   }
@@ -39,9 +55,11 @@ export class UserController {
   }
 
   @StaffOnly()
-  @Post('employee/:userId/create')
-  async createEmployee(@Param('userId') userId: number): Promise<UserProfile> {
-    const employeeProfile = await this.userService.createEmployee(userId);
+  @Post('employee/:userId/set')
+  async setEmployee(
+    @Param('userId', ParseIntPipe) userId: number,
+  ): Promise<UserProfile> {
+    const employeeProfile = await this.userService.setEmployee(userId);
 
     return employeeProfile;
   }
@@ -50,7 +68,7 @@ export class UserController {
   @Post('employee/:userId/remove')
   async removeEmployee(
     @Request() req,
-    @Param('userId') userId: number,
+    @Param('userId', ParseIntPipe) userId: number,
   ): Promise<UserProfile> {
     if (req.user.userId === Number(userId)) {
       throw new Error();

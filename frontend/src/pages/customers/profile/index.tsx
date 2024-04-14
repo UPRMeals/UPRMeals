@@ -1,69 +1,21 @@
-import {
-  Box,
-  CardContent,
-  Card,
-  Typography,
-  Stack,
-  Divider,
-  Avatar,
-  Tooltip,
-  IconButton,
-  Alert,
-  Grid,
-  CardActions,
-  Button,
-  CircularProgress,
-  Menu,
-  MenuItem,
-} from "@mui/material";
-import { deepPurple, amber, cyan, grey } from "@mui/material/colors";
-import PersonIcon from "@mui/icons-material/Person";
-import EmailIcon from "@mui/icons-material/Email";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { Box, Stack, Alert, CircularProgress, Button } from "@mui/material";
 import WarningIcon from "@mui/icons-material/Warning";
-import { isFlaggedAccount } from "../../../shared/components/navbar";
 import { useRouter } from "next/router";
-import { useUserService } from "@/shared/hooks/useUserService";
+import { useUserService } from "../../../shared/hooks/useUserService";
 import { useEffect, useState } from "react";
 import { UserProfile } from "../../../../../backend/src/user/user.dto";
-import { useAuthService } from "@/shared/hooks/useAuthService";
+import { useAuthService } from "../../../shared/hooks/useAuthService";
 import toast from "react-hot-toast";
-import BaseDialog from "@/shared/components/baseDialog";
-import DropdownMenu from "@/shared/components/DropdownMenu";
-
-const accountIconColors: string[] = [
-  deepPurple[200],
-  deepPurple[300],
-  amber[400],
-  amber[600],
-  cyan[200],
-];
-
-const IconDetailsRow = ({
-  icon,
-  text,
-}: {
-  icon: JSX.Element;
-  text: string;
-}) => {
-  return (
-    <Stack direction="row" spacing={3}>
-      {icon}
-      <Typography>{text}</Typography>
-    </Stack>
-  );
-};
+import BaseDialog from "../../../shared/components/baseDialog";
+import ProfileCard from "../../../shared/components/profileCard";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 export default function ProfilePage() {
   const router = useRouter();
   const { getProfile, removeUser } = useUserService();
   const { logOut } = useAuthService();
-  const [letterColor, setLetterColor] = useState<string>();
   const [currUser, setCurrUser] = useState<UserProfile>();
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
-
-  const notes =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+  const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
 
   async function handleDelete() {
     await removeUser();
@@ -72,22 +24,11 @@ export default function ProfilePage() {
     router.push("/customers");
   }
 
-  function pickIconColor() {
-    const randNumber = Math.floor(Math.random() * accountIconColors.length);
-
-    return accountIconColors[randNumber];
-  }
-
   async function handleLogout() {
     await logOut();
     localStorage.removeItem("token");
     router.push("/customers");
   }
-
-  useEffect(() => {
-    const color = pickIconColor();
-    setLetterColor(color);
-  }, []);
 
   useEffect(() => {
     const getUserProfile = async () => {
@@ -101,10 +42,16 @@ export default function ProfilePage() {
   }, [getProfile]);
 
   return (
-    <Box py={15} px={5} justifyContent="center" display="flex" height={"100vh"}>
+    <Box
+      py={15}
+      px={5}
+      justifyContent="center"
+      display="flex"
+      height={currUser ? "normal" : "100vh"}
+    >
       {currUser ? (
         <Stack gap={2}>
-          {isFlaggedAccount && (
+          {currUser.isFlagged && (
             <Alert icon={<WarningIcon fontSize="inherit" />} severity="warning">
               Your account has been flagged. Please visit the cafeteria to
               resolve this issue. You may resume acitivity upon the cafeteria
@@ -113,111 +60,27 @@ export default function ProfilePage() {
             </Alert>
           )}
 
-          <Card sx={{ minWidth: "70%" }}>
-            <CardContent>
-              <Box
-                display="flex"
-                justifyContent={{ xs: "center", md: "start" }}
-                p={{ xs: 3, md: 2 }}
-              >
-                <Stack>
-                  <Grid container>
-                    <Grid item order={{ xs: 1, md: 1 }} xs={10} md={2.5} lg={2}>
-                      <Avatar
-                        sx={{
-                          bgcolor: letterColor,
-                          width: 156,
-                          height: 156,
-                          fontSize: 120,
-                          fontFamily: "Bungee",
-                        }}
-                      >
-                        {currUser?.firstName?.charAt(0).toUpperCase()}
-                      </Avatar>
-                    </Grid>
-                    <Grid
-                      item
-                      order={{ xs: 3, md: 2 }}
-                      xs={12}
-                      md={6.5}
-                      lg={8}
-                      display="flex"
-                      alignItems="center"
-                    >
-                      <Box display="flex">
-                        <Divider
-                          flexItem
-                          orientation="vertical"
-                          sx={{ display: { xs: "none", md: "block" }, mx: 4 }}
-                        />
-
-                        <Stack gap={3} mt={{ xs: 3, md: 0 }}>
-                          <IconDetailsRow
-                            icon={<PersonIcon />}
-                            text={currUser.firstName + " " + currUser.lastName}
-                          />
-                          <IconDetailsRow
-                            icon={<EmailIcon />}
-                            text={currUser.email}
-                          />
-                        </Stack>
-                      </Box>
-                    </Grid>
-                    <Grid
-                      item
-                      order={{ xs: 2, md: 3 }}
-                      xs={2}
-                      md={3}
-                      lg={2}
-                      display="flex"
-                      justifyContent={"flex-end"}
-                    >
-                      <DropdownMenu
-                        menuItems={[
-                          {
-                            title: "Delete Account",
-                            onClick: () => setOpenDialog(true),
-                            color: "error.main",
-                          },
-                        ]}
-                      />
-                    </Grid>
-                  </Grid>
-                  <Divider
-                    sx={{ display: { xs: "block", md: "none" }, mt: 3 }}
-                  />
-                  <Stack mt={3}>
-                    <Box
-                      display="flex"
-                      flexDirection="row"
-                      alignItems={"center"}
-                    >
-                      <Typography variant="h6">
-                        <b>Notes</b>
-                      </Typography>
-                      <Tooltip
-                        title="These notes are added to your account by the cafeteria staff or an admin user."
-                        placement="top"
-                      >
-                        <IconButton>
-                          <InfoOutlinedIcon
-                            fontSize="small"
-                            sx={{ color: grey[400] }}
-                          />
-                        </IconButton>
-                      </Tooltip>
-                    </Box>
-                    <Typography> {notes}</Typography>
-                  </Stack>
-                </Stack>
-              </Box>
-              <CardActions>
-                <Button variant="contained" onClick={handleLogout}>
-                  Log Out
-                </Button>
-              </CardActions>
-            </CardContent>
-          </Card>
+          <ProfileCard
+            user={currUser}
+            dropdownOptions={[
+              {
+                title: "Delete Account",
+                onClick: () => setOpenDeleteDialog(true),
+                color: "error.main",
+              },
+            ]}
+          />
+          <Button
+            sx={{
+              width: { xs: "100%", md: "inherit" },
+              alignSelf: "flex-end",
+            }}
+            variant="contained"
+            onClick={handleLogout}
+            endIcon={<LogoutIcon />}
+          >
+            Log Out
+          </Button>
         </Stack>
       ) : (
         <Box alignContent={"center"} justifyItems={"center"} height={"100%"}>
@@ -225,9 +88,9 @@ export default function ProfilePage() {
         </Box>
       )}
       <BaseDialog
-        open={openDialog}
+        open={openDeleteDialog}
         handleClose={() => {
-          setOpenDialog(false);
+          setOpenDeleteDialog(false);
         }}
         handleSubmit={handleDelete}
         dialogTitle="Are you sure you would like to delete your account?"
