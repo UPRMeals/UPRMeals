@@ -1,10 +1,8 @@
-import React, { useState } from "react";
 import {
   Box,
   Typography,
   Button,
   IconButton,
-  Container,
   Table,
   TableBody,
   TableCell,
@@ -13,12 +11,19 @@ import {
   TableRow,
   Paper,
   Tooltip,
+  useMediaQuery,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useRouter } from "next/router";
+import {
+  getCartLayout,
+  userCartContext,
+} from "@/shared/providers/CartProvider";
+import { NextPageWithLayout } from "@/pages/_app";
+import theme from "@/styles/theme";
 
 type CartItemType = {
   id: number;
@@ -27,97 +32,76 @@ type CartItemType = {
   quantity: number;
 };
 
-const cartItems = [
-  {
-    id: 1,
-    title: "Combo Internacional de Pollo con Papas Fritas",
-    price: 4.99,
-    quantity: 1,
-  },
-  { id: 2, title: "Jamon y Queso", price: 4.99, quantity: 2 },
-  // Add more items here
-];
-
-export default function MyCartPage() {
+const MyCartPage: NextPageWithLayout = () => {
   const router = useRouter();
-  const [items, setItems] = useState(cartItems);
+  const { getItems, getTotalPrice, clearItem, removeItem, addItem } =
+    userCartContext();
 
-  const handleAdd = (item: CartItemType) => {
-    setItems((prevItems) =>
-      prevItems.map((i) =>
-        i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-      )
-    );
-  };
+  const items = getItems();
+  const totalPrice = getTotalPrice();
 
-  const handleRemove = (item: CartItemType) => {
-    setItems((prevItems) =>
-      prevItems
-        .map((i) => (i.id === item.id ? { ...i, quantity: i.quantity - 1 } : i))
-        .filter((i) => i.quantity > 0)
-    );
-  };
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const handleDelete = (item: CartItemType) => {
-    setItems((prevItems) => prevItems.filter((i) => i.id !== item.id));
-  };
-
-  const totalPrice = items.reduce(
-    (acc, item) => acc + item.quantity * item.price,
-    0
+  const EditButtons = (props: any) => (
+    <Box display="flex" alignItems="center" justifyContent="center">
+      <IconButton onClick={() => removeItem(props.item)}>
+        <RemoveIcon fontSize="small" />
+      </IconButton>
+      <Typography sx={{ mx: 2 }} fontWeight={600}>
+        {props.item.quantity}
+      </Typography>
+      <IconButton onClick={() => addItem(props.item)} size="large">
+        <AddIcon fontSize="small" />
+      </IconButton>
+    </Box>
   );
 
   return (
-    <Container maxWidth="md" sx={{ mt: 8, mb: 10 }}>
-      <Typography variant="h2" textAlign="center" mb={4}>
-        My Cart
-      </Typography>
-      <TableContainer
-        component={Paper}
-        sx={{ boxShadow: 3, overflowX: "auto" }}
-      >
-        <Table aria-label="cart table">
+    <Box
+      mt={12}
+      height={"100vh"}
+      width={"100vw"}
+      display={"flex"}
+      flexDirection={"column"}
+      alignItems={"center"}
+      justifyContent={"start"}
+    >
+      <TableContainer sx={{ maxWidth: { xs: "95%", lg: "70%" } }}>
+        <Typography variant="h3" alignSelf={"start"} mb={4}>
+          My Cart
+        </Typography>
+        <Table aria-label="cart table" table-layout="fixed">
           <TableHead>
             <TableRow>
-              <TableCell>Item</TableCell>
-              <TableCell align="center">Quantity</TableCell>
+              <TableCell sx={{ maxWidth: "10%" }}>Item</TableCell>
+              {!isMobile && <TableCell align="center">Quantity</TableCell>}
               <TableCell align="right">Price</TableCell>
               <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {items.map((item) => (
+            {items?.map((item: any) => (
               <TableRow key={item.id}>
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" sx={{ maxWidth: "10%" }}>
                   <Tooltip
-                    title={item.title}
+                    title={item.name}
                     placement="top"
                     enterDelay={500}
                     leaveDelay={200}
                   >
-                    <Typography noWrap>{item.title}</Typography>
+                    <Typography>{item.name}</Typography>
                   </Tooltip>
                 </TableCell>
-                <TableCell align="center">
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <IconButton onClick={() => handleRemove(item)} size="small">
-                      <RemoveIcon />
-                    </IconButton>
-                    <Typography sx={{ mx: 2 }}>{item.quantity}</Typography>
-                    <IconButton onClick={() => handleAdd(item)} size="small">
-                      <AddIcon />
-                    </IconButton>
-                  </Box>
-                </TableCell>
+                {!isMobile && (
+                  <TableCell align="center">
+                    <EditButtons item={item} />
+                  </TableCell>
+                )}
                 <TableCell align="right">
                   ${(item.price * item.quantity).toFixed(2)}
                 </TableCell>
                 <TableCell align="right">
-                  <IconButton onClick={() => handleDelete(item)} size="small">
+                  <IconButton onClick={() => clearItem(item)} size="small">
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>
@@ -127,10 +111,14 @@ export default function MyCartPage() {
         </Table>
       </TableContainer>
       <Box display="flex" justifyContent="space-between" my={2}>
-        <Typography variant="h5">Total:</Typography>
+        <Typography variant="h5">Subtotal: </Typography>
         <Typography variant="h5">${totalPrice.toFixed(2)}</Typography>
       </Box>
-      <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{ mt: 2, width: isMobile ? "60%" : "30%" }}
+      >
         Order Now
       </Button>
       <Paper
@@ -141,19 +129,27 @@ export default function MyCartPage() {
           right: 0,
           height: "10%",
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: isMobile ? "center" : "space-between",
           alignItems: "center",
         }}
         elevation={3}
       >
         <Button
-          sx={{ height: "100%", width: "20%", ml: { xs: 5, md: 0 } }}
+          variant={isMobile ? "contained" : "text"}
+          sx={{
+            borderRadius: isMobile ? 20 : 0,
+            height: isMobile ? "50%" : "100%",
+            width: isMobile ? "60%" : "20%",
+          }}
           onClick={() => router.push("/customers/order")}
           startIcon={<ArrowBackIcon />}
         >
-          Regresar
+          Editar Orden
         </Button>
       </Paper>
-    </Container>
+    </Box>
   );
-}
+};
+
+MyCartPage.getLayout = getCartLayout;
+export default MyCartPage;

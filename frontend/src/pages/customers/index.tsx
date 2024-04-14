@@ -1,8 +1,10 @@
 import { Box, Button, Typography, Stack } from "@mui/material";
 import Image from "next/legacy/image";
 import { useRouter } from "next/router";
+import { getCartLayout } from "@/shared/providers/CartProvider";
+import { NextPageWithLayout } from "../_app";
 
-export default function CustomerHomePage() {
+const CustomerHomePage: NextPageWithLayout = () => {
   const router = useRouter();
 
   return (
@@ -70,4 +72,7 @@ export default function CustomerHomePage() {
       </Box>
     </Box>
   );
-}
+};
+
+CustomerHomePage.getLayout = getCartLayout;
+export default CustomerHomePage;

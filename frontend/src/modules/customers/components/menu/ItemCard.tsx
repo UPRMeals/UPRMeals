@@ -13,7 +13,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 
 import { Colors } from "@/styles/theme";
 import { blueGrey } from "@mui/material/colors";
-import { userOrderContext } from "@/shared/providers/OrderProvider";
+import { userCartContext } from "@/shared/providers/CartProvider";
 
 export const ItemCard = ({
   item,
@@ -22,7 +22,7 @@ export const ItemCard = ({
   item: Item;
   isOrderPage: boolean;
 }) => {
-  const { addItem, getItemCount, removeItem } = userOrderContext();
+  const { addItem, getItemCount, removeItem } = userCartContext();
   const itemCount = getItemCount(item);
 
   return (

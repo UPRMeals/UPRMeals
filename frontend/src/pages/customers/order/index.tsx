@@ -1,17 +1,26 @@
 import CustomerMenu from "@/modules/customers/components/menu/CustomerMenu";
 import { useMenuService } from "@/shared/hooks/useMenuService";
-import { Box, Button, CircularProgress, Paper } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Paper,
+  useMediaQuery,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { Menu } from "../../../../../backend/src/menu/menu.dto";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useRouter } from "next/router";
-import OrderProvider from "@/shared/providers/OrderProvider";
+import { getCartLayout } from "@/shared/providers/CartProvider";
+import { NextPageWithLayout } from "@/pages/_app";
+import theme from "@/styles/theme";
 
-export default function OrderPage() {
+const OrderPage: NextPageWithLayout = () => {
   const router = useRouter();
   const { getActiveMenu } = useMenuService();
   const [activeMenu, setActiveMenu] = useState<Menu>();
+
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -22,63 +31,59 @@ export default function OrderPage() {
   }, [getActiveMenu]);
 
   return (
-    <>
-      <Box
-        mt={10}
-        mb={{ xs: 400, md: 135 }}
-        height={"90vh"}
-        width={"100vw"}
-        display={"flex"}
-        flexDirection={"column"}
-        alignItems={"center"}
-        justifyContent={"start"}
-      >
-        {!activeMenu ? (
-          <Box alignContent={"center"} justifyItems={"center"} height={"100%"}>
-            <CircularProgress size={80} />
-          </Box>
-        ) : (
-          <Box
-            display={"flex"}
-            flexDirection={"column"}
-            width={"95%"}
-            alignItems={"center"}
-          >
-            <OrderProvider>
-              <CustomerMenu menu={activeMenu} isOrderPage={true} />
-            </OrderProvider>
-          </Box>
-        )}
-      </Box>
+    <Box
+      mt={10}
+      mb={{ xs: 400, md: 135 }}
+      height={"90vh"}
+      width={"100vw"}
+      display={"flex"}
+      flexDirection={"column"}
+      alignItems={"center"}
+      justifyContent={"start"}
+    >
+      {!activeMenu ? (
+        <Box alignContent={"center"} justifyItems={"center"} height={"100%"}>
+          <CircularProgress size={80} />
+        </Box>
+      ) : (
+        <Box
+          display={"flex"}
+          flexDirection={"column"}
+          width={"95%"}
+          alignItems={"center"}
+        >
+          <CustomerMenu menu={activeMenu} isOrderPage={true} />
+        </Box>
+      )}
       <Paper
         sx={{
-          zIndex: 1300,
           position: "fixed",
           bottom: 0,
           left: 0,
           right: 0,
-          height: "10vh",
+          height: "10%",
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: isMobile ? "center" : "end",
           alignItems: "center",
         }}
         elevation={3}
       >
         <Button
-          sx={{ height: "100%", width: "20%", ml: { xs: 5, md: 0 } }}
-          onClick={() => router.push("/customers/menu")}
-          startIcon={<ArrowBackIcon />}
-        >
-          Cancelar
-        </Button>
-        <Button
-          sx={{ height: "100%", width: "20%", mr: { xs: 3, md: 0 } }}
+          variant={isMobile ? "contained" : "text"}
+          sx={{
+            borderRadius: isMobile ? 20 : 0,
+            height: isMobile ? "50%" : "100%",
+            width: isMobile ? "60%" : "20%",
+          }}
           onClick={() => router.push("/customers/cart")}
           endIcon={<ArrowForwardIcon />}
         >
           Listo
         </Button>
       </Paper>
-    </>
+    </Box>
   );
-}
+};
+
+OrderPage.getLayout = getCartLayout;
+export default OrderPage;

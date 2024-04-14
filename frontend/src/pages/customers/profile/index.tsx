@@ -13,8 +13,6 @@ import {
   CardActions,
   Button,
   CircularProgress,
-  Menu,
-  MenuItem,
 } from "@mui/material";
 import { deepPurple, amber, cyan, grey } from "@mui/material/colors";
 import PersonIcon from "@mui/icons-material/Person";
@@ -30,6 +28,8 @@ import { useAuthService } from "@/shared/hooks/useAuthService";
 import toast from "react-hot-toast";
 import BaseDialog from "@/shared/components/baseDialog";
 import DropdownMenu from "@/shared/components/DropdownMenu";
+import { NextPageWithLayout } from "@/pages/_app";
+import { getCartLayout } from "@/shared/providers/CartProvider";
 
 const accountIconColors: string[] = [
   deepPurple[200],
@@ -54,7 +54,7 @@ const IconDetailsRow = ({
   );
 };
 
-export default function ProfilePage() {
+const ProfilePage: NextPageWithLayout = () => {
   const router = useRouter();
   const { getProfile, removeUser } = useUserService();
   const { logOut } = useAuthService();
@@ -241,4 +241,7 @@ export default function ProfilePage() {
       />
     </Box>
   );
-}
+};
+
+ProfilePage.getLayout = getCartLayout;
+export default ProfilePage;
