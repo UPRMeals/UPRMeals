@@ -74,12 +74,6 @@ const ProfileCard = ({
     profileTitle = getUserRole(user);
   }
 
-  const rand = Math.random(); // TODO
-  let isFlagged = false;
-  if (rand > 0.5) {
-    isFlagged = true;
-  }
-
   const notes =
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 
@@ -118,7 +112,7 @@ const ProfileCard = ({
         }
         sx={{
           backgroundColor:
-            isFlagged && isStaffPortal ? "error.main" : Colors.Teal,
+            user.isFlagged && isStaffPortal ? "error.main" : Colors.Teal,
           maxWidth: 300,
           textAlign: "center",
           px: 0,
@@ -130,7 +124,8 @@ const ProfileCard = ({
       <CardContent
         sx={{
           border: 5,
-          borderColor: isFlagged && isStaffPortal ? "error.main" : Colors.Teal,
+          borderColor:
+            user.isFlagged && isStaffPortal ? "error.main" : Colors.Teal,
           backgroundColor: "white",
           borderBottomLeftRadius: 10,
           borderBottomRightRadius: 10,

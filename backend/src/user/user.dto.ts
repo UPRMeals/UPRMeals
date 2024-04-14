@@ -7,4 +7,5 @@ export interface UserProfile {
   isActive: boolean;
   isStaff: boolean;
   isAdmin: boolean;
+  isFlagged: boolean;
 }

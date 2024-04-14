@@ -23,6 +23,8 @@ export default function CustomerProfilesPage() {
   const { getCustomerProfiles } = useUserService();
   const [openSuspendCustomerDialog, setOpenSuspendCustomerDialog] =
     useState(false);
+  const [openRemoveSuspensionDialog, setOpenRemoveSuspensionDialog] =
+    useState(false);
   const [openCreateStaffDialog, setOpenCreateStaffDialog] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState<number>();
   const [allCustomers, setAllCustomers] = useState<UserProfile[]>();
@@ -42,13 +44,16 @@ export default function CustomerProfilesPage() {
   const tableHeaders = ["Nombre", "Email", "", "", ""];
 
   function handleMenuOptionsClick(
-    selectedOption: "suspendCustomer" | "createStaff",
+    selectedOption: "suspendCustomer" | "createStaff" | "removeSuspension",
     customerId: number
   ) {
     setSelectedCustomerId(customerId);
     switch (selectedOption) {
       case "suspendCustomer":
         setOpenSuspendCustomerDialog(true);
+        break;
+      case "removeSuspension":
+        setOpenRemoveSuspensionDialog(true);
         break;
       case "createStaff":
         setOpenCreateStaffDialog(true);
@@ -58,10 +63,6 @@ export default function CustomerProfilesPage() {
 
   const Row = ({ customer }: { customer: UserProfile }) => {
     const rand = Math.random(); // TODO
-    let isFlagged = false;
-    if (rand > 0.5) {
-      isFlagged = true;
-    }
 
     const dropdownMenuOptions: DropdownMenuOptionType[] = [
       {
@@ -70,7 +71,13 @@ export default function CustomerProfilesPage() {
       },
     ];
 
-    if (!isFlagged) {
+    if (customer.isFlagged) {
+      dropdownMenuOptions.push({
+        title: "Remover Suspensión",
+        onClick: () => handleMenuOptionsClick("removeSuspension", customer.id),
+        color: "error.main",
+      });
+    } else if (!customer.isFlagged) {
       dropdownMenuOptions.push({
         title: "Suspender Cliente",
         onClick: () => handleMenuOptionsClick("suspendCustomer", customer.id),
@@ -93,7 +100,7 @@ export default function CustomerProfilesPage() {
           </TableCell>
           <TableCell>{customer.email}</TableCell>
           <TableCell>
-            {isFlagged ? (
+            {customer.isFlagged ? (
               <Chip
                 label={"Suspendido"}
                 sx={{

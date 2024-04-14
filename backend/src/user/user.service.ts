@@ -50,6 +50,7 @@ export class UserService {
       isActive: user.isActive,
       isStaff: user.isStaff,
       isAdmin: user.isAdmin,
+      isFlagged: user.isFlagged,
     };
   }
 
@@ -79,6 +80,7 @@ export class UserService {
         isActive: user.isActive,
         isStaff: user.isStaff,
         isAdmin: user.isAdmin,
+        isFlagged: user.isFlagged,
       };
     });
 
@@ -100,6 +102,7 @@ export class UserService {
         isActive: user.isActive,
         isStaff: user.isStaff,
         isAdmin: user.isAdmin,
+        isFlagged: user.isFlagged,
       };
     });
 

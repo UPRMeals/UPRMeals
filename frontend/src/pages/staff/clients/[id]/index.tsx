@@ -15,12 +15,9 @@ export default function ClientProfilePage() {
   const [userProfile, setUserProfile] = useState<UserProfile>();
   const [openSuspendCustomerDialog, setOpenSuspendCustomerDialog] =
     useState(false);
+  const [openRemoveSuspensionDialog, setOpenRemoveSuspensionDialog] =
+    useState(false);
   const [openCreateStaffDialog, setOpenCreateStaffDialog] = useState(false);
-  const rand = Math.random(); // TODO
-  let isFlagged = false;
-  if (rand > 0.5) {
-    isFlagged = true;
-  }
 
   const dropdownMenuOptions: DropdownMenuOptionType[] = [
     {
@@ -29,7 +26,13 @@ export default function ClientProfilePage() {
     },
   ];
 
-  if (!isFlagged) {
+  if (userProfile?.isFlagged) {
+    dropdownMenuOptions.push({
+      title: "Remover Suspensión",
+      onClick: () => setOpenRemoveSuspensionDialog(true),
+      color: "error.main",
+    });
+  } else if (!userProfile?.isFlagged) {
     dropdownMenuOptions.push({
       title: "Suspender Cliente",
       onClick: () => setOpenSuspendCustomerDialog(true),
@@ -70,7 +73,7 @@ export default function ClientProfilePage() {
               Regresar
             </Button>
           </Box>
-          {isFlagged && (
+          {userProfile?.isFlagged && (
             <Alert icon={<WarningIcon fontSize="inherit" />} severity="warning">
               Este usuaria ha sido suspendido. Para remover la suspensión,
               presiona el botón de los tres puntos.

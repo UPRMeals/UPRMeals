@@ -1,6 +1,5 @@
 import { Box, Stack, Alert, CircularProgress } from "@mui/material";
 import WarningIcon from "@mui/icons-material/Warning";
-import { isFlaggedAccount } from "../../../shared/components/navbar";
 import { useRouter } from "next/router";
 import { useUserService } from "@/shared/hooks/useUserService";
 import { useEffect, useState } from "react";
@@ -51,7 +50,7 @@ export default function ProfilePage() {
     >
       {currUser ? (
         <Stack gap={2}>
-          {isFlaggedAccount && (
+          {currUser.isFlagged && (
             <Alert icon={<WarningIcon fontSize="inherit" />} severity="warning">
               Your account has been flagged. Please visit the cafeteria to
               resolve this issue. You may resume acitivity upon the cafeteria
