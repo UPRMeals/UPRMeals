@@ -1,5 +1,10 @@
 import { Body, Controller, Get, Param, Post, Request } from '@nestjs/common';
-import { CreateMenuData, MenuResponse, GetAllMenusResponse } from './menu.dto';
+import {
+  CreateMenuData,
+  MenuResponse,
+  GetAllMenusResponse,
+  Menu,
+} from './menu.dto';
 import { MenuService } from './menu.service';
 import { StaffOnly } from '../auth/decorators/isStaff.decorator';
 
@@ -56,7 +61,7 @@ export class MenuController {
   }
 
   @Get('active-menu')
-  async getActiveMenu() {
+  async getActiveMenu(): Promise<Menu> {
     return await this.menuService.getActiveMenu();
   }
 }

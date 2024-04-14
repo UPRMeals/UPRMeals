@@ -1,11 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ItemType, Prisma } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
-import {
-  ActiveMenuResponse,
-  MenuResponse,
-  GetAllMenusResponse,
-} from './menu.dto';
+import { Menu, MenuResponse, GetAllMenusResponse } from './menu.dto';
 
 @Injectable()
 export class MenuService {
@@ -73,7 +69,7 @@ export class MenuService {
     return menus;
   }
 
-  async getActiveMenu(): Promise<ActiveMenuResponse> {
+  async getActiveMenu(): Promise<Menu> {
     const tempMenuResponse = await this.prismaService.menu.findFirst({
       where: { isActive: true, removed: false },
       include: {

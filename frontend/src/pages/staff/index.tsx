@@ -30,7 +30,7 @@ export default function StaffHomePage() {
           <Typography variant="h1" fontFamily={"Bungee"}>
             Bienvenido al Equipo!
           </Typography>
-          <Typography variant="h3" color={Colors.Charcoal} fontWeight={400}>
+          <Typography variant="h3" fontWeight={400}>
             Gestiona los pedidos aquí.
           </Typography>
           <Box

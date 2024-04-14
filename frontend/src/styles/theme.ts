@@ -52,7 +52,11 @@ const defaultTheme = createTheme({
     },
     h3: {
       fontWeight: 500,
-      color: Colors.Teal,
+      color: Colors.Charcoal,
+    },
+    h4: {
+      fontWeight: 500,
+      color: Colors.Charcoal,
     },
     subtitle2: {
       color: Colors.Charcoal,
