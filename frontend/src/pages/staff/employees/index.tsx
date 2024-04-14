@@ -94,7 +94,7 @@ export default function CustomerProfilesPage() {
           <TableCell>
             <ButtonBase
               onClick={() => {
-                router.push(""); //TODO
+                router.push(`employees/${employee.id}/`);
               }}
               sx={{
                 fontWeight: 700,
