@@ -6,8 +6,8 @@ import ProfileCard from "../../../../shared/components/profileCard";
 import { UserProfile } from "../../../../../../backend/src/user/user.dto";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { DropdownMenuOptionType } from "../../../../shared/components/DropdownMenu";
-import RemoveEmployeeDialog from "../../../../modules/staff/components/RemoveEmployeeDialog";
 import { JWTUtils } from "../../../../shared/utils/jwtUtils";
+import RemoveEmployeeDialog from "@/modules/staff/components/RemoveEmployeeDialog";
 
 export default function EmployeeProfilesPage() {
   const router = useRouter();

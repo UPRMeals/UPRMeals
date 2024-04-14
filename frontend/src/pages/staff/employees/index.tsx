@@ -16,8 +16,8 @@ import DropdownMenu, {
 } from "../../../shared/components/DropdownMenu";
 import { useUserService } from "../../../shared/hooks/useUserService";
 import { UserProfile } from "../../../../../backend/src/user/user.dto";
-import RemoveEmployeeDialog from "../../../modules/staff/components/RemoveEmployeeDialog";
 import { JWTUtils } from "../../../shared/utils/jwtUtils";
+import RemoveEmployeeDialog from "@/modules/staff/components/RemoveEmployeeDialog";
 
 export default function CustomerProfilesPage() {
   const { getEmployeeProfiles } = useUserService();

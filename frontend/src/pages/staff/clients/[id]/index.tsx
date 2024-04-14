@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import ProfileCard from "../../../../shared/components/profileCard";
 import { UserProfile } from "../../../../../../backend/src/user/user.dto";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import SetEmployeeDialog from "../../../../modules/staff/components/setEmployeeDialog";
 import { DropdownMenuOptionType } from "../../../../shared/components/DropdownMenu";
 import WarningIcon from "@mui/icons-material/Warning";
+import SetEmployeeDialog from "@/modules/staff/components/SetEmployeeDialog";
 
 export default function ClientProfilePage() {
   const router = useRouter();
