@@ -14,6 +14,7 @@ import { toast } from "react-hot-toast";
 import * as yup from "yup";
 import { Schema } from "yup";
 import { useState } from "react";
+import { LoadingButton } from "@mui/lab";
 
 export interface SignUpFormType {
   firstName: string;
@@ -128,18 +129,15 @@ const CustomerSignUp = () => {
         type="password"
         required
       />
-      <Button
+      <LoadingButton
+        loading={isValidating}
         variant="contained"
         onClick={formik.submitForm}
-        disabled={!formik.isValid || isValidating}
+        disabled={!formik.isValid}
         sx={{ width: { xs: "100%", sm: "auto" } }}
       >
-        {isValidating ? (
-          <CircularProgress size={18} sx={{ color: "white", my: 1, mx: 4 }} />
-        ) : (
-          "Sign Up"
-        )}
-      </Button>
+        Sign Up
+      </LoadingButton>
       <Stack direction="row" gap={1} mt={2} whiteSpace="nowrap">
         <Typography variant="body1">Already have an account?</Typography>
         <Link

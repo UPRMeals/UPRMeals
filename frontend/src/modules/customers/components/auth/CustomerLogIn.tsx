@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Link,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Link, Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import TextInput from "@/shared/inputs/TextInput";
 import { useAuthService } from "../../../../shared/hooks/useAuthService";
@@ -14,6 +7,7 @@ import toast from "react-hot-toast";
 import * as yup from "yup";
 import { Schema } from "yup";
 import { useState } from "react";
+import { LoadingButton } from "@mui/lab";
 
 export interface LogInFormType {
   email: string;
@@ -76,18 +70,15 @@ const CustomerLogIn = () => {
         type="password"
         required
       />
-      <Button
+      <LoadingButton
+        loading={isValidating}
         variant="contained"
         onClick={formik.submitForm}
-        disabled={!formik.isValid || isValidating}
+        disabled={!formik.isValid}
         sx={{ width: { xs: "100%", sm: "auto" } }}
       >
-        {isValidating ? (
-          <CircularProgress size={18} sx={{ color: "white", my: 1, mx: 2.5 }} />
-        ) : (
-          "Log In"
-        )}
-      </Button>
+        Log In
+      </LoadingButton>
       <Stack direction="row" gap={1} mt={2} whiteSpace="nowrap">
         <Typography variant="body1">Don&apos;t have an account?</Typography>
         <Link
