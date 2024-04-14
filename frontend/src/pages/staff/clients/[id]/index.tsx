@@ -1,12 +1,13 @@
-import { Box, Stack, CircularProgress, Button } from "@mui/material";
+import { Box, Stack, CircularProgress, Button, Alert } from "@mui/material";
 import { useRouter } from "next/router";
 import { useUserService } from "@/shared/hooks/useUserService";
 import { useEffect, useState } from "react";
-import ProfileCard from "@/shared/components/profileCard";
+import ProfileCard from "../../../../shared/components/profileCard";
 import { UserProfile } from "../../../../../../backend/src/user/user.dto";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CreateStaffDialog from "../../../../modules/staff/components/CreateStaffDialog";
 import { DropdownMenuOptionType } from "../../../../shared/components/DropdownMenu";
+import WarningIcon from "@mui/icons-material/Warning";
 
 export default function ClientProfilePage() {
   const router = useRouter();
@@ -69,7 +70,12 @@ export default function ClientProfilePage() {
               Regresar
             </Button>
           </Box>
-
+          {isFlagged && (
+            <Alert icon={<WarningIcon fontSize="inherit" />} severity="warning">
+              Este usuaria ha sido suspendido. Para remover la suspensión,
+              presiona el botón de los tres puntos.
+            </Alert>
+          )}
           <ProfileCard
             user={userProfile}
             dropdownOptions={dropdownMenuOptions}

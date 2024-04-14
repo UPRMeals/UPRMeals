@@ -69,8 +69,15 @@ const ProfileCard = ({
 }) => {
   const [letterColor, setLetterColor] = useState<string>();
   let profileTitle = "Profile";
-  if (window.location.pathname.includes("staff")) {
+  const isStaffPortal = window.location.pathname.includes("staff");
+  if (isStaffPortal) {
     profileTitle = getUserRole(user);
+  }
+
+  const rand = Math.random(); // TODO
+  let isFlagged = false;
+  if (rand > 0.5) {
+    isFlagged = true;
   }
 
   const notes =
@@ -110,7 +117,8 @@ const ProfileCard = ({
           </Typography>
         }
         sx={{
-          backgroundColor: Colors.Teal,
+          backgroundColor:
+            isFlagged && isStaffPortal ? "error.main" : Colors.Teal,
           maxWidth: 300,
           textAlign: "center",
           px: 0,
@@ -122,7 +130,7 @@ const ProfileCard = ({
       <CardContent
         sx={{
           border: 5,
-          borderColor: Colors.Teal,
+          borderColor: isFlagged && isStaffPortal ? "error.main" : Colors.Teal,
           backgroundColor: "white",
           borderBottomLeftRadius: 10,
           borderBottomRightRadius: 10,
