@@ -63,9 +63,13 @@ export default function ProfilePage() {
           <ProfileCard
             user={currUser}
             handleLogout={handleLogout}
-            handleDeleteDialog={() => {
-              setOpenDeleteDialog(true);
-            }}
+            dropdownOptions={[
+              {
+                title: "Delete Account",
+                onClick: () => setOpenDeleteDialog(true),
+                color: "error.main",
+              },
+            ]}
           />
         </Stack>
       ) : (

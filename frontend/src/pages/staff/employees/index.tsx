@@ -11,11 +11,13 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import DropdownMenu, { MenuOptionType } from "@/shared/components/DropdownMenu";
+import DropdownMenu, {
+  DropdownMenuOptionType,
+} from "../../../shared/components/DropdownMenu";
 import { useUserService } from "../../../shared/hooks/useUserService";
 import { UserProfile } from "../../../../../backend/src/user/user.dto";
-import RemoveStaffDialog from "@/modules/staff/components/RemoveStaffDialog";
-import { JWTUtils } from "@/shared/utils/jwtUtils";
+import RemoveStaffDialog from "../../../modules/staff/components/RemoveStaffDialog";
+import { JWTUtils } from "../../../shared/utils/jwtUtils";
 
 export default function CustomerProfilesPage() {
   const { getEmployeeProfiles } = useUserService();
@@ -64,7 +66,7 @@ export default function CustomerProfilesPage() {
   }
 
   const Row = ({ employee }: { employee: UserProfile }) => {
-    const dropdownMenuOptions: MenuOptionType[] =
+    const dropdownMenuOptions: DropdownMenuOptionType[] =
       currUserId === employee.id
         ? []
         : [

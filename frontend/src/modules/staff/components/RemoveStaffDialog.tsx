@@ -1,22 +1,29 @@
 import BaseDialog from "../../../shared/components/baseDialog";
 import toast from "react-hot-toast";
 import { useUserService } from "@/shared/hooks/useUserService";
+import { useRouter } from "next/router";
 
 export default function RemoveStaffDialog({
   open,
   handleClose,
   userId,
+  rerouteLink,
 }: {
   open: boolean;
   handleClose: () => void;
   userId: number;
+  rerouteLink?: string;
 }) {
   const { removeEmployee } = useUserService();
+  const router = useRouter();
 
   async function handleSubmit() {
     const user = await removeEmployee(userId);
     if (user.id) {
       toast.success("Empleado suspendido.");
+      if (rerouteLink) {
+        router.push(rerouteLink);
+      }
     }
 
     handleClose();

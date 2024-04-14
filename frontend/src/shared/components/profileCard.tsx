@@ -19,7 +19,9 @@ import EmailIcon from "@mui/icons-material/Email";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 import { useEffect, useState } from "react";
-import DropdownMenu from "@/shared/components/DropdownMenu";
+import DropdownMenu, {
+  DropdownMenuOptionType,
+} from "@/shared/components/DropdownMenu";
 import { UserProfile } from "../../../../backend/src/user/user.dto";
 import { Colors } from "@/styles/theme";
 
@@ -59,11 +61,11 @@ function getUserRole(user: UserProfile) {
 const ProfileCard = ({
   user,
   handleLogout,
-  handleDeleteDialog,
+  dropdownOptions,
 }: {
   user: UserProfile;
   handleLogout?: () => void;
-  handleDeleteDialog?: () => void;
+  dropdownOptions?: DropdownMenuOptionType[];
 }) => {
   const [letterColor, setLetterColor] = useState<string>();
   let profileTitle = "Profile";
@@ -182,16 +184,8 @@ const ProfileCard = ({
                 display="flex"
                 justifyContent={"flex-end"}
               >
-                {handleDeleteDialog ? (
-                  <DropdownMenu
-                    menuItems={[
-                      {
-                        title: "Delete Account",
-                        onClick: () => handleDeleteDialog(),
-                        color: "error.main",
-                      },
-                    ]}
-                  />
+                {dropdownOptions && dropdownOptions.length !== 0 ? (
+                  <DropdownMenu menuItems={dropdownOptions} />
                 ) : (
                   <></>
                 )}

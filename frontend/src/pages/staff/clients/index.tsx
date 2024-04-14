@@ -12,10 +12,12 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import DropdownMenu, { MenuOptionType } from "@/shared/components/DropdownMenu";
+import DropdownMenu, {
+  DropdownMenuOptionType,
+} from "../../../shared/components/DropdownMenu";
 import { useUserService } from "../../../shared/hooks/useUserService";
 import { UserProfile } from "../../../../../backend/src/user/user.dto";
-import CreateStaffDialog from "@/modules/staff/components/CreateStaffDialog";
+import CreateStaffDialog from "../../../modules/staff/components/CreateStaffDialog";
 
 export default function CustomerProfilesPage() {
   const { getCustomerProfiles } = useUserService();
@@ -61,7 +63,7 @@ export default function CustomerProfilesPage() {
       isFlagged = true;
     }
 
-    const dropdownMenuOptions: MenuOptionType[] = [
+    const dropdownMenuOptions: DropdownMenuOptionType[] = [
       {
         title: "Marcar como Empleado",
         onClick: () => handleMenuOptionsClick("createStaff", customer.id),

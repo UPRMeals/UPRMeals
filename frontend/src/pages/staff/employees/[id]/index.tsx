@@ -1,25 +1,54 @@
 import { Box, Stack, CircularProgress, Button } from "@mui/material";
 import { useRouter } from "next/router";
-import { useUserService } from "@/shared/hooks/useUserService";
+import { useUserService } from "../../../../shared/hooks/useUserService";
 import { useEffect, useState } from "react";
-import ProfileCard from "@/shared/components/profileCard";
+import ProfileCard from "../../../../shared/components/profileCard";
 import { UserProfile } from "../../../../../../backend/src/user/user.dto";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { DropdownMenuOptionType } from "../../../../shared/components/DropdownMenu";
+import RemoveStaffDialog from "../../../../modules/staff/components/RemoveStaffDialog";
+import { JWTUtils } from "../../../../shared/utils/jwtUtils";
 
 export default function EmployeeProfilesPage() {
   const router = useRouter();
   const { getProfileById } = useUserService();
-  const [currUser, setCurrUser] = useState<UserProfile>();
+  const [userProfile, setUserProfile] = useState<UserProfile>();
+  const [openSuspendEmployeeDialog, setOpenSuspendEmployeeDialog] =
+    useState(false);
+  const [currUserId, setCurrUserId] = useState<number>();
+
+  const getCurrUserId = JWTUtils.getUserId;
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const token = localStorage.getItem("token");
+      const userIdFromToken = getCurrUserId(token);
+
+      setCurrUserId(userIdFromToken);
+    };
+    fetchUserId();
+  }, [getCurrUserId, router]);
+
+  const dropdownMenuOptions: DropdownMenuOptionType[] =
+    currUserId === userProfile?.id
+      ? []
+      : [
+          {
+            title: "Suspender Empleado",
+            onClick: () => setOpenSuspendEmployeeDialog(true),
+            color: "error.main",
+          },
+        ];
 
   useEffect(() => {
     const getUserProfile = async () => {
       const idFromRouter = router.query.id;
       if (!idFromRouter || typeof idFromRouter !== "string") return;
       const user = await getProfileById(Number(idFromRouter));
-      setCurrUser(user);
+      setUserProfile(user);
     };
 
-    if (!currUser) {
+    if (!userProfile) {
       getUserProfile();
     }
   }, [getProfileById]);
@@ -30,9 +59,9 @@ export default function EmployeeProfilesPage() {
       px={5}
       justifyContent="center"
       display="flex"
-      height={currUser ? "normal" : "100vh"}
+      height={userProfile ? "normal" : "100vh"}
     >
-      {currUser ? (
+      {userProfile ? (
         <Stack gap={2}>
           <Box>
             <Button
@@ -44,12 +73,27 @@ export default function EmployeeProfilesPage() {
               Regresar
             </Button>
           </Box>
-          <ProfileCard user={currUser} />
+          <ProfileCard
+            user={userProfile}
+            dropdownOptions={dropdownMenuOptions}
+          />
         </Stack>
       ) : (
         <Box alignContent={"center"} justifyItems={"center"} height={"100%"}>
           <CircularProgress size={80} />
         </Box>
+      )}
+      {userProfile?.id ? (
+        <RemoveStaffDialog
+          open={openSuspendEmployeeDialog}
+          handleClose={async () => {
+            setOpenSuspendEmployeeDialog(false);
+          }}
+          userId={userProfile.id}
+          rerouteLink={"/staff/employees"}
+        />
+      ) : (
+        <></>
       )}
     </Box>
   );
