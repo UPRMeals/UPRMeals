@@ -13,7 +13,7 @@ import {
   Button,
   CardHeader,
 } from "@mui/material";
-import { deepPurple, amber, cyan, grey } from "@mui/material/colors";
+import { deepPurple, amber, cyan, grey, blueGrey } from "@mui/material/colors";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
@@ -94,16 +94,15 @@ const ProfileCard = ({
         minWidth: "70%",
         backgroundColor: "#f8f8fc",
         border: 0,
-        boxShadow: 0,
+        boxShadow: "1px 2px 7px 1px " + blueGrey[100] + "99",
       }}
     >
       <CardHeader
         title={
           <Typography
             sx={{
-              fontFamily: "Bungee",
               fontSize: 24,
-              fontWeight: 700,
+              fontWeight: 600,
               color: "white",
             }}
           >
@@ -111,9 +110,7 @@ const ProfileCard = ({
           </Typography>
         }
         sx={{
-          backgroundColor:
-            user.isFlagged && isStaffPortal ? "error.main" : Colors.Teal,
-          maxWidth: 300,
+          backgroundColor: Colors.Teal + "bb",
           textAlign: "center",
           px: 0,
           py: 0.8,
@@ -123,13 +120,9 @@ const ProfileCard = ({
       ></CardHeader>
       <CardContent
         sx={{
-          border: 5,
-          borderColor:
-            user.isFlagged && isStaffPortal ? "error.main" : Colors.Teal,
-          backgroundColor: "white",
+          backgroundColor: "whitesmoke",
           borderBottomLeftRadius: 10,
           borderBottomRightRadius: 10,
-          borderTopRightRadius: 10,
         }}
       >
         <Box
