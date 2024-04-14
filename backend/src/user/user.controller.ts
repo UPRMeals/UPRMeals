@@ -29,4 +29,12 @@ export class UserController {
 
     return customerProfiles;
   }
+
+  @StaffOnly()
+  @Get('employeeProfiles')
+  async getEmployeeProfiles(): Promise<UserProfile[]> {
+    const employeeProfiles = await this.userService.getEmployeeProfiles();
+
+    return employeeProfiles;
+  }
 }
