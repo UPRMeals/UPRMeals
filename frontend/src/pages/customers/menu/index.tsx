@@ -45,14 +45,14 @@ const MenuPage: NextPageWithLayout = () => {
         <>
           <Stack justifyContent={"space-between"} alignItems={"center"} pb={2}>
             <Typography variant="h2" mb={2}>
-              Menu de Hoy
+              {activeMenu.name}
             </Typography>
             <Button
               variant="contained"
               sx={{ maxHeight: 50 }}
               onClick={() => router.push("/customers/order")}
             >
-              Ordena Ahora
+              Order Now!
             </Button>
           </Stack>
           <Box

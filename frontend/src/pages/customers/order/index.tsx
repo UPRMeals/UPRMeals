@@ -11,7 +11,10 @@ import { useEffect, useState } from "react";
 import { Menu } from "../../../../../backend/src/menu/menu.dto";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useRouter } from "next/router";
-import { getCartLayout } from "@/shared/providers/CartProvider";
+import {
+  getCartLayout,
+  userCartContext,
+} from "@/shared/providers/CartProvider";
 import { NextPageWithLayout } from "@/pages/_app";
 import theme from "@/styles/theme";
 
@@ -21,6 +24,8 @@ const OrderPage: NextPageWithLayout = () => {
   const [activeMenu, setActiveMenu] = useState<Menu>();
 
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const { getItemCount } = userCartContext();
+  const itemCount = getItemCount();
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -77,8 +82,9 @@ const OrderPage: NextPageWithLayout = () => {
           }}
           onClick={() => router.push("/customers/cart")}
           endIcon={!isMobile && <ArrowForwardIcon />}
+          disabled={itemCount === 0}
         >
-          Listo
+          Order Summary
         </Button>
       </Paper>
     </Box>

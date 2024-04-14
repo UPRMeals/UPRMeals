@@ -47,7 +47,7 @@ const ComboCard = ({
           {combo.description}
         </Typography>
         <Typography variant="h6" fontWeight={400} mt={3}>
-          Proteinas (Incluye {combo.proteinCount}):
+          Proteins (Includes {combo.proteinCount}):
         </Typography>
         <Stack direction="row" spacing={1} mt={1} useFlexGap flexWrap="wrap">
           {combo.proteins.map((protein, index) => (
@@ -62,7 +62,7 @@ const ComboCard = ({
           ))}
         </Stack>
         <Typography variant="h6" fontWeight={400} mt={3}>
-          Acompañantes (Incluye {combo.sideCount}):
+          Sides (Includes {combo.sideCount}):
         </Typography>
         <Stack direction="row" spacing={1} mt={1} useFlexGap flexWrap="wrap">
           {combo.sides.map((side, index) => (

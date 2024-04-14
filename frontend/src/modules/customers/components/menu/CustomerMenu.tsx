@@ -33,7 +33,7 @@ const CustomerMenu = ({
           <ComboCard key={index} combo={combo} isOrderPage={isOrderPage} />
         ))}
       </Stack>
-      <Typography variant="h4">Proteinas</Typography>
+      <Typography variant="h4">Proteins</Typography>
       <Stack
         direction={{ xs: "column", md: "row" }}
         width="100%"
@@ -47,7 +47,7 @@ const CustomerMenu = ({
           <ItemCard key={index} item={protein} isOrderPage={isOrderPage} />
         ))}
       </Stack>
-      <Typography variant="h4">Acompañantes</Typography>
+      <Typography variant="h4">Sides</Typography>
       <Stack
         direction={{ xs: "column", md: "row" }}
         px="2%"

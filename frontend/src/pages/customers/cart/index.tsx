@@ -129,8 +129,9 @@ const MyCartPage: NextPageWithLayout = () => {
             width: isMobile ? "70%" : "20%",
           }}
           endIcon={!isMobile && <DoneIcon />}
+          disabled={items.length === 0}
         >
-          Ordenar
+          Place Order
         </Button>
         <Button
           variant={isMobile ? "outlined" : "text"}
@@ -142,7 +143,7 @@ const MyCartPage: NextPageWithLayout = () => {
           onClick={() => router.push("/customers/order")}
           startIcon={!isMobile && <ArrowBackIcon />}
         >
-          Editar
+          Edit Items
         </Button>
       </Paper>
     </Box>
