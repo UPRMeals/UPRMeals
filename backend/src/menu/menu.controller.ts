@@ -7,6 +7,7 @@ import {
 } from './menu.dto';
 import { MenuService } from './menu.service';
 import { StaffOnly } from '../auth/decorators/isStaff.decorator';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('menu')
 export class MenuController {
@@ -60,6 +61,7 @@ export class MenuController {
     return menu;
   }
 
+  @Public()
   @Get('active-menu')
   async getActiveMenu(): Promise<Menu> {
     return await this.menuService.getActiveMenu();

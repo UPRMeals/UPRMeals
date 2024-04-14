@@ -34,22 +34,26 @@ export default function MenuPage() {
       alignItems={"center"}
       justifyContent={"start"}
     >
-      <Stack justifyContent={"space-between"} alignItems={"center"} pb={2}>
-        <Typography variant="h2" mb={2}>
-          Menu de Hoy
-        </Typography>
-        <Button
-          variant="contained"
-          sx={{ maxHeight: 50 }}
-          onClick={() => router.push("/customers/order")}
-        >
-          Order Now
-        </Button>
-      </Stack>
       {!activeMenu ? (
-        <CircularProgress size={80} />
+        <Box alignContent={"center"} justifyItems={"center"} height={"100%"}>
+          <CircularProgress size={80} />
+        </Box>
       ) : (
-        <CustomerMenu menu={activeMenu} isOrderPage={false} />
+        <>
+          <Stack justifyContent={"space-between"} alignItems={"center"} pb={2}>
+            <Typography variant="h2" mb={2}>
+              Menu de Hoy
+            </Typography>
+            <Button
+              variant="contained"
+              sx={{ maxHeight: 50 }}
+              onClick={() => router.push("/customers/order")}
+            >
+              Order Now
+            </Button>
+          </Stack>
+          <CustomerMenu menu={activeMenu} isOrderPage={false} />
+        </>
       )}
     </Box>
   );

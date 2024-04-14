@@ -25,7 +25,9 @@ export default function OrderPage() {
       justifyContent={"center"}
     >
       {!activeMenu ? (
-        <CircularProgress size={80} />
+        <Box alignContent={"center"} justifyItems={"center"} height={"100%"}>
+          <CircularProgress size={80} />
+        </Box>
       ) : (
         <CustomerMenu menu={activeMenu} isOrderPage={true} />
       )}
