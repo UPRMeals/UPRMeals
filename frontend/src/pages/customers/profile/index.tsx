@@ -101,7 +101,7 @@ export default function ProfilePage() {
   }, [getProfile]);
 
   return (
-    <Box mt={15} pb={10} px={5} justifyContent="center" display="flex">
+    <Box py={15} px={5} justifyContent="center" display="flex" height={"100vh"}>
       {currUser ? (
         <Stack gap={2}>
           {isFlaggedAccount && (
@@ -220,7 +220,9 @@ export default function ProfilePage() {
           </Card>
         </Stack>
       ) : (
-        <CircularProgress />
+        <Box alignContent={"center"} justifyItems={"center"} height={"100%"}>
+          <CircularProgress size={80} />
+        </Box>
       )}
       <BaseDialog
         open={openDialog}
