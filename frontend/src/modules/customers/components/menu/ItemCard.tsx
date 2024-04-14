@@ -13,7 +13,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 
 import { Colors } from "@/styles/theme";
 import { blueGrey } from "@mui/material/colors";
-import { useState } from "react";
+import { userOrderContext } from "@/shared/providers/OrderProvider";
 
 export const ItemCard = ({
   item,
@@ -22,7 +22,8 @@ export const ItemCard = ({
   item: Item;
   isOrderPage: boolean;
 }) => {
-  const [itemCount, setItemCount] = useState(0);
+  const { addItem, getItemCount, removeItem } = userOrderContext();
+  const itemCount = getItemCount(item);
 
   return (
     <Card
@@ -79,7 +80,7 @@ export const ItemCard = ({
                     borderBottomLeftRadius: 20,
                   },
                 }}
-                onClick={() => setItemCount(itemCount - 1)}
+                onClick={() => removeItem(item)}
               />
               <Typography px={1} fontWeight={600}>
                 {itemCount}
@@ -88,7 +89,7 @@ export const ItemCard = ({
                 endIcon={
                   <AddIcon fontSize="large" sx={{ color: Colors.Charcoal }} />
                 }
-                onClick={() => setItemCount(itemCount + 1)}
+                onClick={() => addItem(item)}
                 sx={{
                   height: "100%",
                   borderTopRightRadius: 20,
@@ -107,7 +108,7 @@ export const ItemCard = ({
                 borderRadius: 10,
                 boxShadow: "1px 2px 7px 1px " + blueGrey[100] + "99",
               }}
-              onClick={() => setItemCount(itemCount + 1)}
+              onClick={() => addItem(item)}
             >
               <AddIcon sx={{ color: Colors.Charcoal }} />
             </IconButton>

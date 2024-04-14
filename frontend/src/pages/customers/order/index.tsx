@@ -6,6 +6,7 @@ import { Menu } from "../../../../../backend/src/menu/menu.dto";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useRouter } from "next/router";
+import OrderProvider from "@/shared/providers/OrderProvider";
 
 export default function OrderPage() {
   const router = useRouter();
@@ -43,7 +44,9 @@ export default function OrderPage() {
             width={"95%"}
             alignItems={"center"}
           >
-            <CustomerMenu menu={activeMenu} isOrderPage={true} />
+            <OrderProvider>
+              <CustomerMenu menu={activeMenu} isOrderPage={true} />
+            </OrderProvider>
           </Box>
         )}
       </Box>
