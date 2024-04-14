@@ -7,7 +7,7 @@ import {
 } from './menu.dto';
 import { MenuService } from './menu.service';
 import { StaffOnly } from '../auth/decorators/isStaff.decorator';
-import { Public } from 'src/auth/decorators/public.decorator';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('menu')
 export class MenuController {
