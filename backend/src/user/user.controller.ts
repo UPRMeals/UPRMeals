@@ -6,7 +6,7 @@ import {
   Post,
   Request,
 } from '@nestjs/common';
-import { StaffOnly } from 'src/auth/decorators/isStaff.decorator';
+import { StaffOnly } from '../auth/decorators/isStaff.decorator';
 import { UserProfile } from './user.dto';
 
 import { UserService } from './user.service';
@@ -55,11 +55,11 @@ export class UserController {
   }
 
   @StaffOnly()
-  @Post('employee/:userId/create')
-  async createEmployee(
+  @Post('employee/:userId/set')
+  async setEmployee(
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<UserProfile> {
-    const employeeProfile = await this.userService.createEmployee(userId);
+    const employeeProfile = await this.userService.setEmployee(userId);
 
     return employeeProfile;
   }

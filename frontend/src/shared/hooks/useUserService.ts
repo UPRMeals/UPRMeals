@@ -42,7 +42,7 @@ export const useUserService = () => {
 
   const setEmployee = async (userId: number): Promise<UserProfile> =>
     baseApi({
-      url: `${userControllerBase}/employee/${userId}/create`,
+      url: `${userControllerBase}/employee/${userId}/set`,
       method: "POST",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
