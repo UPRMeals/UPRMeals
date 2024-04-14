@@ -9,7 +9,13 @@ export type MenuOptionType = {
   color?: string;
 };
 
-const DropdownMenu = ({ menuItems }: { menuItems: MenuOptionType[] }) => {
+const DropdownMenu = ({
+  menuItems,
+  disabled = false,
+}: {
+  menuItems: MenuOptionType[];
+  disabled?: boolean;
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [open, setOpen] = useState(false);
 
@@ -28,7 +34,7 @@ const DropdownMenu = ({ menuItems }: { menuItems: MenuOptionType[] }) => {
 
   return (
     <Box>
-      <IconButton onClick={handleMenuOpen}>
+      <IconButton onClick={handleMenuOpen} disabled={disabled}>
         <MoreVertIcon />
       </IconButton>
       <Menu

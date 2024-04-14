@@ -15,6 +15,7 @@ import DropdownMenu, { MenuOptionType } from "@/shared/components/DropdownMenu";
 import { useUserService } from "../../../shared/hooks/useUserService";
 import { UserProfile } from "../../../../../backend/src/user/user.dto";
 import RemoveStaffDialog from "@/modules/staff/components/RemoveStaffDialog";
+import { JWTUtils } from "@/shared/utils/jwtUtils";
 
 export default function CustomerProfilesPage() {
   const { getEmployeeProfiles } = useUserService();
@@ -22,7 +23,20 @@ export default function CustomerProfilesPage() {
     useState(false);
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<number>();
   const [allEmployees, setAllEmployees] = useState<UserProfile[]>();
+  const [currUserId, setCurrUserId] = useState<number>();
   const router = useRouter();
+
+  const getCurrUserId = JWTUtils.getUserId;
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const token = localStorage.getItem("token");
+      const userIdFromToken = getCurrUserId(token);
+
+      setCurrUserId(userIdFromToken);
+    };
+    fetchUserId();
+  }, [getCurrUserId, router]);
 
   useEffect(() => {
     const getEmployees = async () => {
@@ -50,13 +64,17 @@ export default function CustomerProfilesPage() {
   }
 
   const Row = ({ employee }: { employee: UserProfile }) => {
-    const dropdownMenuOptions: MenuOptionType[] = [
-      {
-        title: "Suspender Empleado",
-        onClick: () => handleMenuOptionsClick("suspendEmployee", employee.id),
-        color: "error.main",
-      },
-    ];
+    const dropdownMenuOptions: MenuOptionType[] =
+      currUserId === employee.id
+        ? []
+        : [
+            {
+              title: "Suspender Empleado",
+              onClick: () =>
+                handleMenuOptionsClick("suspendEmployee", employee.id),
+              color: "error.main",
+            },
+          ];
 
     return (
       <>
@@ -90,7 +108,10 @@ export default function CustomerProfilesPage() {
             </ButtonBase>
           </TableCell>
           <TableCell sx={{ width: 4 }}>
-            <DropdownMenu menuItems={dropdownMenuOptions} />
+            <DropdownMenu
+              menuItems={dropdownMenuOptions}
+              disabled={dropdownMenuOptions.length === 0}
+            />
           </TableCell>
         </TableRow>
       </>

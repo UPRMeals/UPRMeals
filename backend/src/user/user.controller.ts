@@ -48,7 +48,14 @@ export class UserController {
 
   @StaffOnly()
   @Post('employee/:userId/remove')
-  async removeEmployee(@Param('userId') userId: number): Promise<UserProfile> {
+  async removeEmployee(
+    @Request() req,
+    @Param('userId') userId: number,
+  ): Promise<UserProfile> {
+    if (req.user.userId === Number(userId)) {
+      throw new Error();
+    }
+
     const userProfile = await this.userService.removeEmployee(userId);
 
     return userProfile;
