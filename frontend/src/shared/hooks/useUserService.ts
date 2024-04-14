@@ -19,5 +19,40 @@ export const useUserService = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
 
-  return { getProfile, removeUser };
+  const getCustomerProfiles = async (): Promise<UserProfile[]> =>
+    baseApi({
+      url: `${userControllerBase}/customerProfiles`,
+      method: "GET",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+
+  const getEmployeeProfiles = async (): Promise<UserProfile[]> =>
+    baseApi({
+      url: `${userControllerBase}/employeeProfiles`,
+      method: "GET",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+
+  const createEmployee = async (userId: number): Promise<UserProfile> =>
+    baseApi({
+      url: `${userControllerBase}/employee/${userId}/create`,
+      method: "POST",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+
+  const removeEmployee = async (userId: number): Promise<UserProfile> =>
+    baseApi({
+      url: `${userControllerBase}/employee/${userId}/remove`,
+      method: "POST",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+
+  return {
+    getProfile,
+    removeUser,
+    getCustomerProfiles,
+    getEmployeeProfiles,
+    createEmployee,
+    removeEmployee,
+  };
 };

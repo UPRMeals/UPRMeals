@@ -34,4 +34,20 @@ export class JWTUtils {
     }
     return false;
   }
+
+  public static getUserId(token: string | null): number {
+    if (token !== null) {
+      try {
+        const [header, payload, signature] = token.split(".");
+        const decodedPayload = JSON.parse(
+          Buffer.from(payload, "base64").toString("utf-8")
+        );
+        return decodedPayload?.userId;
+      } catch (error) {
+        console.error("Error decoding token.", error);
+        return -1;
+      }
+    }
+    return -1;
+  }
 }
