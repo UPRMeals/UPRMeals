@@ -11,7 +11,7 @@ export default function OrderPage() {
   useEffect(() => {
     const fetchMenu = async () => {
       const menu = await getActiveMenu();
-      setActiveMenu(menu as any);
+      setActiveMenu(menu);
     };
     if (!activeMenu) fetchMenu();
   }, [getActiveMenu]);

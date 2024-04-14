@@ -19,7 +19,7 @@ export default function MenuPage() {
   useEffect(() => {
     const fetchMenu = async () => {
       const menu = await getActiveMenu();
-      setActiveMenu(menu as any);
+      setActiveMenu(menu);
     };
     if (!activeMenu) fetchMenu();
   }, [getActiveMenu]);
