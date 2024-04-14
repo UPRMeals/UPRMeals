@@ -41,7 +41,7 @@ const CartContext = createContext<{
   },
 });
 
-export const userCartContext = () => useContext(CartContext);
+export const useCartContext = () => useContext(CartContext);
 
 export const CartProvider = ({ children }: PropsWithChildren) => {
   const formik = useFormik<CartSchema>({

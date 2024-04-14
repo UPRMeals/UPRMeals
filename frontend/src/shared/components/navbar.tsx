@@ -21,7 +21,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { grey } from "@mui/material/colors";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { NextPageWithLayout } from "@/pages/_app";
-import { getCartLayout, userCartContext } from "../providers/CartProvider";
+import { getCartLayout, useCartContext } from "../providers/CartProvider";
 
 // TODO: Implement functionality
 export const isFlaggedAccount = true;
@@ -83,7 +83,7 @@ const Navbar: NextPageWithLayout<{
     ? staffNavBarItems
     : customerNavBarItems;
 
-  const { getItemCount } = userCartContext();
+  const { getItemCount } = useCartContext();
   const itemCount = getItemCount();
 
   useEffect(() => {

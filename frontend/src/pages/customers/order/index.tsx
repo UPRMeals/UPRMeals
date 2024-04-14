@@ -11,10 +11,7 @@ import { useEffect, useState } from "react";
 import { Menu } from "../../../../../backend/src/menu/menu.dto";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useRouter } from "next/router";
-import {
-  getCartLayout,
-  userCartContext,
-} from "@/shared/providers/CartProvider";
+import { getCartLayout, useCartContext } from "@/shared/providers/CartProvider";
 import { NextPageWithLayout } from "@/pages/_app";
 import theme from "@/styles/theme";
 
@@ -24,7 +21,7 @@ const OrderPage: NextPageWithLayout = () => {
   const [activeMenu, setActiveMenu] = useState<Menu>();
 
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { getItemCount } = userCartContext();
+  const { getItemCount } = useCartContext();
   const itemCount = getItemCount();
 
   useEffect(() => {

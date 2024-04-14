@@ -11,7 +11,7 @@ import AddIcon from "@mui/icons-material/Add";
 
 import { Colors } from "@/styles/theme";
 import { blueGrey } from "@mui/material/colors";
-import { userCartContext } from "@/shared/providers/CartProvider";
+import { useCartContext } from "@/shared/providers/CartProvider";
 import ItemAdder from "@/shared/components/ItemAdder";
 
 export const ItemCard = ({
@@ -21,7 +21,7 @@ export const ItemCard = ({
   item: Item;
   isOrderPage: boolean;
 }) => {
-  const { addItem, getItemCount, removeItem } = userCartContext();
+  const { addItem, getItemCount, removeItem } = useCartContext();
   const itemCount = getItemCount(item);
 
   return (

@@ -18,10 +18,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DoneIcon from "@mui/icons-material/Done";
 import { useRouter } from "next/router";
-import {
-  getCartLayout,
-  userCartContext,
-} from "@/shared/providers/CartProvider";
+import { getCartLayout, useCartContext } from "@/shared/providers/CartProvider";
 import { NextPageWithLayout } from "@/pages/_app";
 import theme, { Colors } from "@/styles/theme";
 import EditButtons from "@/shared/components/ItemAdder";
@@ -31,7 +28,7 @@ const MyCartPage: NextPageWithLayout = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const { getItems, getTotalPrice, clearItem, removeItem, addItem } =
-    userCartContext();
+    useCartContext();
 
   const items = getItems();
   const totalPrice = getTotalPrice();
