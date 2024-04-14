@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { useUserService } from "@/shared/hooks/useUserService";
 import { useRouter } from "next/router";
 
-export default function CreateStaffDialog({
+export default function SetEmployeeDialog({
   open,
   handleClose,
   userId,
@@ -14,11 +14,11 @@ export default function CreateStaffDialog({
   userId: number;
   rerouteLink?: string;
 }) {
-  const { createEmployee } = useUserService();
+  const { setEmployee } = useUserService();
   const router = useRouter();
 
   async function handleSubmit() {
-    const user = await createEmployee(userId);
+    const user = await setEmployee(userId);
 
     if (user.id && user.isStaff) {
       if (rerouteLink) {

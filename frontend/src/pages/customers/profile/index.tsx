@@ -1,13 +1,13 @@
 import { Box, Stack, Alert, CircularProgress } from "@mui/material";
 import WarningIcon from "@mui/icons-material/Warning";
 import { useRouter } from "next/router";
-import { useUserService } from "@/shared/hooks/useUserService";
+import { useUserService } from "../../../shared/hooks/useUserService";
 import { useEffect, useState } from "react";
 import { UserProfile } from "../../../../../backend/src/user/user.dto";
-import { useAuthService } from "@/shared/hooks/useAuthService";
+import { useAuthService } from "../../../shared/hooks/useAuthService";
 import toast from "react-hot-toast";
-import BaseDialog from "@/shared/components/baseDialog";
-import ProfileCard from "@/shared/components/profileCard";
+import BaseDialog from "../../../shared/components/baseDialog";
+import ProfileCard from "../../../shared/components/profileCard";
 
 export default function ProfilePage() {
   const router = useRouter();

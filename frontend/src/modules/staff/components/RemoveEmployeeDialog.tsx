@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { useUserService } from "@/shared/hooks/useUserService";
 import { useRouter } from "next/router";
 
-export default function RemoveStaffDialog({
+export default function RemoveEmployeeDialog({
   open,
   handleClose,
   userId,

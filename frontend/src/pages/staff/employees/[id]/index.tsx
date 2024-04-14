@@ -6,7 +6,7 @@ import ProfileCard from "../../../../shared/components/profileCard";
 import { UserProfile } from "../../../../../../backend/src/user/user.dto";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { DropdownMenuOptionType } from "../../../../shared/components/DropdownMenu";
-import RemoveStaffDialog from "../../../../modules/staff/components/RemoveStaffDialog";
+import RemoveEmployeeDialog from "../../../../modules/staff/components/RemoveEmployeeDialog";
 import { JWTUtils } from "../../../../shared/utils/jwtUtils";
 
 export default function EmployeeProfilesPage() {
@@ -84,7 +84,7 @@ export default function EmployeeProfilesPage() {
         </Box>
       )}
       {userProfile?.id ? (
-        <RemoveStaffDialog
+        <RemoveEmployeeDialog
           open={openSuspendEmployeeDialog}
           handleClose={async () => {
             setOpenSuspendEmployeeDialog(false);

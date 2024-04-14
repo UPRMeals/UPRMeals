@@ -17,7 +17,7 @@ import DropdownMenu, {
 } from "../../../shared/components/DropdownMenu";
 import { useUserService } from "../../../shared/hooks/useUserService";
 import { UserProfile } from "../../../../../backend/src/user/user.dto";
-import CreateStaffDialog from "../../../modules/staff/components/CreateStaffDialog";
+import SetEmployeeDialog from "../../../modules/staff/components/SetEmployeeDialog";
 
 export default function CustomerProfilesPage() {
   const { getCustomerProfiles } = useUserService();
@@ -25,7 +25,7 @@ export default function CustomerProfilesPage() {
     useState(false);
   const [openRemoveSuspensionDialog, setOpenRemoveSuspensionDialog] =
     useState(false);
-  const [openCreateStaffDialog, setOpenCreateStaffDialog] = useState(false);
+  const [openSetEmployeeDialog, setOpenSetEmployeeDialog] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState<number>();
   const [allCustomers, setAllCustomers] = useState<UserProfile[]>();
   const router = useRouter();
@@ -44,7 +44,7 @@ export default function CustomerProfilesPage() {
   const tableHeaders = ["Nombre", "Email", "", "", ""];
 
   function handleMenuOptionsClick(
-    selectedOption: "suspendCustomer" | "createStaff" | "removeSuspension",
+    selectedOption: "suspendCustomer" | "setEmployee" | "removeSuspension",
     customerId: number
   ) {
     setSelectedCustomerId(customerId);
@@ -55,8 +55,8 @@ export default function CustomerProfilesPage() {
       case "removeSuspension":
         setOpenRemoveSuspensionDialog(true);
         break;
-      case "createStaff":
-        setOpenCreateStaffDialog(true);
+      case "setEmployee":
+        setOpenSetEmployeeDialog(true);
         break;
     }
   }
@@ -67,7 +67,7 @@ export default function CustomerProfilesPage() {
     const dropdownMenuOptions: DropdownMenuOptionType[] = [
       {
         title: "Marcar como Empleado",
-        onClick: () => handleMenuOptionsClick("createStaff", customer.id),
+        onClick: () => handleMenuOptionsClick("setEmployee", customer.id),
       },
     ];
 
@@ -189,10 +189,10 @@ export default function CustomerProfilesPage() {
       </Box>
       {selectedCustomerId ? (
         <>
-          <CreateStaffDialog
-            open={openCreateStaffDialog}
+          <SetEmployeeDialog
+            open={openSetEmployeeDialog}
             handleClose={async () => {
-              setOpenCreateStaffDialog(false);
+              setOpenSetEmployeeDialog(false);
               setAllCustomers(await getCustomerProfiles());
             }}
             userId={selectedCustomerId}

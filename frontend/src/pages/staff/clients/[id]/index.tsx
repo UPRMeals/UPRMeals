@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import ProfileCard from "../../../../shared/components/profileCard";
 import { UserProfile } from "../../../../../../backend/src/user/user.dto";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import CreateStaffDialog from "../../../../modules/staff/components/CreateStaffDialog";
+import SetEmployeeDialog from "../../../../modules/staff/components/setEmployeeDialog";
 import { DropdownMenuOptionType } from "../../../../shared/components/DropdownMenu";
 import WarningIcon from "@mui/icons-material/Warning";
 
@@ -17,12 +17,12 @@ export default function ClientProfilePage() {
     useState(false);
   const [openRemoveSuspensionDialog, setOpenRemoveSuspensionDialog] =
     useState(false);
-  const [openCreateStaffDialog, setOpenCreateStaffDialog] = useState(false);
+  const [openSetEmployeeDialog, setOpenSetEmployeeDialog] = useState(false);
 
   const dropdownMenuOptions: DropdownMenuOptionType[] = [
     {
       title: "Marcar como Empleado",
-      onClick: () => setOpenCreateStaffDialog(true),
+      onClick: () => setOpenSetEmployeeDialog(true),
     },
   ];
 
@@ -91,10 +91,10 @@ export default function ClientProfilePage() {
       )}
       {userProfile?.id ? (
         <>
-          <CreateStaffDialog
-            open={openCreateStaffDialog}
+          <SetEmployeeDialog
+            open={openSetEmployeeDialog}
             handleClose={async () => {
-              setOpenCreateStaffDialog(false);
+              setOpenSetEmployeeDialog(false);
             }}
             userId={userProfile.id}
             rerouteLink={"/staff/employees"}

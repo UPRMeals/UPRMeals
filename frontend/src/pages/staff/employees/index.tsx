@@ -16,7 +16,7 @@ import DropdownMenu, {
 } from "../../../shared/components/DropdownMenu";
 import { useUserService } from "../../../shared/hooks/useUserService";
 import { UserProfile } from "../../../../../backend/src/user/user.dto";
-import RemoveStaffDialog from "../../../modules/staff/components/RemoveStaffDialog";
+import RemoveEmployeeDialog from "../../../modules/staff/components/RemoveEmployeeDialog";
 import { JWTUtils } from "../../../shared/utils/jwtUtils";
 
 export default function CustomerProfilesPage() {
@@ -172,7 +172,7 @@ export default function CustomerProfilesPage() {
         </TableContainer>
       </Box>
       {selectedEmployeeId ? (
-        <RemoveStaffDialog
+        <RemoveEmployeeDialog
           open={openSuspendEmployeeDialog}
           handleClose={async () => {
             setOpenSuspendEmployeeDialog(false);

@@ -1,4 +1,4 @@
-import { useBaseAPI } from "@/shared/hooks/useBaseAPI";
+import { useBaseAPI } from "../../shared/hooks/useBaseAPI";
 import { UserProfile } from "../../../../backend/src/user/user.dto";
 
 export const useUserService = () => {
@@ -40,7 +40,7 @@ export const useUserService = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
 
-  const createEmployee = async (userId: number): Promise<UserProfile> =>
+  const setEmployee = async (userId: number): Promise<UserProfile> =>
     baseApi({
       url: `${userControllerBase}/employee/${userId}/create`,
       method: "POST",
@@ -60,7 +60,7 @@ export const useUserService = () => {
     removeUser,
     getCustomerProfiles,
     getEmployeeProfiles,
-    createEmployee,
+    setEmployee,
     removeEmployee,
   };
 };
