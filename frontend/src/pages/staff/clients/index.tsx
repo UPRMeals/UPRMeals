@@ -43,9 +43,9 @@ export default function CustomerProfilesPage() {
 
   function handleMenuOptionsClick(
     selectedOption: "suspendCustomer" | "createStaff",
-    menuId: number
+    customerId: number
   ) {
-    setSelectedCustomerId(menuId);
+    setSelectedCustomerId(customerId);
     switch (selectedOption) {
       case "suspendCustomer":
         setOpenSuspendCustomerDialog(true);

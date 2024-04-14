@@ -55,9 +55,9 @@ export default function CustomerProfilesPage() {
 
   function handleMenuOptionsClick(
     selectedOption: "suspendEmployee",
-    menuId: number
+    employeeId: number
   ) {
-    setSelectedEmployeeId(menuId);
+    setSelectedEmployeeId(employeeId);
     switch (selectedOption) {
       case "suspendEmployee":
         setOpenSuspendEmployeeDialog(true);
