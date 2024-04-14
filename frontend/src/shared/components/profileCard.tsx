@@ -9,11 +9,16 @@ import {
   Tooltip,
   IconButton,
   Grid,
-  CardActions,
-  Button,
   CardHeader,
 } from "@mui/material";
-import { deepPurple, amber, cyan, grey, blueGrey } from "@mui/material/colors";
+import {
+  deepPurple,
+  amber,
+  cyan,
+  grey,
+  blueGrey,
+  lightGreen,
+} from "@mui/material/colors";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
@@ -24,6 +29,8 @@ import DropdownMenu, {
 } from "@/shared/components/DropdownMenu";
 import { UserProfile } from "../../../../backend/src/user/user.dto";
 import { Colors } from "@/styles/theme";
+
+type UserRoles = "Administrador" | "Empleado" | "Cliente";
 
 const accountIconColors: string[] = [
   deepPurple[200],
@@ -48,7 +55,19 @@ const IconDetailsRow = ({
   );
 };
 
-function getUserRole(user: UserProfile) {
+const titleColors = {
+  Administrador: {
+    color: lightGreen[700],
+  },
+  Empleado: {
+    color: "#ab003cee",
+  },
+  Cliente: {
+    color: "#00695fee",
+  },
+};
+
+function getUserRole(user: UserProfile): UserRoles {
   if (user.isAdmin) {
     return "Administrador";
   } else if (user.isStaff) {
@@ -60,18 +79,21 @@ function getUserRole(user: UserProfile) {
 
 const ProfileCard = ({
   user,
-  handleLogout,
   dropdownOptions,
 }: {
   user: UserProfile;
-  handleLogout?: () => void;
   dropdownOptions?: DropdownMenuOptionType[];
 }) => {
   const [letterColor, setLetterColor] = useState<string>();
+
   let profileTitle = "Profile";
+  let titleColor = Colors.Teal + "bb";
+
   const isStaffPortal = window.location.pathname.includes("staff");
   if (isStaffPortal) {
-    profileTitle = getUserRole(user);
+    const userRole = getUserRole(user);
+    profileTitle = userRole;
+    titleColor = titleColors[userRole].color;
   }
 
   const notes =
@@ -110,7 +132,7 @@ const ProfileCard = ({
           </Typography>
         }
         sx={{
-          backgroundColor: Colors.Teal + "bb",
+          backgroundColor: titleColor,
           textAlign: "center",
           px: 0,
           py: 0.8,
@@ -209,15 +231,6 @@ const ProfileCard = ({
             </Stack>
           </Stack>
         </Box>
-        {handleLogout ? (
-          <CardActions>
-            <Button variant="contained" onClick={handleLogout}>
-              Log Out
-            </Button>
-          </CardActions>
-        ) : (
-          <></>
-        )}
       </CardContent>
     </Card>
   );

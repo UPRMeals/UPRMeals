@@ -1,4 +1,4 @@
-import { Box, Stack, Alert, CircularProgress } from "@mui/material";
+import { Box, Stack, Alert, CircularProgress, Button } from "@mui/material";
 import WarningIcon from "@mui/icons-material/Warning";
 import { useRouter } from "next/router";
 import { useUserService } from "../../../shared/hooks/useUserService";
@@ -8,6 +8,7 @@ import { useAuthService } from "../../../shared/hooks/useAuthService";
 import toast from "react-hot-toast";
 import BaseDialog from "../../../shared/components/baseDialog";
 import ProfileCard from "../../../shared/components/profileCard";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -61,7 +62,6 @@ export default function ProfilePage() {
 
           <ProfileCard
             user={currUser}
-            handleLogout={handleLogout}
             dropdownOptions={[
               {
                 title: "Delete Account",
@@ -70,6 +70,17 @@ export default function ProfilePage() {
               },
             ]}
           />
+          <Button
+            sx={{
+              width: { xs: "100%", md: "inherit" },
+              alignSelf: "flex-end",
+            }}
+            variant="contained"
+            onClick={handleLogout}
+            endIcon={<LogoutIcon />}
+          >
+            Log Out
+          </Button>
         </Stack>
       ) : (
         <Box alignContent={"center"} justifyItems={"center"} height={"100%"}>
