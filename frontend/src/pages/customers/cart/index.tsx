@@ -7,94 +7,75 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
   Paper,
-  Tooltip,
   useMediaQuery,
+  Divider,
+  Stack,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
+
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import DoneIcon from "@mui/icons-material/Done";
 import { useRouter } from "next/router";
 import {
   getCartLayout,
   userCartContext,
 } from "@/shared/providers/CartProvider";
 import { NextPageWithLayout } from "@/pages/_app";
-import theme from "@/styles/theme";
-
-type CartItemType = {
-  id: number;
-  title: string;
-  price: number;
-  quantity: number;
-};
+import theme, { Colors } from "@/styles/theme";
+import EditButtons from "@/shared/components/ItemAdder";
 
 const MyCartPage: NextPageWithLayout = () => {
   const router = useRouter();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const { getItems, getTotalPrice, clearItem, removeItem, addItem } =
     userCartContext();
 
   const items = getItems();
   const totalPrice = getTotalPrice();
 
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-  const EditButtons = (props: any) => (
-    <Box display="flex" alignItems="center" justifyContent="center">
-      <IconButton onClick={() => removeItem(props.item)}>
-        <RemoveIcon fontSize="small" />
-      </IconButton>
-      <Typography sx={{ mx: 2 }} fontWeight={600}>
-        {props.item.quantity}
-      </Typography>
-      <IconButton onClick={() => addItem(props.item)} size="large">
-        <AddIcon fontSize="small" />
-      </IconButton>
-    </Box>
-  );
-
   return (
     <Box
-      mt={12}
-      height={"100vh"}
+      mt={14}
       width={"100vw"}
       display={"flex"}
       flexDirection={"column"}
       alignItems={"center"}
       justifyContent={"start"}
+      mb={20}
     >
       <TableContainer sx={{ maxWidth: { xs: "95%", lg: "70%" } }}>
-        <Typography variant="h3" alignSelf={"start"} mb={4}>
+        <Typography variant="h4" alignSelf={"start"} fontWeight={600} mb={1}>
           My Cart
         </Typography>
-        <Table aria-label="cart table" table-layout="fixed">
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ maxWidth: "10%" }}>Item</TableCell>
-              {!isMobile && <TableCell align="center">Quantity</TableCell>}
-              <TableCell align="right">Price</TableCell>
-              <TableCell align="right"></TableCell>
-            </TableRow>
-          </TableHead>
+        <Typography variant="body1" alignSelf={"start"} mb={3} fontWeight={300}>
+          Payment will be processed at the cafeteria.
+        </Typography>
+        <Divider />
+        <Table aria-label="cart table" table-layout="fixed" stickyHeader>
           <TableBody>
             {items?.map((item: any) => (
               <TableRow key={item.id}>
                 <TableCell component="th" scope="row" sx={{ maxWidth: "10%" }}>
-                  <Tooltip
-                    title={item.name}
-                    placement="top"
-                    enterDelay={500}
-                    leaveDelay={200}
-                  >
-                    <Typography>{item.name}</Typography>
-                  </Tooltip>
+                  <Typography fontWeight={500}>{item.name}</Typography>
+                  {isMobile && (
+                    <EditButtons
+                      quantity={item.quantity}
+                      onAddItem={() => addItem(item)}
+                      onRemoveItem={() => removeItem(item)}
+                      restProps={{ justifyContent: "start", mt: 2 }}
+                    />
+                  )}
                 </TableCell>
                 {!isMobile && (
                   <TableCell align="center">
-                    <EditButtons item={item} />
+                    <EditButtons
+                      quantity={item.quantity}
+                      onAddItem={() => addItem(item)}
+                      onRemoveItem={() => removeItem(item)}
+                    />
                   </TableCell>
                 )}
                 <TableCell align="right">
@@ -102,7 +83,7 @@ const MyCartPage: NextPageWithLayout = () => {
                 </TableCell>
                 <TableCell align="right">
                   <IconButton onClick={() => clearItem(item)} size="small">
-                    <DeleteIcon />
+                    <DeleteIcon sx={{ color: Colors.Charcoal }} />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -110,41 +91,58 @@ const MyCartPage: NextPageWithLayout = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Box display="flex" justifyContent="space-between" my={2}>
-        <Typography variant="h5">Subtotal: </Typography>
-        <Typography variant="h5">${totalPrice.toFixed(2)}</Typography>
-      </Box>
-      <Button
-        variant="contained"
-        color="primary"
-        sx={{ mt: 2, width: isMobile ? "60%" : "30%" }}
+      <Stack
+        width="100%"
+        direction="row"
+        justifyContent="space-between"
+        sx={{ maxWidth: { xs: "95%", lg: "70%" } }}
+        px={2}
+        pt={2}
       >
-        Order Now
-      </Button>
+        <Typography variant={"h5"} fontWeight={500}>
+          Subtotal:
+        </Typography>
+        <Typography variant={"h5"} fontWeight={500}>
+          ${totalPrice.toFixed(2)}
+        </Typography>
+      </Stack>
       <Paper
         sx={{
           position: "fixed",
           bottom: 0,
           left: 0,
           right: 0,
-          height: "10%",
+          height: isMobile ? "15%" : "10%",
           display: "flex",
-          justifyContent: isMobile ? "center" : "space-between",
+          flexDirection: isMobile ? "column" : "row-reverse",
+          justifyContent: "space-between",
           alignItems: "center",
+          py: isMobile ? 2 : 0,
         }}
         elevation={3}
       >
         <Button
           variant={isMobile ? "contained" : "text"}
           sx={{
-            borderRadius: isMobile ? 20 : 0,
-            height: isMobile ? "50%" : "100%",
-            width: isMobile ? "60%" : "20%",
+            borderRadius: isMobile ? 4 : 0,
+            height: isMobile ? "45%" : "100%",
+            width: isMobile ? "70%" : "20%",
+          }}
+          endIcon={!isMobile && <DoneIcon />}
+        >
+          Ordenar
+        </Button>
+        <Button
+          variant={isMobile ? "outlined" : "text"}
+          sx={{
+            borderRadius: isMobile ? 4 : 0,
+            height: isMobile ? "45%" : "100%",
+            width: isMobile ? "70%" : "20%",
           }}
           onClick={() => router.push("/customers/order")}
-          startIcon={<ArrowBackIcon />}
+          startIcon={!isMobile && <ArrowBackIcon />}
         >
-          Editar Orden
+          Editar
         </Button>
       </Paper>
     </Box>

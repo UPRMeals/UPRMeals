@@ -71,12 +71,12 @@ const OrderPage: NextPageWithLayout = () => {
         <Button
           variant={isMobile ? "contained" : "text"}
           sx={{
-            borderRadius: isMobile ? 20 : 0,
+            borderRadius: isMobile ? 4 : 0,
             height: isMobile ? "50%" : "100%",
             width: isMobile ? "60%" : "20%",
           }}
           onClick={() => router.push("/customers/cart")}
-          endIcon={<ArrowForwardIcon />}
+          endIcon={!isMobile && <ArrowForwardIcon />}
         >
           Listo
         </Button>
