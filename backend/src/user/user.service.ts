@@ -63,4 +63,25 @@ export class UserService {
       success: user.removed,
     };
   }
+
+  async getCustomerProfiles(): Promise<UserProfile[]> {
+    const customers = await this.prismaService.user.findMany({
+      where: { isStaff: false },
+    });
+
+    const userProfiles = customers.flatMap((user) => {
+      return {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        email: user.email,
+        isActive: user.isActive,
+        isStaff: user.isStaff,
+        isAdmin: user.isAdmin,
+      };
+    });
+
+    return userProfiles;
+  }
 }

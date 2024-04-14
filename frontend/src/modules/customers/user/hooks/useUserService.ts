@@ -19,5 +19,12 @@ export const useUserService = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
 
-  return { getProfile, removeUser };
+  const getCustomerProfiles = async (): Promise<UserProfile[]> =>
+    baseApi({
+      url: `${userControllerBase}/customerProfiles`,
+      method: "GET",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+
+  return { getProfile, removeUser, getCustomerProfiles };
 };
