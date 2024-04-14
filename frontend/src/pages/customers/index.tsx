@@ -1,4 +1,3 @@
-import { Colors } from "@/styles/theme";
 import { Box, Button, Typography, Stack } from "@mui/material";
 import Image from "next/legacy/image";
 import { useRouter } from "next/router";
@@ -58,13 +57,13 @@ export default function CustomerHomePage() {
               variant="contained"
               onClick={() => router.push("/customers/order")}
             >
-              Order Now
+              Ordena ahora
             </Button>
             <Button
               variant="text"
               onClick={() => router.push("/customers/menu")}
             >
-              View Menu
+              Ver Menu
             </Button>
           </Stack>
         </Stack>

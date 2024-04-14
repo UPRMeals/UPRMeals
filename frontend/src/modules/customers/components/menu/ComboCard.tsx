@@ -90,7 +90,7 @@ const ComboCard = ({
               },
             }}
           >
-            Add To Cart
+            Añadir
           </Button>
         </CardActions>
       )}

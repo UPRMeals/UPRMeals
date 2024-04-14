@@ -17,6 +17,8 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useRouter } from "next/router";
 
 type CartItemType = {
   id: number;
@@ -37,6 +39,7 @@ const cartItems = [
 ];
 
 export default function MyCartPage() {
+  const router = useRouter();
   const [items, setItems] = useState(cartItems);
 
   const handleAdd = (item: CartItemType) => {
@@ -130,6 +133,27 @@ export default function MyCartPage() {
       <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
         Order Now
       </Button>
+      <Paper
+        sx={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: "10%",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+        elevation={3}
+      >
+        <Button
+          sx={{ height: "100%", width: "20%", ml: { xs: 5, md: 0 } }}
+          onClick={() => router.push("/customers/order")}
+          startIcon={<ArrowBackIcon />}
+        >
+          Regresar
+        </Button>
+      </Paper>
     </Container>
   );
 }

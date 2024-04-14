@@ -49,7 +49,7 @@ export default function MenuPage() {
               sx={{ maxHeight: 50 }}
               onClick={() => router.push("/customers/order")}
             >
-              Order Now
+              Ordena Ahora
             </Button>
           </Stack>
           <CustomerMenu menu={activeMenu} isOrderPage={false} />

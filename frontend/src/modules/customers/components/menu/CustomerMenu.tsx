@@ -16,7 +16,7 @@ const CustomerMenu = ({
       flexDirection={"column"}
       justifyContent="start"
       alignItems="start"
-      width={"95%"}
+      width={"100%"}
       rowGap={2}
     >
       <Typography variant="h4">Combos</Typography>
