@@ -33,5 +33,26 @@ export const useUserService = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
 
-  return { getProfile, removeUser, getCustomerProfiles, getEmployeeProfiles };
+  const createEmployee = async (userId: number): Promise<UserProfile> =>
+    baseApi({
+      url: `${userControllerBase}/employee/${userId}/create`,
+      method: "POST",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+
+  const removeEmployee = async (userId: number): Promise<UserProfile> =>
+    baseApi({
+      url: `${userControllerBase}/employee/${userId}/remove`,
+      method: "POST",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+
+  return {
+    getProfile,
+    removeUser,
+    getCustomerProfiles,
+    getEmployeeProfiles,
+    createEmployee,
+    removeEmployee,
+  };
 };

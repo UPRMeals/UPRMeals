@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import DropdownMenu, { MenuOptionType } from "@/shared/components/DropdownMenu";
 import { useUserService } from "../../../shared/hooks/useUserService";
 import { UserProfile } from "../../../../../backend/src/user/user.dto";
+import RemoveStaffDialog from "@/modules/staff/components/RemoveStaffDialog";
 
 export default function CustomerProfilesPage() {
   const { getEmployeeProfiles } = useUserService();
@@ -147,6 +148,18 @@ export default function CustomerProfilesPage() {
           </Table>
         </TableContainer>
       </Box>
+      {selectedEmployeeId ? (
+        <RemoveStaffDialog
+          open={openSuspendEmployeeDialog}
+          handleClose={async () => {
+            setOpenSuspendEmployeeDialog(false);
+            setAllEmployees(await getEmployeeProfiles());
+          }}
+          userId={selectedEmployeeId}
+        />
+      ) : (
+        <></>
+      )}
     </Box>
   );
 }

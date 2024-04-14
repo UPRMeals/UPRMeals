@@ -105,4 +105,22 @@ export class UserService {
 
     return userProfiles;
   }
+
+  async createEmployee(userId: number): Promise<UserProfile> {
+    const employeeProfile = await this.prismaService.user.update({
+      where: { id: Number(userId) },
+      data: { isStaff: true },
+    });
+
+    return employeeProfile;
+  }
+
+  async removeEmployee(userId: number): Promise<UserProfile> {
+    const userProfile = await this.prismaService.user.update({
+      where: { id: Number(userId) },
+      data: { isStaff: false },
+    });
+
+    return userProfile;
+  }
 }
