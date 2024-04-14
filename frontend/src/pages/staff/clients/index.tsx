@@ -13,7 +13,7 @@ import {
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import DropdownMenu, { MenuOptionType } from "@/shared/components/DropdownMenu";
-import { useUserService } from "@/modules/customers/user/hooks/useUserService";
+import { useUserService } from "../../../shared/hooks/useUserService";
 import { UserProfile } from "../../../../../backend/src/user/user.dto";
 
 export default function CustomerProfilesPage() {
