@@ -1,5 +1,5 @@
 import { useBaseAPI } from "@/shared/hooks/useBaseAPI";
-import { UserProfile } from "../../../../../../backend/src/user/user.dto";
+import { UserProfile } from "../../../../backend/src/user/user.dto";
 
 export const useUserService = () => {
   const userControllerBase = "user";

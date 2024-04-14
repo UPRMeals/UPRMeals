@@ -1,4 +1,4 @@
-import CustomerSignUp from "@/modules/customers/auth/signup/CustomerSignUp";
+import CustomerSignUp from "@/modules/customers/components/auth/CustomerSignUp";
 import { Box } from "@mui/material";
 
 const SignUpPage = () => {

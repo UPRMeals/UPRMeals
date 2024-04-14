@@ -9,8 +9,15 @@ import {
 } from "@mui/material";
 import { Combo } from "../../../../../../backend/src/menu/menu.dto";
 import { Colors } from "@/styles/theme";
+import { indigo, lightGreen } from "@mui/material/colors";
 
-const ComboCard = ({ combo }: { combo: Combo }) => {
+const ComboCard = ({
+  combo,
+  isOrderPage,
+}: {
+  combo: Combo;
+  isOrderPage: boolean;
+}) => {
   return (
     <Card
       variant="outlined"
@@ -29,32 +36,33 @@ const ComboCard = ({ combo }: { combo: Combo }) => {
           justifyContent={"space-between"}
           alignItems={"center"}
         >
-          <Typography variant="h4" fontWeight={500}>
+          <Typography variant="h5" fontWeight={500}>
             {combo.name}
           </Typography>
-          <Typography variant="h5" fontWeight={700}>
+          <Typography variant="h6" fontWeight={400}>
             ${combo.price}
           </Typography>
         </Stack>
-        <Typography variant="caption">{combo.description}</Typography>
-
-        <Typography variant="h5" fontWeight={500} mt={3}>
-          Proteinas ({combo.proteinCount}):
+        <Typography variant="body1" fontWeight={300}>
+          {combo.description}
+        </Typography>
+        <Typography variant="h6" fontWeight={400} mt={3}>
+          Proteinas (Incluye {combo.proteinCount}):
         </Typography>
         <Stack direction="row" spacing={1} mt={1} useFlexGap flexWrap="wrap">
           {combo.proteins.map((protein, index) => (
             <Chip
               key={index}
               sx={{
-                backgroundColor: Colors.OrangeSunset + "33",
+                backgroundColor: indigo[400] + "33",
                 fontWeight: 600,
               }}
               label={protein.name}
             />
           ))}
         </Stack>
-        <Typography variant="h5" fontWeight={500} mt={3}>
-          Acompañantes ({combo.sideCount}):
+        <Typography variant="h6" fontWeight={400} mt={3}>
+          Acompañantes (Incluye {combo.sideCount}):
         </Typography>
         <Stack direction="row" spacing={1} mt={1} useFlexGap flexWrap="wrap">
           {combo.sides.map((side, index) => (
@@ -69,22 +77,23 @@ const ComboCard = ({ combo }: { combo: Combo }) => {
           ))}
         </Stack>
       </CardContent>
-      <CardActions sx={{ alignSelf: "center", width: "100%" }}>
-        <Button
-          fullWidth
-          variant="contained"
-          sx={{
-            borderRadius: 5,
-            backgroundColor: Colors.ColegioGreen + "dd",
-            color: "white",
-            ":hover": {
-              backgroundColor: Colors.ColegioGreen,
-            },
-          }}
-        >
-          Add To Cart
-        </Button>
-      </CardActions>
+      {isOrderPage && (
+        <CardActions sx={{ alignSelf: "center", width: "100%" }}>
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{
+              borderRadius: 5,
+              backgroundColor: lightGreen[400],
+              ":hover": {
+                backgroundColor: lightGreen[600],
+              },
+            }}
+          >
+            Add To Cart
+          </Button>
+        </CardActions>
+      )}
     </Card>
   );
 };
