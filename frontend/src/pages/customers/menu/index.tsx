@@ -29,7 +29,7 @@ const MenuPage: NextPageWithLayout = () => {
   return (
     <Box
       mt={10}
-      mb={{ xs: 400, md: 135 }}
+      mb={{ xs: 300, md: 135 }}
       height={"90vh"}
       width={"100vw"}
       display={"flex"}
@@ -44,7 +44,7 @@ const MenuPage: NextPageWithLayout = () => {
       ) : (
         <>
           <Stack justifyContent={"space-between"} alignItems={"center"} pb={2}>
-            <Typography variant="h2" mb={2}>
+            <Typography variant="h2" mb={2} textAlign={"center"}>
               {activeMenu.name}
             </Typography>
             <Button
