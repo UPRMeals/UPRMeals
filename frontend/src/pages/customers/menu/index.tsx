@@ -1,5 +1,5 @@
 import CustomerMenu from "@/modules/customers/components/menu/CustomerMenu";
-import { useMenuService } from "@/shared/hooks/useMenuService";
+import { useMenuService } from "../../../shared/hooks/useMenuService";
 import {
   Box,
   Button,

@@ -20,7 +20,9 @@ import CreateMenuDialog from "../../../modules/staff/components/CreateMenuDialog
 import { useMenuService } from "../../../shared/hooks/useMenuService";
 import { GetAllMenusResponse } from "../../../../../backend/src/menu/menu.dto";
 import { useRouter } from "next/router";
-import DropdownMenu, { MenuOptionType } from "@/shared/components/DropdownMenu";
+import DropdownMenu, {
+  DropdownMenuOptionType,
+} from "../../../shared/components/DropdownMenu";
 import DeleteMenuDialog from "../../../modules/staff/components/DeleteMenuDialog";
 import { lightGreen } from "@mui/material/colors";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -69,7 +71,7 @@ export default function MenusPage() {
     const [openRow, setOpenRow] = useState(false);
     const selectedGrey = "#f1f1f166";
 
-    const dropdownMenuOptions: MenuOptionType[] = [
+    const dropdownMenuOptions: DropdownMenuOptionType[] = [
       {
         title: "Delete Menu",
         onClick: () => handleMenuOptionsClick("delete", menu.id),

@@ -11,11 +11,13 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import DropdownMenu, { MenuOptionType } from "@/shared/components/DropdownMenu";
+import DropdownMenu, {
+  DropdownMenuOptionType,
+} from "../../../shared/components/DropdownMenu";
 import { useUserService } from "../../../shared/hooks/useUserService";
 import { UserProfile } from "../../../../../backend/src/user/user.dto";
-import RemoveStaffDialog from "@/modules/staff/components/RemoveStaffDialog";
-import { JWTUtils } from "@/shared/utils/jwtUtils";
+import { JWTUtils } from "../../../shared/utils/jwtUtils";
+import RemoveEmployeeDialog from "@/modules/staff/components/RemoveEmployeeDialog";
 
 export default function CustomerProfilesPage() {
   const { getEmployeeProfiles } = useUserService();
@@ -53,9 +55,9 @@ export default function CustomerProfilesPage() {
 
   function handleMenuOptionsClick(
     selectedOption: "suspendEmployee",
-    menuId: number
+    employeeId: number
   ) {
-    setSelectedEmployeeId(menuId);
+    setSelectedEmployeeId(employeeId);
     switch (selectedOption) {
       case "suspendEmployee":
         setOpenSuspendEmployeeDialog(true);
@@ -64,7 +66,7 @@ export default function CustomerProfilesPage() {
   }
 
   const Row = ({ employee }: { employee: UserProfile }) => {
-    const dropdownMenuOptions: MenuOptionType[] =
+    const dropdownMenuOptions: DropdownMenuOptionType[] =
       currUserId === employee.id
         ? []
         : [
@@ -94,7 +96,7 @@ export default function CustomerProfilesPage() {
           <TableCell>
             <ButtonBase
               onClick={() => {
-                router.push(""); //TODO
+                router.push(`employees/${employee.id}/`);
               }}
               sx={{
                 fontWeight: 700,
@@ -170,7 +172,7 @@ export default function CustomerProfilesPage() {
         </TableContainer>
       </Box>
       {selectedEmployeeId ? (
-        <RemoveStaffDialog
+        <RemoveEmployeeDialog
           open={openSuspendEmployeeDialog}
           handleClose={async () => {
             setOpenSuspendEmployeeDialog(false);

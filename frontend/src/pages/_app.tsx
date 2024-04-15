@@ -6,11 +6,11 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "@/styles/theme";
 import CssBaseline from "@mui/material/CssBaseline";
 import Navbar from "../shared/components/navbar";
-import { JWTUtils } from "@/shared/utils/jwtUtils";
+import { JWTUtils } from "../shared/utils/jwtUtils";
 import { useRouter } from "next/router";
 import { Toaster } from "react-hot-toast";
-import ErrorProvider from "@/shared/providers/ErrorProvider";
 import CartProvider from "@/shared/providers/CartProvider";
+import ErrorProvider from "../shared/providers/ErrorProvider";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
