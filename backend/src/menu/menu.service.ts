@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { ItemType, Prisma } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
-import { Menu, MenuResponse, GetAllMenusResponse } from './menu.dto';
+import {
+  Menu,
+  MenuResponse,
+  GetAllMenusResponse,
+  GetMenuWithItemsInput,
+} from './menu.dto';
 
 @Injectable()
 export class MenuService {
@@ -9,13 +14,6 @@ export class MenuService {
 
   async createMenu(data: Prisma.MenuCreateArgs): Promise<MenuResponse> {
     const menu = await this.prismaService.menu.create(data);
-    return menu;
-  }
-
-  async getMenuById(menuId: number): Promise<MenuResponse> {
-    const menu = await this.prismaService.menu.findUnique({
-      where: { id: menuId, removed: false },
-    });
     return menu;
   }
 
@@ -69,9 +67,26 @@ export class MenuService {
     return menus;
   }
 
+  async getMenuById(menuId: number): Promise<Menu> {
+    const menu = await this.getMenuWithItems({ id: menuId, isActive: false });
+    return menu;
+  }
+
   async getActiveMenu(): Promise<Menu> {
+    const activeMenu = this.getMenuWithItems({ isActive: true });
+    return activeMenu;
+  }
+
+  private async getMenuWithItems({
+    id,
+    isActive,
+  }: GetMenuWithItemsInput): Promise<Menu> {
+    let queryParams: Partial<GetMenuWithItemsInput> = id
+      ? { id }
+      : { isActive };
+
     const tempMenuResponse = await this.prismaService.menu.findFirst({
-      where: { isActive: true, removed: false },
+      where: { ...queryParams, removed: false },
       include: {
         items: true,
         combos: {

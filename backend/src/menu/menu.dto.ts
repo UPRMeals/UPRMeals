@@ -64,3 +64,8 @@ export interface Combo {
 }
 
 export interface Item extends PrismaItem {}
+
+export interface GetMenuWithItemsInput {
+  id?: number;
+  isActive: boolean;
+}

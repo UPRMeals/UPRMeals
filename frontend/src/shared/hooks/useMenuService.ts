@@ -18,7 +18,7 @@ export const useMenuService = () => {
       data,
     });
 
-  const getMenu = async (menuId: number): Promise<MenuResponse> =>
+  const getMenu = async (menuId: number): Promise<Menu> =>
     baseApi({
       url: `${menuControllerBase}/${menuId}/menu`,
       method: "GET",
