@@ -50,6 +50,7 @@ export class UserService {
       isActive: user.isActive,
       isStaff: user.isStaff,
       isAdmin: user.isAdmin,
+      isFlagged: user.isFlagged,
     };
   }
 
@@ -66,7 +67,7 @@ export class UserService {
 
   async getCustomerProfiles(): Promise<UserProfile[]> {
     const customers = await this.prismaService.user.findMany({
-      where: { isStaff: false },
+      where: { isStaff: false, removed: false },
     });
 
     const userProfiles = customers.flatMap((user) => {
@@ -79,6 +80,7 @@ export class UserService {
         isActive: user.isActive,
         isStaff: user.isStaff,
         isAdmin: user.isAdmin,
+        isFlagged: user.isFlagged,
       };
     });
 
@@ -100,15 +102,16 @@ export class UserService {
         isActive: user.isActive,
         isStaff: user.isStaff,
         isAdmin: user.isAdmin,
+        isFlagged: user.isFlagged,
       };
     });
 
     return userProfiles;
   }
 
-  async createEmployee(userId: number): Promise<UserProfile> {
+  async setEmployee(userId: number): Promise<UserProfile> {
     const employeeProfile = await this.prismaService.user.update({
-      where: { id: Number(userId) },
+      where: { id: userId, removed: false },
       data: { isStaff: true },
     });
 
@@ -117,7 +120,7 @@ export class UserService {
 
   async removeEmployee(userId: number): Promise<UserProfile> {
     const userProfile = await this.prismaService.user.update({
-      where: { id: Number(userId) },
+      where: { id: userId, removed: false },
       data: { isStaff: false },
     });
 

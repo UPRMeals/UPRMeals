@@ -12,16 +12,20 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import DropdownMenu, { MenuOptionType } from "@/shared/components/DropdownMenu";
+import DropdownMenu, {
+  DropdownMenuOptionType,
+} from "../../../shared/components/DropdownMenu";
 import { useUserService } from "../../../shared/hooks/useUserService";
 import { UserProfile } from "../../../../../backend/src/user/user.dto";
-import CreateStaffDialog from "@/modules/staff/components/CreateStaffDialog";
+import SetEmployeeDialog from "@/modules/staff/components/SetEmployeeDialog";
 
 export default function CustomerProfilesPage() {
   const { getCustomerProfiles } = useUserService();
   const [openSuspendCustomerDialog, setOpenSuspendCustomerDialog] =
     useState(false);
-  const [openCreateStaffDialog, setOpenCreateStaffDialog] = useState(false);
+  const [openRemoveSuspensionDialog, setOpenRemoveSuspensionDialog] =
+    useState(false);
+  const [openSetEmployeeDialog, setOpenSetEmployeeDialog] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState<number>();
   const [allCustomers, setAllCustomers] = useState<UserProfile[]>();
   const router = useRouter();
@@ -40,35 +44,40 @@ export default function CustomerProfilesPage() {
   const tableHeaders = ["Nombre", "Email", "", "", ""];
 
   function handleMenuOptionsClick(
-    selectedOption: "suspendCustomer" | "createStaff",
-    menuId: number
+    selectedOption: "suspendCustomer" | "setEmployee" | "removeSuspension",
+    customerId: number
   ) {
-    setSelectedCustomerId(menuId);
+    setSelectedCustomerId(customerId);
     switch (selectedOption) {
       case "suspendCustomer":
         setOpenSuspendCustomerDialog(true);
         break;
-      case "createStaff":
-        setOpenCreateStaffDialog(true);
+      case "removeSuspension":
+        setOpenRemoveSuspensionDialog(true);
+        break;
+      case "setEmployee":
+        setOpenSetEmployeeDialog(true);
         break;
     }
   }
 
   const Row = ({ customer }: { customer: UserProfile }) => {
     const rand = Math.random(); // TODO
-    let isFlagged = false;
-    if (rand > 0.5) {
-      isFlagged = true;
-    }
 
-    const dropdownMenuOptions: MenuOptionType[] = [
+    const dropdownMenuOptions: DropdownMenuOptionType[] = [
       {
         title: "Marcar como Empleado",
-        onClick: () => handleMenuOptionsClick("createStaff", customer.id),
+        onClick: () => handleMenuOptionsClick("setEmployee", customer.id),
       },
     ];
 
-    if (!isFlagged) {
+    if (customer.isFlagged) {
+      dropdownMenuOptions.push({
+        title: "Remover Suspensión",
+        onClick: () => handleMenuOptionsClick("removeSuspension", customer.id),
+        color: "error.main",
+      });
+    } else if (!customer.isFlagged) {
       dropdownMenuOptions.push({
         title: "Suspender Cliente",
         onClick: () => handleMenuOptionsClick("suspendCustomer", customer.id),
@@ -91,7 +100,7 @@ export default function CustomerProfilesPage() {
           </TableCell>
           <TableCell>{customer.email}</TableCell>
           <TableCell>
-            {isFlagged ? (
+            {customer.isFlagged ? (
               <Chip
                 label={"Suspendido"}
                 sx={{
@@ -106,7 +115,7 @@ export default function CustomerProfilesPage() {
           <TableCell>
             <ButtonBase
               onClick={() => {
-                router.push(""); //TODO
+                router.push(`clients/${customer.id}/`);
               }}
               sx={{
                 fontWeight: 700,
@@ -180,10 +189,10 @@ export default function CustomerProfilesPage() {
       </Box>
       {selectedCustomerId ? (
         <>
-          <CreateStaffDialog
-            open={openCreateStaffDialog}
+          <SetEmployeeDialog
+            open={openSetEmployeeDialog}
             handleClose={async () => {
-              setOpenCreateStaffDialog(false);
+              setOpenSetEmployeeDialog(false);
               setAllCustomers(await getCustomerProfiles());
             }}
             userId={selectedCustomerId}
