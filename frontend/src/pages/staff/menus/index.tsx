@@ -16,17 +16,19 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useEffect, useState } from "react";
-import CreateMenuDialog from "../components/CreateMenuDialog";
+import CreateMenuDialog from "../../../modules/staff/components/CreateMenuDialog";
 import { useMenuService } from "../../../shared/hooks/useMenuService";
 import { GetAllMenusResponse } from "../../../../../backend/src/menu/menu.dto";
 import { useRouter } from "next/router";
-import DropdownMenu, { MenuOptionType } from "@/shared/components/DropdownMenu";
-import DeleteMenuDialog from "../components/DeleteMenuDialog";
+import DropdownMenu, {
+  DropdownMenuOptionType,
+} from "../../../shared/components/DropdownMenu";
+import DeleteMenuDialog from "../../../modules/staff/components/DeleteMenuDialog";
 import { lightGreen } from "@mui/material/colors";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { indigo } from "@mui/material/colors";
-import ActivateMenuDialog from "../components/ActivateMenuDialog";
+import ActivateMenuDialog from "../../../modules/staff/components/ActivateMenuDialog";
 
 export default function MenusPage() {
   const { getAllMenus } = useMenuService();
@@ -69,7 +71,7 @@ export default function MenusPage() {
     const [openRow, setOpenRow] = useState(false);
     const selectedGrey = "#f1f1f166";
 
-    const dropdownMenuOptions: MenuOptionType[] = [
+    const dropdownMenuOptions: DropdownMenuOptionType[] = [
       {
         title: "Delete Menu",
         onClick: () => handleMenuOptionsClick("delete", menu.id),
@@ -265,7 +267,7 @@ export default function MenusPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {allMenus ? (
+              {allMenus && allMenus?.length > 0 ? (
                 allMenus.map((menu: GetAllMenusResponse) => (
                   <Row key={menu.id} menu={menu} />
                 ))

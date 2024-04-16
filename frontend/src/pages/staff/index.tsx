@@ -1,8 +1,9 @@
-import { Box, Button, Typography, Stack } from "@mui/material";
+import { Colors } from "@/styles/theme";
+import { Box, Button, Typography, Stack, ButtonGroup } from "@mui/material";
 import Image from "next/legacy/image";
 import { useRouter } from "next/router";
 
-export default function CustomerHomePage() {
+export default function StaffHomePage() {
   const router = useRouter();
 
   return (
@@ -29,7 +30,9 @@ export default function CustomerHomePage() {
           <Typography variant="h1" fontFamily={"Bungee"}>
             Bienvenido al Equipo!
           </Typography>
-          <Typography variant="h3">Gestiona los pedidos aquí.</Typography>
+          <Typography variant="h3" fontWeight={400}>
+            Gestiona los pedidos aquí.
+          </Typography>
           <Box
             sx={{ position: "relative" }}
             display={{ xs: "block", md: "none" }}
@@ -45,21 +48,16 @@ export default function CustomerHomePage() {
               width={173}
             />
           </Box>
-          <Stack
-            direction="row"
-            spacing={2}
-            mt={5}
-            alignSelf={{ xs: "center", md: "inherit" }}
-          >
-            <Button
-              variant="contained"
-              onClick={() => router.push("/staff/orders")}
-            >
-              Orders
-            </Button>
-            <Button variant="text" onClick={() => router.push("/staff/menu")}>
-              View Menu
-            </Button>
+          <Stack mt={5} alignSelf={{ xs: "center", md: "inherit" }}>
+            <ButtonGroup variant="text">
+              <Button onClick={() => router.push("/staff/orders")}>
+                Pedidos
+              </Button>
+              <Button onClick={() => router.push("/staff/menus")}>Menus</Button>
+              <Button onClick={() => router.push("/customers")}>
+                Portal de Estudiantes
+              </Button>
+            </ButtonGroup>
           </Stack>
         </Stack>
       </Box>

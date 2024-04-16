@@ -45,7 +45,7 @@ export interface CreateMenuItemResponse {
   menuId: number;
 }
 
-export interface ActiveMenuResponse {
+export interface Menu {
   name: string;
   date: Date;
   proteins: Item[];

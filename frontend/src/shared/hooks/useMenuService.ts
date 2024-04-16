@@ -1,6 +1,6 @@
 import { useBaseAPI } from "../../shared/hooks/useBaseAPI";
 import {
-  ActiveMenuResponse,
+  Menu,
   CreateMenuData,
   MenuResponse,
   GetAllMenusResponse,
@@ -25,7 +25,7 @@ export const useMenuService = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
 
-  const getActiveMenu = async (): Promise<ActiveMenuResponse> =>
+  const getActiveMenu = async (): Promise<Menu> =>
     baseApi({
       url: `${menuControllerBase}/active-menu`,
       method: "GET",

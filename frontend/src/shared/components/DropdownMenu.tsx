@@ -3,13 +3,19 @@ import { Box, IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Colors } from "@/styles/theme";
 
-export type MenuOptionType = {
+export type DropdownMenuOptionType = {
   title: string;
   onClick: () => void;
   color?: string;
 };
 
-const DropdownMenu = ({ menuItems }: { menuItems: MenuOptionType[] }) => {
+const DropdownMenu = ({
+  menuItems,
+  disabled = false,
+}: {
+  menuItems: DropdownMenuOptionType[];
+  disabled?: boolean;
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [open, setOpen] = useState(false);
 
@@ -28,7 +34,7 @@ const DropdownMenu = ({ menuItems }: { menuItems: MenuOptionType[] }) => {
 
   return (
     <Box>
-      <IconButton onClick={handleMenuOpen}>
+      <IconButton onClick={handleMenuOpen} disabled={disabled}>
         <MoreVertIcon />
       </IconButton>
       <Menu

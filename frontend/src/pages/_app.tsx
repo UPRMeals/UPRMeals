@@ -5,11 +5,11 @@ import type { NextPage } from "next";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "@/styles/theme";
 import CssBaseline from "@mui/material/CssBaseline";
-import Navbar from "./customers/components/navbar";
-import { JWTUtils } from "@/shared/utils/jwtUtils";
+import Navbar from "../shared/components/navbar";
+import { JWTUtils } from "../shared/utils/jwtUtils";
 import { useRouter } from "next/router";
 import { Toaster } from "react-hot-toast";
-import ErrorProvider from "@/shared/providers/ErrorProvider";
+import ErrorProvider from "../shared/providers/ErrorProvider";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -34,6 +34,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
 
   const isTokenValid = JWTUtils.isTokenValid;
+  const isStaffUser = JWTUtils.isStaffUser;
   const router = useRouter();
 
   useEffect(() => {
@@ -52,6 +53,17 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     };
     checkAuth();
   }, [isTokenValid, router]);
+
+  useEffect(() => {
+    const checkIsStaff = async () => {
+      const token = localStorage.getItem("token");
+      const isStaff = isStaffUser(token);
+      if (!isStaff && window?.location?.pathname?.includes("staff")) {
+        router.push("/customers");
+      }
+    };
+    checkIsStaff();
+  }, [isStaffUser, router]);
 
   useEffect(() => {
     setHasNavbar(!noNavBarPaths.includes(window?.location?.pathname ?? ""));

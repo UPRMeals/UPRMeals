@@ -50,6 +50,7 @@ export class UserService {
       isActive: user.isActive,
       isStaff: user.isStaff,
       isAdmin: user.isAdmin,
+      isFlagged: user.isFlagged,
     };
   }
 
@@ -62,5 +63,67 @@ export class UserService {
     return {
       success: user.removed,
     };
+  }
+
+  async getCustomerProfiles(): Promise<UserProfile[]> {
+    const customers = await this.prismaService.user.findMany({
+      where: { isStaff: false, removed: false },
+    });
+
+    const userProfiles = customers.flatMap((user) => {
+      return {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        email: user.email,
+        isActive: user.isActive,
+        isStaff: user.isStaff,
+        isAdmin: user.isAdmin,
+        isFlagged: user.isFlagged,
+      };
+    });
+
+    return userProfiles;
+  }
+
+  async getEmployeeProfiles(): Promise<UserProfile[]> {
+    const employees = await this.prismaService.user.findMany({
+      where: { isStaff: true },
+    });
+
+    const userProfiles = employees.flatMap((user) => {
+      return {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        email: user.email,
+        isActive: user.isActive,
+        isStaff: user.isStaff,
+        isAdmin: user.isAdmin,
+        isFlagged: user.isFlagged,
+      };
+    });
+
+    return userProfiles;
+  }
+
+  async setEmployee(userId: number): Promise<UserProfile> {
+    const employeeProfile = await this.prismaService.user.update({
+      where: { id: userId, removed: false },
+      data: { isStaff: true },
+    });
+
+    return employeeProfile;
+  }
+
+  async removeEmployee(userId: number): Promise<UserProfile> {
+    const userProfile = await this.prismaService.user.update({
+      where: { id: userId, removed: false },
+      data: { isStaff: false },
+    });
+
+    return userProfile;
   }
 }

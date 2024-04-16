@@ -20,6 +20,7 @@ model User {
   isStaff         Boolean   @default(false)
   isAdmin         Boolean   @default(false)
   isActive        Boolean   @default(false)
+  isFlagged       Boolean   @default(false)
   removed         Boolean   @default(false)
   orders          Order[]
 }
