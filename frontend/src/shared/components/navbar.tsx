@@ -111,7 +111,13 @@ const Navbar = ({ authenticated }: { authenticated: boolean }) => {
         )}
         <NavLink
           title={authenticated ? "Profile" : "Log In"}
-          path={authenticated ? "/customers/profile" : "/customers/auth/login"}
+          path={
+            authenticated
+              ? isStaffPage
+                ? "/staff/profile"
+                : "/customers/profile"
+              : "/customers/auth/login"
+          }
           currentPath={currentPath}
           textProps={{
             color: "white",
@@ -170,7 +176,11 @@ const Navbar = ({ authenticated }: { authenticated: boolean }) => {
 
               {authenticated ? (
                 <IconButton
-                  onClick={() => router.push("/customers/profile")}
+                  onClick={() =>
+                    router.push(
+                      isStaffPage ? "/staff/profile" : "/customers/profile"
+                    )
+                  }
                   sx={{ ml: 4 }}
                 >
                   {isFlaggedAccount ? (
