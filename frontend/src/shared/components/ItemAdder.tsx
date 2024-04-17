@@ -41,7 +41,18 @@ const EditButtons = ({
             height: "100%",
             borderTopLeftRadius: 20,
             borderBottomLeftRadius: 20,
-            ":hover": { border: 0, backgroundColor: blueGrey[50] },
+            "@media (hover: none)": {
+              "&:hover": {
+                backgroundColor: "white",
+                border: 0,
+              },
+            },
+            "@media (hover: hover)": {
+              "&:hover": {
+                backgroundColor: blueGrey[50],
+                border: 0,
+              },
+            },
           }}
           onClick={onRemoveItem}
         />
@@ -55,7 +66,18 @@ const EditButtons = ({
             height: "100%",
             borderTopRightRadius: 20,
             borderBottomRightRadius: 20,
-            ":hover": { border: 0, backgroundColor: blueGrey[50] },
+            "@media (hover: none)": {
+              "&:hover": {
+                backgroundColor: "white",
+                border: 0,
+              },
+            },
+            "@media (hover: hover)": {
+              "&:hover": {
+                backgroundColor: blueGrey[50],
+                border: 0,
+              },
+            },
           }}
           onClick={onAddItem}
         />
