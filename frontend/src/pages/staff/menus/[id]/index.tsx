@@ -1,9 +1,16 @@
 import CustomerMenu from "@/modules/customers/components/menu/CustomerMenu";
 import { useMenuService } from "@/shared/hooks/useMenuService";
-import { Box, CircularProgress, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Menu } from "../../../../../../backend/src/menu/menu.dto";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function MenuPage() {
   const router = useRouter();
@@ -36,8 +43,16 @@ export default function MenuPage() {
         </Box>
       ) : (
         <>
-          <Stack justifyContent={"space-between"} alignItems={"center"} pb={2}>
-            <Typography variant="h2" mb={2}>
+          <Stack pb={2}>
+            <Button
+              onClick={() => {
+                router.push("/staff/menus");
+              }}
+              startIcon={<ArrowBackIcon />}
+            >
+              Regresar
+            </Button>
+            <Typography variant="h4" mb={2}>
               {menuWithItems.name}
             </Typography>
           </Stack>
