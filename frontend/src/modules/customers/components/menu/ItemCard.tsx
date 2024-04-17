@@ -63,6 +63,9 @@ export const ItemCard = ({
               sx={{
                 borderRadius: 10,
                 boxShadow: "1px 2px 7px 1px " + blueGrey[100] + "99",
+                ":hover": {
+                  backgroundColor: blueGrey[50],
+                },
               }}
               onClick={() => addItem(item)}
             >

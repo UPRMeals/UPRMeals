@@ -65,6 +65,7 @@ const OrderPage: NextPageWithLayout = () => {
           right: 0,
           height: "10%",
           display: "flex",
+          backgroundColor: "#fbfbff",
           justifyContent: isMobile ? "center" : "end",
           alignItems: "center",
         }}

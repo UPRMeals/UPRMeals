@@ -1,9 +1,9 @@
 import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
+import Dialog, { DialogProps } from "@mui/material/Dialog";
+import DialogActions, { DialogActionsProps } from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+import DialogTitle, { DialogTitleProps } from "@mui/material/DialogTitle";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 
@@ -24,13 +24,17 @@ export default function BaseDialog({
   dialogTitle,
   buttonDetails,
   dialogContent,
+  otherDialogTitleProps,
+  otherDialogActionsProps,
 }: {
   open: boolean;
   handleSubmit: () => void;
   handleClose: () => void;
-  dialogTitle: string;
+  dialogTitle: string | JSX.Element;
   buttonDetails: ButtonDetails;
   dialogContent?: string | JSX.Element;
+  otherDialogTitleProps?: Partial<DialogTitleProps>;
+  otherDialogActionsProps?: Partial<DialogActionsProps>;
 }) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
@@ -68,14 +72,18 @@ export default function BaseDialog({
       open={open}
       onClose={handleClose}
       aria-labelledby="responsive-dialog-title"
+      fullWidth
+      PaperProps={{ style: { backgroundColor: "#f8f8fc" } }}
     >
-      <DialogTitle id="responsive-dialog-title">{dialogTitle}</DialogTitle>
+      <DialogTitle id="responsive-dialog-title" {...otherDialogTitleProps}>
+        {dialogTitle}
+      </DialogTitle>
       <DialogContent>
         <DialogContentText color={"text.primary"}>
           {dialogContent}
         </DialogContentText>
       </DialogContent>
-      <DialogActions>
+      <DialogActions {...otherDialogActionsProps}>
         {buttonDetails.primary.position === "left" ? (
           <>
             {primaryButton}

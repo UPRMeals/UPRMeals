@@ -114,6 +114,7 @@ const MyCartPage: NextPageWithLayout = () => {
           flexDirection: isMobile ? "column" : "row-reverse",
           justifyContent: "space-between",
           alignItems: "center",
+          backgroundColor: "#fbfbff",
           py: isMobile ? 2 : 0,
         }}
         elevation={3}

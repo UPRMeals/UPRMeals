@@ -133,7 +133,8 @@ const Navbar: NextPageWithLayout<{
       <AppBar elevation={0}>
         <Toolbar
           sx={{
-            backgroundColor: "background.default",
+            backgroundColor: "#fbfbff",
+            boxShadow: "0px -1px 8px 0px rgba(0,0,0,0.12)",
             justifyContent: "space-between",
             alignItems: "center",
             maxHeight: 75,
