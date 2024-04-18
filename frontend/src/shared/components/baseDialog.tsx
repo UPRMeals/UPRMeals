@@ -11,6 +11,7 @@ type ButtonDetails = {
   primary: {
     text: string;
     position: "left" | "right";
+    disabled?: boolean;
   };
   secondary: {
     text: string;
@@ -51,7 +52,12 @@ export default function BaseDialog({
     buttonDetails.primary.position === "left" ? handleClose : handleSubmit;
 
   const primaryButton = (
-    <Button autoFocus onClick={primaryOnClick} variant={"contained"}>
+    <Button
+      autoFocus
+      onClick={primaryOnClick}
+      variant={"contained"}
+      disabled={buttonDetails.primary.disabled ?? false}
+    >
       {buttonDetails.primary.text}
     </Button>
   );

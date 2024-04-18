@@ -1,6 +1,13 @@
 import { useFormik } from "formik";
-import React, { PropsWithChildren, createContext, useContext } from "react";
+import React, {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useMemo,
+} from "react";
 import { Combo, Item } from "../../../../backend/src/menu/menu.dto";
+import { useOrderService } from "../hooks/useOrderService";
+import { useRouter } from "next/router";
 
 //TODO: FIX TYPES
 
@@ -27,6 +34,8 @@ interface CartSchema {
 }
 
 const CartContext = createContext<{
+  cartCount: number;
+  totalPrice: number;
   addCombo: (combo: CartCombo) => void;
   removeCombo: (combo: CartCombo) => void;
   getComboCount: () => number;
@@ -36,7 +45,7 @@ const CartContext = createContext<{
   clearItem: (item: CartItem) => void;
   getItemCount: (item?: Item) => number;
   getItems: () => CartItem[];
-  getTotalPrice: () => number;
+  submitOrder: () => void;
 }>({
   addCombo: (combo) => {
     console.log(combo);
@@ -65,18 +74,47 @@ const CartContext = createContext<{
   getCombos: () => {
     return [];
   },
-  getTotalPrice: () => {
-    return 0;
-  },
+  cartCount: 0,
+  totalPrice: 0,
+  submitOrder: () => {},
 });
 
 export const useCartContext = () => useContext(CartContext);
 
 export const CartProvider = ({ children }: PropsWithChildren) => {
+  const router = useRouter();
+  const { createOrder } = useOrderService();
+
   const formik = useFormik<CartSchema>({
     initialValues: cartInitialValues,
     onSubmit: async (values) => {
-      console.log(values);
+      // handle quantity
+      const items = values.items.flatMap((item) => {
+        return Array<{ id: number }>(item.quantity).fill({ id: item.id });
+      });
+
+      const combos = values.combos.flatMap((combo) => {
+        return {
+          id: combo.id,
+          items: [
+            ...combo.selectedProteins.flatMap<{ id: number }>((protein) => ({
+              id: protein.id,
+            })),
+            ...combo.selectedSides.flatMap<{ id: number }>((side) => ({
+              id: side.id,
+            })),
+          ],
+        };
+      });
+
+      await createOrder({
+        items,
+        combos,
+        totalPrice,
+      });
+      formik.setValues(cartInitialValues);
+      //TODO: Change this to the new order status page
+      router.push("/customers/menu");
     },
   });
 
@@ -159,6 +197,11 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
     return formik.values.items;
   };
 
+  const getCartCount = () => {
+    return getItemCount() + getComboCount();
+  };
+  const cartCount = getCartCount();
+
   const getTotalPrice = () => {
     const items = formik.values.items;
     const combos = formik.values.combos;
@@ -168,24 +211,44 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
     );
   };
 
-  return (
-    <CartContext.Provider
-      value={{
-        addCombo,
-        removeCombo,
-        getComboCount,
-        addItem,
-        removeItem,
-        getItemCount,
-        getCombos,
-        getItems,
-        clearItem,
-        getTotalPrice,
-      }}
-    >
-      {children}
-    </CartContext.Provider>
+  const totalPrice = getTotalPrice();
+
+  const submitOrder = () => {
+    formik.submitForm();
+  };
+
+  const value = useMemo(
+    () => ({
+      cartCount,
+      totalPrice,
+      addCombo,
+      removeCombo,
+      getComboCount,
+      addItem,
+      removeItem,
+      getItemCount,
+      getCombos,
+      getItems,
+      clearItem,
+      submitOrder,
+    }),
+    [
+      cartCount,
+      totalPrice,
+      addCombo,
+      removeCombo,
+      getComboCount,
+      addItem,
+      removeItem,
+      getItemCount,
+      getCombos,
+      getItems,
+      clearItem,
+      submitOrder,
+    ]
   );
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
 
 export function getCartLayout(page: React.ReactElement) {

@@ -38,16 +38,15 @@ const MyCartPage: NextPageWithLayout = () => {
     removeCombo,
     getItems,
     removeItem,
-    getTotalPrice,
+    totalPrice,
     clearItem,
     addItem,
-    getItemCount,
-    getComboCount,
+    cartCount,
+    submitOrder,
   } = useCartContext();
 
   const items = getItems();
   const combos = getCombos();
-  const totalPrice = getTotalPrice();
 
   const ComboItemsDisplay = ({ combo }: { combo: CartCombo }) => {
     return (
@@ -185,7 +184,8 @@ const MyCartPage: NextPageWithLayout = () => {
             width: isMobile ? "70%" : "20%",
           }}
           endIcon={!isMobile && <DoneIcon />}
-          disabled={getItemCount() + getComboCount() === 0}
+          disabled={cartCount === 0}
+          onClick={submitOrder}
         >
           Place Order
         </Button>
@@ -196,8 +196,8 @@ const MyCartPage: NextPageWithLayout = () => {
             height: isMobile ? "45%" : "100%",
             width: isMobile ? "70%" : "20%",
           }}
-          onClick={() => router.push("/customers/order")}
           startIcon={!isMobile && <ArrowBackIcon />}
+          onClick={() => router.push("/customers/order")}
         >
           Edit Items
         </Button>

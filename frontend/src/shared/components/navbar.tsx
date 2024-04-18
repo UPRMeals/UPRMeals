@@ -83,8 +83,7 @@ const Navbar: NextPageWithLayout<{
     ? staffNavBarItems
     : customerNavBarItems;
 
-  const { getItemCount } = useCartContext();
-  const itemCount = getItemCount();
+  const { cartCount } = useCartContext();
 
   useEffect(() => {
     setIsStaffPage(window.location.pathname.includes("staff"));
@@ -148,7 +147,7 @@ const Navbar: NextPageWithLayout<{
                 layout="fixed"
                 objectFit="contain"
                 height={largerScreen ? 100 : 55}
-                width={largerScreen ? 150 : 150}
+                width={150}
               />
             </Link>
           </Box>
@@ -158,7 +157,7 @@ const Navbar: NextPageWithLayout<{
                 onClick={() => router.push("/customers/cart")}
                 sx={{ display: { sm: "none" } }}
               >
-                <Badge badgeContent={itemCount} color="primary">
+                <Badge badgeContent={cartCount} color="primary">
                   <ShoppingCartIcon
                     fontSize={"medium"}
                     sx={{
@@ -196,24 +195,22 @@ const Navbar: NextPageWithLayout<{
                 ) : null
               )}
               {authenticated ? (
-                <>
-                  <IconButton
-                    onClick={() => router.push("/customers/cart")}
-                    sx={{ ml: 4, ":hover": { backgroundColor: "transparent" } }}
-                  >
-                    <Badge badgeContent={itemCount} color="primary">
-                      <ShoppingCartIcon
-                        sx={{
-                          fontSize: 25,
-                          color:
-                            currentPath === "/customers/cart"
-                              ? "text.secondary"
-                              : "text.primary",
-                        }}
-                      />
-                    </Badge>
-                  </IconButton>
-                </>
+                <IconButton
+                  onClick={() => router.push("/customers/cart")}
+                  sx={{ ml: 4, ":hover": { backgroundColor: "transparent" } }}
+                >
+                  <Badge badgeContent={cartCount} color="primary">
+                    <ShoppingCartIcon
+                      sx={{
+                        fontSize: 25,
+                        color:
+                          currentPath === "/customers/cart"
+                            ? "text.secondary"
+                            : "text.primary",
+                      }}
+                    />
+                  </Badge>
+                </IconButton>
               ) : null}
               {authenticated ? (
                 <IconButton

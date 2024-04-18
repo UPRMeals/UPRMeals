@@ -12,6 +12,7 @@ import { Colors } from "@/styles/theme";
 import { indigo, lightGreen } from "@mui/material/colors";
 import { useState } from "react";
 import AddComboDialog from "./AddComboDialog";
+import { toast } from "react-hot-toast";
 
 const ComboCard = ({
   combo,
@@ -105,7 +106,10 @@ const ComboCard = ({
         <AddComboDialog
           open={openDialog}
           onClose={() => setOpenDialog(false)}
-          onSubmit={() => setOpenDialog(false)}
+          onSubmit={() => {
+            setOpenDialog(false);
+            toast.success("Combo added to cart!");
+          }}
           combo={combo}
         />
       )}

@@ -148,7 +148,14 @@ export default function AddComboDialog({
         </Stack>
       }
       buttonDetails={{
-        primary: { text: "Add to Cart", position: "right" },
+        primary: {
+          text: "Add to Cart",
+          position: "right",
+          disabled:
+            (selectedProteins.length == 0 && selectedSides.length == 0) ||
+            (selectedProteins.length > combo.proteinCount &&
+              selectedSides.length > combo.sideCount),
+        },
         secondary: { text: "Cancel" },
       }}
       otherDialogTitleProps={{

@@ -21,7 +21,7 @@ const OrderPage: NextPageWithLayout = () => {
   const [activeMenu, setActiveMenu] = useState<Menu>();
 
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { getItemCount, getComboCount } = useCartContext();
+  const { cartCount } = useCartContext();
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -79,7 +79,7 @@ const OrderPage: NextPageWithLayout = () => {
           }}
           onClick={() => router.push("/customers/cart")}
           endIcon={!isMobile && <ArrowForwardIcon />}
-          disabled={getItemCount() + getComboCount() === 0}
+          disabled={cartCount === 0}
         >
           Order Summary
         </Button>
