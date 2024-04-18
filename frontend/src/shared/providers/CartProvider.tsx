@@ -4,23 +4,38 @@ import React, { PropsWithChildren, createContext, useContext } from "react";
 //TODO: FIX TYPES
 
 const cartInitialValues = {
+  combos: [],
   items: [],
   total: 0,
 };
 
 interface CartSchema {
+  combos: any[];
   items: { id: number; price: number; quantity: number }[];
   total: number;
 }
 
 const CartContext = createContext<{
+  addCombo: (combo: any) => void;
+  removeCombo: (combo: any) => void;
+  getComboCount: () => number;
   addItem: (item: any) => void;
   removeItem: (item: any) => void;
   clearItem: (item: any) => void;
   getItemCount: (item?: any) => number;
   getItems: () => any;
+  getCombos: () => any;
   getTotalPrice: () => number;
 }>({
+  addCombo: (combo) => {
+    console.log(combo);
+  },
+  removeCombo: (combo) => {
+    console.log(combo);
+  },
+  getComboCount: () => {
+    return 0;
+  },
   addItem: (item) => {
     console.log(item);
   },
@@ -34,6 +49,9 @@ const CartContext = createContext<{
     return 0;
   },
   getItems: () => {
+    return [];
+  },
+  getCombos: () => {
     return [];
   },
   getTotalPrice: () => {
@@ -51,7 +69,26 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
     },
   });
 
-  //adds removes one of that item
+  const addCombo = (combo: any) => {
+    formik.setFieldValue("combos", [...formik.values.combos, combo]);
+  };
+
+  const removeCombo = (combo: any) => {
+    formik.setFieldValue(
+      "combos",
+      formik.values.combos.filter((_combo) => _combo.uId !== combo.uId)
+    );
+  };
+
+  const getComboCount = () => {
+    return formik.values.combos.length;
+  };
+
+  const getCombos = () => {
+    return formik.values.combos;
+  };
+
+  //adds one of that item
   const addItem = (item: { id: number; price: number; quantity: number }) => {
     const existingItemIndex = formik.values.items.findIndex(
       (_item) => _item.id === item.id
@@ -117,15 +154,23 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
 
   const getTotalPrice = () => {
     const items = formik.values.items;
-    return items.reduce((acc, item) => acc + item.quantity * item.price, 0);
+    const combos = formik.values.combos;
+    return (
+      items.reduce((acc, item) => acc + item.quantity * item.price, 0) +
+      combos.reduce((acc, combo) => acc + combo.price, 0)
+    );
   };
 
   return (
     <CartContext.Provider
       value={{
+        addCombo,
+        removeCombo,
+        getComboCount,
         addItem,
         removeItem,
         getItemCount,
+        getCombos,
         getItems,
         clearItem,
         getTotalPrice,

@@ -27,10 +27,20 @@ const MyCartPage: NextPageWithLayout = () => {
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const { getItems, getTotalPrice, clearItem, removeItem, addItem } =
-    useCartContext();
+  const {
+    getCombos,
+    removeCombo,
+    getItems,
+    removeItem,
+    getTotalPrice,
+    clearItem,
+    addItem,
+    getItemCount,
+    getComboCount,
+  } = useCartContext();
 
   const items = getItems();
+  const combos = getCombos();
   const totalPrice = getTotalPrice();
 
   return (
@@ -53,6 +63,28 @@ const MyCartPage: NextPageWithLayout = () => {
         <Divider />
         <Table aria-label="cart table" table-layout="fixed" stickyHeader>
           <TableBody>
+            {combos?.map((combo: any) => (
+              <TableRow key={combo.id}>
+                <TableCell component="th" scope="row" sx={{ maxWidth: "10%" }}>
+                  <Typography fontWeight={500}>{combo.name}</Typography>
+                  <Typography variant="caption">{combo.description}</Typography>
+                </TableCell>
+                <TableCell>
+                  {combo.selectedProteins.map((p) => p.name).join(", ")}
+                  {"; "}
+                  {combo.selectedSides.map((s) => s.name).join(", ")};
+                </TableCell>
+                <TableCell align="right">${combo.price.toFixed(2)}</TableCell>
+                <TableCell align="right">
+                  <IconButton size="small">
+                    <DeleteIcon
+                      onClick={() => removeCombo(combo)}
+                      sx={{ color: Colors.Charcoal }}
+                    />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
             {items?.map((item: any) => (
               <TableRow key={item.id}>
                 <TableCell component="th" scope="row" sx={{ maxWidth: "10%" }}>
@@ -127,7 +159,7 @@ const MyCartPage: NextPageWithLayout = () => {
             width: isMobile ? "70%" : "20%",
           }}
           endIcon={!isMobile && <DoneIcon />}
-          disabled={items.length === 0}
+          disabled={getItemCount() + getComboCount() === 0}
         >
           Place Order
         </Button>

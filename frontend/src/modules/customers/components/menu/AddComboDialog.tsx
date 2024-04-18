@@ -1,5 +1,5 @@
 import BaseDialog from "@/shared/components/baseDialog";
-import { Combo } from "../../../../../../backend/src/menu/menu.dto";
+import { Combo, Item } from "../../../../../../backend/src/menu/menu.dto";
 import {
   Card,
   Checkbox,
@@ -7,54 +7,11 @@ import {
   FormControlLabel,
   FormGroup,
   Stack,
-  Theme,
   Typography,
-  useMediaQuery,
 } from "@mui/material";
-
-const AddComboDialogContent = ({ combo }: { combo: Combo }) => {
-  return (
-    <Stack mt={2}>
-      <Typography variant="h5" fontWeight={500}>
-        Proteins
-      </Typography>
-      <Typography variant="caption">
-        Choose up to {combo.proteinCount}
-      </Typography>
-      <FormGroup sx={{ ml: 1.5 }}>
-        {combo.proteins.map((protein, index) => {
-          return (
-            <>
-              {index !== 0 && <Divider />}
-              <FormControlLabel
-                control={<Checkbox defaultChecked />}
-                label={protein.name}
-              />
-            </>
-          );
-        })}
-      </FormGroup>
-      <Divider sx={{ my: 2 }} />
-      <Typography variant="h5" fontWeight={500}>
-        Sides
-      </Typography>
-      <Typography variant="caption">Choose up to {combo.sideCount}</Typography>
-      <FormGroup sx={{ ml: 1.5 }}>
-        {combo.sides.map((side, index) => {
-          return (
-            <>
-              {index !== 0 && <Divider />}
-              <FormControlLabel
-                control={<Checkbox defaultChecked />}
-                label={side.name}
-              />
-            </>
-          );
-        })}
-      </FormGroup>
-    </Stack>
-  );
-};
+import { useState } from "react";
+import { useCartContext } from "@/shared/providers/CartProvider";
+import { v4 as uuidv4 } from "uuid";
 
 export default function AddComboDialog({
   open,
@@ -67,21 +24,36 @@ export default function AddComboDialog({
   onSubmit: () => void;
   combo: Combo;
 }) {
-  const isMobile = useMediaQuery((theme: Theme) =>
-    theme.breakpoints.down("sm")
-  );
+  const { addCombo } = useCartContext();
+
+  const [selectedProteins, setSelectedProteins] = useState<Item[]>([]);
+  const [selectedSides, setSelectedSides] = useState<Item[]>([]);
+
+  const handleClose = () => {
+    setSelectedProteins([]);
+    setSelectedSides([]);
+    onClose();
+  };
+
+  const handleSubmit = () => {
+    addCombo({ ...combo, uId: uuidv4(), selectedProteins, selectedSides });
+    setSelectedProteins([]);
+    setSelectedSides([]);
+    onSubmit();
+  };
+
   return (
     <BaseDialog
       open={open}
-      handleClose={onClose}
-      handleSubmit={onSubmit}
+      handleClose={handleClose}
+      handleSubmit={handleSubmit}
       dialogTitle={
         <Card
           variant="outlined"
           sx={{
             border: 0,
             padding: 2,
-            backgroundColor: isMobile ? "#fbfbff" : "#f8f8fc",
+            backgroundColor: "#f8f8fc",
           }}
         >
           <Typography variant="h4" fontWeight={600}>
@@ -95,24 +67,97 @@ export default function AddComboDialog({
           </Typography>
         </Card>
       }
-      dialogContent={<AddComboDialogContent combo={combo} />}
+      dialogContent={
+        <Stack mt={1}>
+          <Typography variant="h5" fontWeight={500}>
+            Proteins
+          </Typography>
+          <Typography variant="caption">
+            Choose up to {combo.proteinCount}
+          </Typography>
+          <Divider />
+          <FormGroup sx={{ ml: 1.5, mb: 2 }}>
+            {combo.proteins.map((protein) => {
+              return (
+                <>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        key={protein.id}
+                        disabled={
+                          selectedProteins.length >= combo.proteinCount &&
+                          !selectedProteins.some((p) => protein.id == p.id)
+                        }
+                        checked={selectedProteins.some(
+                          (p) => protein.id == p.id
+                        )}
+                        onChange={(value) =>
+                          setSelectedProteins(
+                            selectedProteins.some((p) => protein.id == p.id)
+                              ? selectedProteins.filter(
+                                  (p) => protein.id !== p.id
+                                )
+                              : [...selectedProteins, protein]
+                          )
+                        }
+                      />
+                    }
+                    label={protein.name}
+                  />
+                  <Divider />
+                </>
+              );
+            })}
+          </FormGroup>
+          <Typography variant="h5" fontWeight={500}>
+            Sides
+          </Typography>
+          <Typography variant="caption">
+            Choose up to {combo.sideCount}
+          </Typography>
+          <Divider />
+          <FormGroup sx={{ ml: 1.5 }}>
+            {combo.sides.map((side, index) => {
+              return (
+                <>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        disabled={
+                          selectedSides.length >= combo.sideCount &&
+                          !selectedSides.some((s) => side.id == s.id)
+                        }
+                        key={side.id}
+                        checked={selectedSides.some((s) => side.id == s.id)}
+                        onChange={() =>
+                          setSelectedSides(
+                            selectedSides.some((s) => side.id == s.id)
+                              ? selectedSides.filter((s) => side.id !== s.id)
+                              : [...selectedSides, side]
+                          )
+                        }
+                      />
+                    }
+                    label={side.name}
+                  />
+                  <Divider />
+                </>
+              );
+            })}
+          </FormGroup>
+        </Stack>
+      }
       buttonDetails={{
         primary: { text: "Add to Cart", position: "right" },
         secondary: { text: "Cancel" },
       }}
       otherDialogTitleProps={{
         sx: {
-          boxShadow: isMobile ? "0px -1px 8px 0px rgba(0,0,0,0.12)" : 0,
           padding: 0,
         },
       }}
       otherDialogActionsProps={{
-        sx: isMobile
-          ? {
-              boxShadow: "0px 1px 8px 0px rgba(0,0,0,0.12)",
-              backgroundColor: "#fbfbff",
-            }
-          : { backgroundColor: "#f8f8fc" },
+        sx: { backgroundColor: "#f8f8fc" },
       }}
     />
   );
