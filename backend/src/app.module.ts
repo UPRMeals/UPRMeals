@@ -8,6 +8,7 @@ import { UserModule } from './user/user.module';
 import { UserController } from './user/user.controller';
 import { MenuModule } from './menu/menu.module';
 import { MenuController } from './menu/menu.controller';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { MenuController } from './menu/menu.controller';
     AuthModule,
     UserModule,
     MenuModule,
+    OrderModule,
   ],
   controllers: [AppController, AuthController, UserController, MenuController],
   providers: [AppService],

@@ -46,6 +46,7 @@ export interface CreateMenuItemResponse {
 }
 
 export interface Menu {
+  id: number;
   name: string;
   date: Date;
   proteins: Item[];
@@ -54,6 +55,7 @@ export interface Menu {
 }
 
 export interface Combo {
+  id: number;
   name: string;
   description: string;
   price: number;

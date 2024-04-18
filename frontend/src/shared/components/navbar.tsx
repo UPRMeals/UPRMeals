@@ -19,6 +19,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Image from "next/legacy/image";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { grey } from "@mui/material/colors";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { NextPageWithLayout } from "@/pages/_app";
+import { getCartLayout, useCartContext } from "../providers/CartProvider";
 
 // TODO: Implement functionality
 export const isFlaggedAccount = true;
@@ -31,7 +34,6 @@ type NavItemProps = {
 
 const customerNavBarItems: NavItemProps[] = [
   { text: "Menu", href: "/customers/menu", requiresAuthentication: false },
-  { text: "My Cart", href: "/customers/cart", requiresAuthentication: true },
 ];
 
 const staffNavBarItems: NavItemProps[] = [
@@ -68,7 +70,9 @@ const NavLink = ({
   );
 };
 
-const Navbar = ({ authenticated }: { authenticated: boolean }) => {
+const Navbar: NextPageWithLayout<{
+  authenticated: boolean;
+}> = ({ authenticated }) => {
   const router = useRouter();
   const currentPath = router.asPath;
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
@@ -78,6 +82,8 @@ const Navbar = ({ authenticated }: { authenticated: boolean }) => {
   const navBarItemsToDisplay = isStaffPage
     ? staffNavBarItems
     : customerNavBarItems;
+
+  const { cartCount } = useCartContext();
 
   useEffect(() => {
     setIsStaffPage(window.location.pathname.includes("staff"));
@@ -126,7 +132,8 @@ const Navbar = ({ authenticated }: { authenticated: boolean }) => {
       <AppBar elevation={0}>
         <Toolbar
           sx={{
-            backgroundColor: "background.default",
+            backgroundColor: "#fbfbff",
+            boxShadow: "0px -1px 8px 0px rgba(0,0,0,0.12)",
             justifyContent: "space-between",
             alignItems: "center",
             maxHeight: 75,
@@ -140,19 +147,39 @@ const Navbar = ({ authenticated }: { authenticated: boolean }) => {
                 layout="fixed"
                 objectFit="contain"
                 height={largerScreen ? 100 : 55}
-                width={largerScreen ? 150 : 150}
+                width={150}
               />
             </Link>
           </Box>
-          <IconButton
-            color="primary"
-            aria-label="open drawer"
-            edge="end"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
+          <Box>
+            {authenticated ? (
+              <IconButton
+                onClick={() => router.push("/customers/cart")}
+                sx={{ display: { sm: "none" } }}
+              >
+                <Badge badgeContent={cartCount} color="primary">
+                  <ShoppingCartIcon
+                    fontSize={"medium"}
+                    sx={{
+                      color:
+                        currentPath === "/customers/cart"
+                          ? "text.secondary"
+                          : "text.primary",
+                    }}
+                  />
+                </Badge>
+              </IconButton>
+            ) : null}
+            <IconButton
+              color="primary"
+              aria-label="open drawer"
+              edge="end"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: "none" } }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Box>
 
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             <Stack flexDirection={"row"} columnGap={2} alignItems={"center"}>
@@ -167,7 +194,24 @@ const Navbar = ({ authenticated }: { authenticated: boolean }) => {
                   />
                 ) : null
               )}
-
+              {authenticated ? (
+                <IconButton
+                  onClick={() => router.push("/customers/cart")}
+                  sx={{ ml: 4, ":hover": { backgroundColor: "transparent" } }}
+                >
+                  <Badge badgeContent={cartCount} color="primary">
+                    <ShoppingCartIcon
+                      sx={{
+                        fontSize: 25,
+                        color:
+                          currentPath === "/customers/cart"
+                            ? "text.secondary"
+                            : "text.primary",
+                      }}
+                    />
+                  </Badge>
+                </IconButton>
+              ) : null}
               {authenticated ? (
                 <IconButton
                   onClick={() => router.push("/customers/profile")}
@@ -222,4 +266,5 @@ const Navbar = ({ authenticated }: { authenticated: boolean }) => {
   );
 };
 
+Navbar.getLayout = getCartLayout;
 export default Navbar;

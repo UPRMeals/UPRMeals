@@ -10,8 +10,10 @@ import {
 import { useEffect, useState } from "react";
 import { Menu } from "../../../../../backend/src/menu/menu.dto";
 import { useRouter } from "next/router";
+import { NextPageWithLayout } from "@/pages/_app";
+import { getCartLayout } from "@/shared/providers/CartProvider";
 
-export default function MenuPage() {
+const MenuPage: NextPageWithLayout = () => {
   const router = useRouter();
   const { getActiveMenu } = useMenuService();
   const [activeMenu, setActiveMenu] = useState<Menu>();
@@ -26,8 +28,9 @@ export default function MenuPage() {
 
   return (
     <Box
-      py={10}
-      height={"100vh"}
+      mt={10}
+      mb={{ xs: 300, md: 135 }}
+      height={"90vh"}
       width={"100vw"}
       display={"flex"}
       flexDirection={"column"}
@@ -41,8 +44,8 @@ export default function MenuPage() {
       ) : (
         <>
           <Stack justifyContent={"space-between"} alignItems={"center"} pb={2}>
-            <Typography variant="h2" mb={2}>
-              Menu de Hoy
+            <Typography variant="h2" mb={2} textAlign={"center"}>
+              {activeMenu.name}
             </Typography>
             <Button
               variant="contained"
@@ -52,9 +55,19 @@ export default function MenuPage() {
               Order Now
             </Button>
           </Stack>
-          <CustomerMenu menu={activeMenu} isOrderPage={false} />
+          <Box
+            display={"flex"}
+            flexDirection={"column"}
+            width={"95%"}
+            alignItems={"center"}
+          >
+            <CustomerMenu menu={activeMenu} isOrderPage={false} />
+          </Box>
         </>
       )}
     </Box>
   );
-}
+};
+
+MenuPage.getLayout = getCartLayout;
+export default MenuPage;

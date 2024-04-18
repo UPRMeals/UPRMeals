@@ -9,6 +9,7 @@ import Navbar from "../shared/components/navbar";
 import { JWTUtils } from "../shared/utils/jwtUtils";
 import { useRouter } from "next/router";
 import { Toaster } from "react-hot-toast";
+import CartProvider from "@/shared/providers/CartProvider";
 import ErrorProvider from "../shared/providers/ErrorProvider";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -72,9 +73,11 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return getLayout(
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {hasNavbar && <Navbar authenticated={isAuthenticated} />}
       <ErrorProvider>
-        <Component {...pageProps} />
+        <CartProvider>
+          {hasNavbar && <Navbar authenticated={isAuthenticated} />}
+          <Component {...pageProps} />
+        </CartProvider>
       </ErrorProvider>
       <Toaster
         position="top-right"
