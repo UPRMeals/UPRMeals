@@ -18,10 +18,16 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DoneIcon from "@mui/icons-material/Done";
 import { useRouter } from "next/router";
-import { getCartLayout, useCartContext } from "@/shared/providers/CartProvider";
+import {
+  CartCombo,
+  CartItem,
+  getCartLayout,
+  useCartContext,
+} from "@/shared/providers/CartProvider";
 import { NextPageWithLayout } from "@/pages/_app";
 import theme, { Colors } from "@/styles/theme";
 import EditButtons from "@/shared/components/ItemAdder";
+import { Item } from "../../../../../backend/src/menu/menu.dto";
 
 const MyCartPage: NextPageWithLayout = () => {
   const router = useRouter();
@@ -43,6 +49,25 @@ const MyCartPage: NextPageWithLayout = () => {
   const combos = getCombos();
   const totalPrice = getTotalPrice();
 
+  const ComboItemsDisplay = ({ combo }: { combo: CartCombo }) => {
+    return (
+      <Stack>
+        <Typography variant="caption">
+          <Typography variant="caption" fontWeight={600}>
+            Protein(s):&nbsp;
+          </Typography>
+          {combo.selectedProteins.map((p: Item) => p.name).join(", ")}
+        </Typography>
+        <Typography variant="caption">
+          <Typography variant="caption" fontWeight={600}>
+            Side(s):&nbsp;
+          </Typography>
+          {combo.selectedSides.map((s: Item) => s.name).join(", ")}
+        </Typography>
+      </Stack>
+    );
+  };
+
   return (
     <Box
       mt={14}
@@ -63,17 +88,18 @@ const MyCartPage: NextPageWithLayout = () => {
         <Divider />
         <Table aria-label="cart table" table-layout="fixed" stickyHeader>
           <TableBody>
-            {combos?.map((combo: any) => (
+            {combos?.map((combo: CartCombo) => (
               <TableRow key={combo.id}>
                 <TableCell component="th" scope="row" sx={{ maxWidth: "10%" }}>
                   <Typography fontWeight={500}>{combo.name}</Typography>
                   <Typography variant="caption">{combo.description}</Typography>
+                  {isMobile && <ComboItemsDisplay combo={combo} />}
                 </TableCell>
-                <TableCell>
-                  {combo.selectedProteins.map((p) => p.name).join(", ")}
-                  {"; "}
-                  {combo.selectedSides.map((s) => s.name).join(", ")};
-                </TableCell>
+                {!isMobile && (
+                  <TableCell>
+                    <ComboItemsDisplay combo={combo} />
+                  </TableCell>
+                )}
                 <TableCell align="right">${combo.price.toFixed(2)}</TableCell>
                 <TableCell align="right">
                   <IconButton size="small">
@@ -85,7 +111,7 @@ const MyCartPage: NextPageWithLayout = () => {
                 </TableCell>
               </TableRow>
             ))}
-            {items?.map((item: any) => (
+            {items?.map((item: CartItem) => (
               <TableRow key={item.id}>
                 <TableCell component="th" scope="row" sx={{ maxWidth: "10%" }}>
                   <Typography fontWeight={500}>{item.name}</Typography>

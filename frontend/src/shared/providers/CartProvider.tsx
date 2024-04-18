@@ -1,5 +1,6 @@
 import { useFormik } from "formik";
 import React, { PropsWithChildren, createContext, useContext } from "react";
+import { Combo, Item } from "../../../../backend/src/menu/menu.dto";
 
 //TODO: FIX TYPES
 
@@ -9,22 +10,32 @@ const cartInitialValues = {
   total: 0,
 };
 
+export interface CartCombo extends Combo {
+  selectedProteins: Item[];
+  selectedSides: Item[];
+  uId: string;
+}
+
+export interface CartItem extends Item {
+  quantity: number;
+}
+
 interface CartSchema {
-  combos: any[];
-  items: { id: number; price: number; quantity: number }[];
+  combos: CartCombo[];
+  items: CartItem[];
   total: number;
 }
 
 const CartContext = createContext<{
-  addCombo: (combo: any) => void;
-  removeCombo: (combo: any) => void;
+  addCombo: (combo: CartCombo) => void;
+  removeCombo: (combo: CartCombo) => void;
   getComboCount: () => number;
-  addItem: (item: any) => void;
-  removeItem: (item: any) => void;
-  clearItem: (item: any) => void;
-  getItemCount: (item?: any) => number;
-  getItems: () => any;
-  getCombos: () => any;
+  getCombos: () => CartCombo[];
+  addItem: (item: CartItem) => void;
+  removeItem: (item: CartItem) => void;
+  clearItem: (item: CartItem) => void;
+  getItemCount: (item?: CartItem) => number;
+  getItems: () => CartItem[];
   getTotalPrice: () => number;
 }>({
   addCombo: (combo) => {
@@ -69,27 +80,27 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
     },
   });
 
-  const addCombo = (combo: any) => {
+  const addCombo = (combo: CartCombo) => {
     formik.setFieldValue("combos", [...formik.values.combos, combo]);
   };
 
-  const removeCombo = (combo: any) => {
+  const removeCombo = (combo: CartCombo) => {
     formik.setFieldValue(
       "combos",
       formik.values.combos.filter((_combo) => _combo.uId !== combo.uId)
     );
   };
 
-  const getComboCount = () => {
+  const getComboCount: () => number = () => {
     return formik.values.combos.length;
   };
 
-  const getCombos = () => {
+  const getCombos: () => CartCombo[] = () => {
     return formik.values.combos;
   };
 
   //adds one of that item
-  const addItem = (item: { id: number; price: number; quantity: number }) => {
+  const addItem = (item: CartItem) => {
     const existingItemIndex = formik.values.items.findIndex(
       (_item) => _item.id === item.id
     );
@@ -106,11 +117,7 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
   };
 
   //only removes one of that item
-  const removeItem = (item: {
-    id: number;
-    price: number;
-    quantity: number;
-  }) => {
+  const removeItem = (item: CartItem) => {
     const existingItemIndex = formik.values.items.findIndex(
       (i) => i.id === item.id
     );
@@ -126,7 +133,7 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
   };
 
   //removes all of that item
-  const clearItem = (item: any) => {
+  const clearItem = (item: CartItem) => {
     formik.setFieldValue(
       "items",
       formik.values.items.filter((_item) => _item.id !== item.id)
@@ -134,7 +141,7 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
   };
 
   //if item is provided returns amount of that item, if not it returns total amount of all items
-  const getItemCount = (item?: any) => {
+  const getItemCount = (item?: CartItem) => {
     let count = 0;
     if (item) {
       count =

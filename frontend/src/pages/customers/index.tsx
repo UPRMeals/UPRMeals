@@ -59,7 +59,7 @@ const CustomerHomePage: NextPageWithLayout = () => {
               variant="contained"
               onClick={() => router.push("/customers/order")}
             >
-              Order Now!
+              Order Now
             </Button>
             <Button
               variant="text"
