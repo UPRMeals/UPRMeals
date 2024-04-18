@@ -105,9 +105,6 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
         };
       });
 
-      console.log("combos", combos);
-      console.log("items", items);
-
       await createOrder({
         items,
         combos,
