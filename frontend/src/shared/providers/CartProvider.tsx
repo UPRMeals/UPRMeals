@@ -31,10 +31,10 @@ const CartContext = createContext<{
   removeCombo: (combo: CartCombo) => void;
   getComboCount: () => number;
   getCombos: () => CartCombo[];
-  addItem: (item: CartItem) => void;
-  removeItem: (item: CartItem) => void;
+  addItem: (item: Item) => void;
+  removeItem: (item: Item) => void;
   clearItem: (item: CartItem) => void;
-  getItemCount: (item?: CartItem) => number;
+  getItemCount: (item?: Item) => number;
   getItems: () => CartItem[];
   getTotalPrice: () => number;
 }>({
@@ -100,7 +100,7 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
   };
 
   //adds one of that item
-  const addItem = (item: CartItem) => {
+  const addItem = (item: Item) => {
     const existingItemIndex = formik.values.items.findIndex(
       (_item) => _item.id === item.id
     );
@@ -117,7 +117,7 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
   };
 
   //only removes one of that item
-  const removeItem = (item: CartItem) => {
+  const removeItem = (item: Item) => {
     const existingItemIndex = formik.values.items.findIndex(
       (i) => i.id === item.id
     );
@@ -141,7 +141,7 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
   };
 
   //if item is provided returns amount of that item, if not it returns total amount of all items
-  const getItemCount = (item?: CartItem) => {
+  const getItemCount = (item?: Item) => {
     let count = 0;
     if (item) {
       count =
