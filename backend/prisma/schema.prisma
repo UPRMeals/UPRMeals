@@ -34,8 +34,8 @@ model Order {
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @default(now())
   removed         Boolean       @default(false)
-  items           OrderItem[]
-  combos          OrderCombo[]
+  orderItems      OrderItem[]
+  orderCombos     OrderCombo[]
 }
 
 model OrderItem {
@@ -48,13 +48,13 @@ model OrderItem {
 }
 
 model OrderCombo {
-  id              Int               @default(autoincrement()) @id
-  order           Order             @relation(fields: [orderId], references: [id])
-  orderId         Int
-  combo           Combo             @relation(fields: [comboId], references: [id])
-  comboId         Int
-  removed         Boolean           @default(false)
-  comboItems      OrderComboItem[]
+  id                Int               @default(autoincrement()) @id
+  order             Order             @relation(fields: [orderId], references: [id])
+  orderId           Int
+  combo             Combo             @relation(fields: [comboId], references: [id])
+  comboId           Int
+  removed           Boolean           @default(false)
+  orderComboItems   OrderComboItem[]
 }
 
 model Combo {
@@ -66,28 +66,27 @@ model Combo {
   proteinCount    Int
   sideCount       Int
   removed         Boolean       @default(false)
-  orders          OrderCombo[]
+  orderCombos     OrderCombo[]
   menuId          Int
   menu            Menu          @relation(fields: [menuId], references: [id])
-  items           ComboItem[]
+  comboItems      ComboItem[]
 }
 
 model ComboItem {
-  id              Int               @default(autoincrement()) @id
-  combo           Combo             @relation(fields: [comboId], references: [id])
-  comboId         Int
-  item            Item              @relation(fields: [itemId], references: [id])
-  itemId          Int
-  orderCombos     OrderComboItem[]
-  removed         Boolean           @default(false)
+  id                Int               @default(autoincrement()) @id
+  combo             Combo             @relation(fields: [comboId], references: [id])
+  comboId           Int
+  item              Item              @relation(fields: [itemId], references: [id])
+  itemId            Int
+  removed           Boolean           @default(false)
 }
 
 model OrderComboItem {
   id              Int           @default(autoincrement()) @id
   orderCombo      OrderCombo    @relation(fields: [orderComboId], references: [id])
   orderComboId    Int
-  comboItem       ComboItem     @relation(fields: [comboItemId], references: [id])
-  comboItemId     Int
+  item            Item          @relation(fields: [itemId], references: [id])
+  itemId          Int
   removed         Boolean       @default(false)
 }
 
@@ -99,10 +98,11 @@ model Item {
   type            ItemType      
   status          String        @default("available")
   removed         Boolean       @default(false)
-  orders          OrderItem[]
+  orderItems      OrderItem[]
   menuId          Int
   menu            Menu          @relation(fields: [menuId], references: [id])
-  combos          ComboItem[]
+  comboItems      ComboItem[]
+  orderComboItems OrderComboItem[]
 }
 
 model Menu {

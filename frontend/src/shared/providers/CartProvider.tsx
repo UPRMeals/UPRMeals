@@ -9,8 +9,6 @@ import { Combo, Item } from "../../../../backend/src/menu/menu.dto";
 import { useOrderService } from "../hooks/useOrderService";
 import { useRouter } from "next/router";
 
-//TODO: FIX TYPES
-
 const cartInitialValues = {
   combos: [],
   items: [],
@@ -106,6 +104,9 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
           ],
         };
       });
+
+      console.log("combos", combos);
+      console.log("items", items);
 
       await createOrder({
         items,

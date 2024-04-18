@@ -7,7 +7,7 @@ export class OrderService {
   constructor(private prismaService: PrismaService) {}
 
   async createOrder(userId: number, data: CreateOrderData): Promise<any> {
-    const items = data.items.flatMap((item) => ({
+    const orderItems = data.items.flatMap((item) => ({
       item: {
         connect: {
           id: item.id,
@@ -15,15 +15,15 @@ export class OrderService {
       },
     }));
 
-    const combos = data.combos.flatMap((combo) => ({
+    const orderCombos = data.combos.flatMap((combo) => ({
       combo: {
         connect: {
           id: combo.id,
         },
       },
-      comboItems: {
+      orderComboItems: {
         create: combo.items.flatMap((item) => ({
-          comboItem: {
+          item: {
             connect: {
               id: item.id,
             },
@@ -36,11 +36,11 @@ export class OrderService {
       data: {
         userId: userId,
         totalPrice: data.totalPrice,
-        items: {
-          create: items,
+        orderItems: {
+          create: orderItems,
         },
-        combos: {
-          create: combos,
+        orderCombos: {
+          create: orderCombos,
         },
       },
     });

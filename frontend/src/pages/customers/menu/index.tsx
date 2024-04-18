@@ -52,7 +52,7 @@ const MenuPage: NextPageWithLayout = () => {
               sx={{ maxHeight: 50 }}
               onClick={() => router.push("/customers/order")}
             >
-              Order Now!
+              Order Now
             </Button>
           </Stack>
           <Box

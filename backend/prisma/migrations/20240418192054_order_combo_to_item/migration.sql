@@ -16,7 +16,7 @@ ALTER COLUMN "userId" SET NOT NULL;
 CREATE TABLE "OrderComboItem" (
     "id" SERIAL NOT NULL,
     "orderComboId" INTEGER NOT NULL,
-    "comboItemId" INTEGER NOT NULL,
+    "itemId" INTEGER NOT NULL,
     "removed" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "OrderComboItem_pkey" PRIMARY KEY ("id")
@@ -29,4 +29,4 @@ ALTER TABLE "Order" ADD CONSTRAINT "Order_userId_fkey" FOREIGN KEY ("userId") RE
 ALTER TABLE "OrderComboItem" ADD CONSTRAINT "OrderComboItem_orderComboId_fkey" FOREIGN KEY ("orderComboId") REFERENCES "OrderCombo"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "OrderComboItem" ADD CONSTRAINT "OrderComboItem_comboItemId_fkey" FOREIGN KEY ("comboItemId") REFERENCES "ComboItem"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "OrderComboItem" ADD CONSTRAINT "OrderComboItem_itemId_fkey" FOREIGN KEY ("itemId") REFERENCES "Item"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

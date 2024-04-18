@@ -26,7 +26,7 @@ export class MenuService {
       include: {
         items: { orderBy: { type: 'asc' } },
         combos: {
-          include: { items: { include: { item: true } } },
+          include: { comboItems: { include: { item: true } } },
           orderBy: { price: 'asc' },
         },
       },
@@ -41,12 +41,12 @@ export class MenuService {
           price: combo.price,
           proteinCount: combo.proteinCount,
           sideCount: combo.sideCount,
-          proteins: combo.items
+          proteins: combo.comboItems
             .map(({ item }) => {
               if (item.type === ItemType.PROTEIN) return item;
             })
             .filter(Boolean),
-          sides: combo.items
+          sides: combo.comboItems
             .map(({ item }) => {
               if (item.type === ItemType.SIDE) return item;
             })
@@ -76,7 +76,7 @@ export class MenuService {
       include: {
         items: true,
         combos: {
-          include: { items: { include: { item: true } } },
+          include: { comboItems: { include: { item: true } } },
           orderBy: { price: 'asc' },
         },
       },
@@ -97,12 +97,12 @@ export class MenuService {
         price: combo.price,
         proteinCount: combo.proteinCount,
         sideCount: combo.sideCount,
-        proteins: combo.items
+        proteins: combo.comboItems
           .map(({ item }) => {
             if (item.type === ItemType.PROTEIN) return item;
           })
           .filter(Boolean),
-        sides: combo.items
+        sides: combo.comboItems
           .map(({ item }) => {
             if (item.type === ItemType.SIDE) return item;
           })

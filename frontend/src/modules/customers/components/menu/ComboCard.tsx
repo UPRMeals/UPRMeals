@@ -108,7 +108,7 @@ const ComboCard = ({
           onClose={() => setOpenDialog(false)}
           onSubmit={() => {
             setOpenDialog(false);
-            toast.success("Combo added to cart!");
+            toast.success("Combo added to cart.");
           }}
           combo={combo}
         />
