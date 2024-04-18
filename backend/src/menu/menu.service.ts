@@ -117,6 +117,7 @@ export class MenuService {
     });
 
     return {
+      id: tempMenuResponse.id,
       name: tempMenuResponse.name,
       date: tempMenuResponse.date,
       description: tempMenuResponse.description,

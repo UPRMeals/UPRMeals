@@ -66,7 +66,7 @@ export default function MenuPage() {
             </Button>
           </Box>
 
-          <StaffMenu menu={menuWithItems} isOrderPage={false} />
+          <StaffMenu menu={menuWithItems} />
         </Stack>
       )}
     </Box>

@@ -16,6 +16,8 @@ import { Colors } from "@/styles/theme";
 import AddIcon from "@mui/icons-material/Add";
 import { indigo, lightGreen } from "@mui/material/colors";
 import EditIcon from "@mui/icons-material/Edit";
+import { useState } from "react";
+import AddItemDialog from "../AddItemDialog";
 
 const MenuDetails = ({ label, value }: { label: string; value: string }) => {
   return (
@@ -37,13 +39,11 @@ const EmptyState = ({ itemType }: { itemType: string }) => {
   );
 };
 
-const StaffMenu = ({
-  isOrderPage,
-  menu,
-}: {
-  isOrderPage: boolean;
-  menu: Menu;
-}) => {
+const StaffMenu = ({ menu }: { menu: Menu }) => {
+  const [openAddComboDialog, setOpenAddComboDialog] = useState<boolean>(false);
+  const [openAddProteinDialog, setOpenAddProteinDialog] =
+    useState<boolean>(false);
+  const [openAddSideDialog, setOpenAddSideDialog] = useState<boolean>(false);
   return (
     <Box
       display={"flex"}
@@ -88,7 +88,12 @@ const StaffMenu = ({
         sx={{ display: "flex", justifyContent: "space-between" }}
       >
         <Typography variant="h5">Combos</Typography>
-        <Button startIcon={<AddIcon />}>Añadir </Button>
+        <Button
+          startIcon={<AddIcon />}
+          onClick={() => setOpenAddComboDialog(true)}
+        >
+          Añadir
+        </Button>
       </Stack>
       <Divider sx={{ width: "100%" }} />
 
@@ -117,7 +122,12 @@ const StaffMenu = ({
         sx={{ display: "flex", justifyContent: "space-between" }}
       >
         <Typography variant="h5">Proteinas</Typography>
-        <Button startIcon={<AddIcon />}>Añadir</Button>
+        <Button
+          startIcon={<AddIcon />}
+          onClick={() => setOpenAddProteinDialog(true)}
+        >
+          Añadir
+        </Button>
       </Stack>
       <Divider sx={{ width: "100%" }} />
 
@@ -146,7 +156,12 @@ const StaffMenu = ({
         sx={{ display: "flex", justifyContent: "space-between" }}
       >
         <Typography variant="h5">Acompañantes</Typography>
-        <Button startIcon={<AddIcon />}>Añadir</Button>
+        <Button
+          startIcon={<AddIcon />}
+          onClick={() => setOpenAddSideDialog(true)}
+        >
+          Añadir
+        </Button>
       </Stack>
       <Divider sx={{ width: "100%" }} />
       <Stack
@@ -167,6 +182,23 @@ const StaffMenu = ({
           <EmptyState itemType="acompañantes" />
         )}
       </Stack>
+
+      <AddItemDialog
+        open={openAddSideDialog}
+        handleClose={async () => {
+          setOpenAddSideDialog(false);
+        }}
+        menuId={menu.id}
+        itemType={"SIDE"}
+      />
+      <AddItemDialog
+        open={openAddProteinDialog}
+        handleClose={async () => {
+          setOpenAddProteinDialog(false);
+        }}
+        menuId={menu.id}
+        itemType={"PROTEIN"}
+      />
     </Box>
   );
 };

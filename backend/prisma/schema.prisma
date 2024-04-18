@@ -82,7 +82,6 @@ model ComboItem {
 model Item {
   id              Int           @default(autoincrement()) @id
   name            String
-  description     String?
   price           Float
   type            ItemType      
   status          String        @default("available")
