@@ -68,7 +68,7 @@ export class MenuService {
   }
 
   async getMenuById(menuId: number): Promise<Menu> {
-    const menu = await this.getMenuWithItems({ id: menuId, isActive: false });
+    const menu = await this.getMenuWithItems({ id: menuId });
     return menu;
   }
 
@@ -77,16 +77,9 @@ export class MenuService {
     return activeMenu;
   }
 
-  private async getMenuWithItems({
-    id,
-    isActive,
-  }: GetMenuWithItemsInput): Promise<Menu> {
-    let queryParams: Partial<GetMenuWithItemsInput> = id
-      ? { id }
-      : { isActive };
-
+  private async getMenuWithItems(where: Prisma.MenuWhereInput): Promise<Menu> {
     const tempMenuResponse = await this.prismaService.menu.findFirst({
-      where: { ...queryParams, removed: false },
+      where: { ...where, removed: false },
       include: {
         items: true,
         combos: {
@@ -126,6 +119,8 @@ export class MenuService {
     return {
       name: tempMenuResponse.name,
       date: tempMenuResponse.date,
+      description: tempMenuResponse.description,
+      isActive: tempMenuResponse.isActive,
       proteins,
       sides,
       combos,

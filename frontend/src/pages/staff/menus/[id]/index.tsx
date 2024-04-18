@@ -1,5 +1,5 @@
-import CustomerMenu from "@/modules/customers/components/menu/CustomerMenu";
-import { useMenuService } from "@/shared/hooks/useMenuService";
+import StaffMenu from "../../../../modules/staff/components/menu/StaffMenu";
+import { useMenuService } from "../../../../shared/hooks/useMenuService";
 import {
   Box,
   Button,
@@ -38,12 +38,24 @@ export default function MenuPage() {
       justifyContent={"start"}
     >
       {!menuWithItems ? (
-        <Box alignContent={"center"} justifyItems={"center"} height={"100%"}>
+        <Box
+          alignContent={"center"}
+          justifyItems={"center"}
+          height={"100%"}
+          alignSelf={"center"}
+        >
           <CircularProgress size={80} />
         </Box>
       ) : (
-        <>
-          <Stack pb={2}>
+        <Stack
+          sx={{
+            flexDirection: "column",
+            width: "80%",
+            justifyItems: "flex-start",
+            display: "flex",
+          }}
+        >
+          <Box>
             <Button
               onClick={() => {
                 router.push("/staff/menus");
@@ -52,12 +64,10 @@ export default function MenuPage() {
             >
               Regresar
             </Button>
-            <Typography variant="h4" mb={2}>
-              {menuWithItems.name}
-            </Typography>
-          </Stack>
-          <CustomerMenu menu={menuWithItems} isOrderPage={false} />
-        </>
+          </Box>
+
+          <StaffMenu menu={menuWithItems} isOrderPage={false} />
+        </Stack>
       )}
     </Box>
   );

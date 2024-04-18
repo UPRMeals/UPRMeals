@@ -48,6 +48,8 @@ export interface CreateMenuItemResponse {
 export interface Menu {
   name: string;
   date: Date;
+  isActive: boolean;
+  description: string;
   proteins: Item[];
   sides: Item[];
   combos: Combo[];
