@@ -35,6 +35,7 @@ export class MenuService {
     const menus = menusResponse.map((menu) => {
       const combos = menu.combos.map((combo) => {
         return {
+          id: combo.id,
           name: combo.name,
           description: combo.description,
           price: combo.price,
@@ -90,6 +91,7 @@ export class MenuService {
 
     const combos = tempMenuResponse.combos.map((combo) => {
       return {
+        id: combo.id,
         name: combo.name,
         description: combo.description,
         price: combo.price,
@@ -109,6 +111,7 @@ export class MenuService {
     });
 
     return {
+      id: tempMenuResponse.id,
       name: tempMenuResponse.name,
       date: tempMenuResponse.date,
       proteins,
