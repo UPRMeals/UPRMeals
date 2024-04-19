@@ -1,121 +1,143 @@
-import React, { useState } from "react";
 import {
   Box,
   Typography,
   Button,
   IconButton,
-  Container,
   Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
   Paper,
-  Tooltip,
+  useMediaQuery,
+  Divider,
+  Stack,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
+
 import DeleteIcon from "@mui/icons-material/Delete";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import DoneIcon from "@mui/icons-material/Done";
+import { useRouter } from "next/router";
+import {
+  CartCombo,
+  CartItem,
+  getCartLayout,
+  useCartContext,
+} from "@/shared/providers/CartProvider";
+import { NextPageWithLayout } from "@/pages/_app";
+import theme, { Colors } from "@/styles/theme";
+import EditButtons from "@/shared/components/ItemAdder";
+import { Item } from "../../../../../backend/src/menu/menu.dto";
 
-type CartItemType = {
-  id: number;
-  title: string;
-  price: number;
-  quantity: number;
-};
+const MyCartPage: NextPageWithLayout = () => {
+  const router = useRouter();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-const cartItems = [
-  {
-    id: 1,
-    title: "Combo Internacional de Pollo con Papas Fritas",
-    price: 4.99,
-    quantity: 1,
-  },
-  { id: 2, title: "Jamon y Queso", price: 4.99, quantity: 2 },
-  // Add more items here
-];
+  const {
+    getCombos,
+    removeCombo,
+    getItems,
+    removeItem,
+    totalPrice,
+    clearItem,
+    addItem,
+    cartCount,
+    submitOrder,
+  } = useCartContext();
 
-export default function MyCartPage() {
-  const [items, setItems] = useState(cartItems);
+  const items = getItems();
+  const combos = getCombos();
 
-  const handleAdd = (item: CartItemType) => {
-    setItems((prevItems) =>
-      prevItems.map((i) =>
-        i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-      )
+  const ComboItemsDisplay = ({ combo }: { combo: CartCombo }) => {
+    return (
+      <Stack>
+        <Typography variant="caption">
+          <Typography variant="caption" fontWeight={600}>
+            Protein(s):&nbsp;
+          </Typography>
+          {combo.selectedProteins.map((p: Item) => p.name).join(", ")}
+        </Typography>
+        <Typography variant="caption">
+          <Typography variant="caption" fontWeight={600}>
+            Side(s):&nbsp;
+          </Typography>
+          {combo.selectedSides.map((s: Item) => s.name).join(", ")}
+        </Typography>
+      </Stack>
     );
   };
-
-  const handleRemove = (item: CartItemType) => {
-    setItems((prevItems) =>
-      prevItems
-        .map((i) => (i.id === item.id ? { ...i, quantity: i.quantity - 1 } : i))
-        .filter((i) => i.quantity > 0)
-    );
-  };
-
-  const handleDelete = (item: CartItemType) => {
-    setItems((prevItems) => prevItems.filter((i) => i.id !== item.id));
-  };
-
-  const totalPrice = items.reduce(
-    (acc, item) => acc + item.quantity * item.price,
-    0
-  );
 
   return (
-    <Container maxWidth="md" sx={{ mt: 8, mb: 10 }}>
-      <Typography variant="h2" textAlign="center" mb={4}>
-        My Cart
-      </Typography>
-      <TableContainer
-        component={Paper}
-        sx={{ boxShadow: 3, overflowX: "auto" }}
-      >
-        <Table aria-label="cart table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Item</TableCell>
-              <TableCell align="center">Quantity</TableCell>
-              <TableCell align="right">Price</TableCell>
-              <TableCell align="right"></TableCell>
-            </TableRow>
-          </TableHead>
+    <Box
+      mt={14}
+      width={"100vw"}
+      display={"flex"}
+      flexDirection={"column"}
+      alignItems={"center"}
+      justifyContent={"start"}
+      mb={20}
+    >
+      <TableContainer sx={{ maxWidth: { xs: "95%", lg: "70%" } }}>
+        <Typography variant="h4" alignSelf={"start"} fontWeight={600} mb={1}>
+          My Cart
+        </Typography>
+        <Typography variant="body1" alignSelf={"start"} mb={3} fontWeight={300}>
+          Payment will be processed at the cafeteria.
+        </Typography>
+        <Divider />
+        <Table aria-label="cart table" table-layout="fixed" stickyHeader>
           <TableBody>
-            {items.map((item) => (
+            {combos?.map((combo: CartCombo) => (
+              <TableRow key={combo.id}>
+                <TableCell component="th" scope="row" sx={{ maxWidth: "10%" }}>
+                  <Typography fontWeight={500}>{combo.name}</Typography>
+                  <Typography variant="caption">{combo.description}</Typography>
+                  {isMobile && <ComboItemsDisplay combo={combo} />}
+                </TableCell>
+                {!isMobile && (
+                  <TableCell>
+                    <ComboItemsDisplay combo={combo} />
+                  </TableCell>
+                )}
+                <TableCell align="right">${combo.price.toFixed(2)}</TableCell>
+                <TableCell align="right">
+                  <IconButton size="small">
+                    <DeleteIcon
+                      onClick={() => removeCombo(combo)}
+                      sx={{ color: Colors.Charcoal }}
+                    />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+            {items?.map((item: CartItem) => (
               <TableRow key={item.id}>
-                <TableCell component="th" scope="row">
-                  <Tooltip
-                    title={item.title}
-                    placement="top"
-                    enterDelay={500}
-                    leaveDelay={200}
-                  >
-                    <Typography noWrap>{item.title}</Typography>
-                  </Tooltip>
+                <TableCell component="th" scope="row" sx={{ maxWidth: "10%" }}>
+                  <Typography fontWeight={500}>{item.name}</Typography>
+                  {isMobile && (
+                    <EditButtons
+                      quantity={item.quantity}
+                      onAddItem={() => addItem(item)}
+                      onRemoveItem={() => removeItem(item)}
+                      restProps={{ justifyContent: "start", mt: 2 }}
+                    />
+                  )}
                 </TableCell>
-                <TableCell align="center">
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <IconButton onClick={() => handleRemove(item)} size="small">
-                      <RemoveIcon />
-                    </IconButton>
-                    <Typography sx={{ mx: 2 }}>{item.quantity}</Typography>
-                    <IconButton onClick={() => handleAdd(item)} size="small">
-                      <AddIcon />
-                    </IconButton>
-                  </Box>
-                </TableCell>
+                {!isMobile && (
+                  <TableCell align="center">
+                    <EditButtons
+                      quantity={item.quantity}
+                      onAddItem={() => addItem(item)}
+                      onRemoveItem={() => removeItem(item)}
+                    />
+                  </TableCell>
+                )}
                 <TableCell align="right">
                   ${(item.price * item.quantity).toFixed(2)}
                 </TableCell>
                 <TableCell align="right">
-                  <IconButton onClick={() => handleDelete(item)} size="small">
-                    <DeleteIcon />
+                  <IconButton onClick={() => clearItem(item)} size="small">
+                    <DeleteIcon sx={{ color: Colors.Charcoal }} />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -123,13 +145,66 @@ export default function MyCartPage() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Box display="flex" justifyContent="space-between" my={2}>
-        <Typography variant="h5">Total:</Typography>
-        <Typography variant="h5">${totalPrice.toFixed(2)}</Typography>
-      </Box>
-      <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
-        Order Now
-      </Button>
-    </Container>
+      <Stack
+        width="100%"
+        direction="row"
+        justifyContent="space-between"
+        sx={{ maxWidth: { xs: "95%", lg: "70%" } }}
+        px={2}
+        pt={2}
+      >
+        <Typography variant={"h5"} fontWeight={500}>
+          Subtotal:
+        </Typography>
+        <Typography variant={"h5"} fontWeight={500}>
+          ${totalPrice.toFixed(2)}
+        </Typography>
+      </Stack>
+      <Paper
+        sx={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: isMobile ? "15%" : "10%",
+          display: "flex",
+          flexDirection: isMobile ? "column" : "row-reverse",
+          justifyContent: "space-between",
+          alignItems: "center",
+          backgroundColor: "#fbfbff",
+          py: isMobile ? 2 : 0,
+        }}
+        elevation={3}
+      >
+        <Button
+          variant={isMobile ? "contained" : "text"}
+          sx={{
+            borderRadius: isMobile ? 4 : 0,
+            height: isMobile ? "45%" : "100%",
+            width: isMobile ? "70%" : "20%",
+          }}
+          endIcon={!isMobile && <DoneIcon />}
+          disabled={cartCount === 0}
+          onClick={submitOrder}
+        >
+          Place Order
+        </Button>
+        <Button
+          variant={isMobile ? "outlined" : "text"}
+          sx={{
+            borderRadius: isMobile ? 4 : 0,
+            height: isMobile ? "45%" : "100%",
+            width: isMobile ? "70%" : "20%",
+          }}
+          startIcon={!isMobile && <ArrowBackIcon />}
+          onClick={() => router.push("/customers/order")}
+        >
+          Edit Items
+        </Button>
+      </Paper>
+    </Box>
   );
-}
+};
+
+MyCartPage.getLayout = getCartLayout;
+export default MyCartPage;

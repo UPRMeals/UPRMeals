@@ -1,7 +1,9 @@
 import { Box, CircularProgress } from "@mui/material";
 import { useRouter } from "next/router";
+import { NextPageWithLayout } from "./_app";
+import { getCartLayout } from "@/shared/providers/CartProvider";
 
-export default function HomePage() {
+const HomePage: NextPageWithLayout = () => {
   const router = useRouter();
 
   if (router.isReady) {
@@ -19,4 +21,7 @@ export default function HomePage() {
       <CircularProgress size={80} />
     </Box>
   );
-}
+};
+
+HomePage.getLayout = getCartLayout;
+export default HomePage;

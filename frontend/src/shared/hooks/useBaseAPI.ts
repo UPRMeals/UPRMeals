@@ -27,7 +27,7 @@ export const useBaseAPI = () => {
 };
 
 const devConfig = {
-  nestBackendUrl: "http://localhost:3001",
+  nestBackendUrl: process.env.BACKEND_URL_LOCAL,
 };
 
 const prodConfig = {

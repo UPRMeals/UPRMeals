@@ -6,11 +6,14 @@ import { useEffect, useState } from "react";
 import { UserProfile } from "../../../../../backend/src/user/user.dto";
 import { useAuthService } from "../../../shared/hooks/useAuthService";
 import toast from "react-hot-toast";
-import BaseDialog from "../../../shared/components/baseDialog";
+import BaseDialog from "@/shared/components/baseDialog";
+import { NextPageWithLayout } from "@/pages/_app";
+import { getCartLayout } from "@/shared/providers/CartProvider";
+
 import ProfileCard from "../../../shared/components/profileCard";
 import LogoutIcon from "@mui/icons-material/Logout";
 
-export default function ProfilePage() {
+const ProfilePage: NextPageWithLayout = () => {
   const router = useRouter();
   const { getProfile, removeUser } = useUserService();
   const { logOut } = useAuthService();
@@ -104,4 +107,7 @@ export default function ProfilePage() {
       />
     </Box>
   );
-}
+};
+
+ProfilePage.getLayout = getCartLayout;
+export default ProfilePage;
