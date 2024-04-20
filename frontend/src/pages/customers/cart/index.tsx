@@ -78,7 +78,7 @@ const MyCartPage: NextPageWithLayout = () => {
       mb={20}
     >
       <TableContainer sx={{ maxWidth: { xs: "95%", lg: "70%" } }}>
-        <Typography variant="h4" alignSelf={"start"} fontWeight={600} mb={1}>
+        <Typography variant="h3" alignSelf={"start"} fontWeight={600} mb={1}>
           My Cart
         </Typography>
         <Typography variant="body1" alignSelf={"start"} mb={3} fontWeight={300}>

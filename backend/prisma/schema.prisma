@@ -26,14 +26,14 @@ model User {
 }
 
 model Order {
-  id              Int           @default(autoincrement()) @id
-  user            User?         @relation(fields: [userId], references: [id])
+  id              Int                   @default(autoincrement()) @id
+  user            User?                 @relation(fields: [userId], references: [id])
   userId          Int
-  status          String        @default("pending")
+  status          OrderStatusType       @default(PENDING)
   totalPrice      Float
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @default(now())
-  removed         Boolean       @default(false)
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @default(now())
+  removed         Boolean               @default(false)
   orderItems      OrderItem[]
   orderCombos     OrderCombo[]
 }
@@ -120,4 +120,11 @@ model Menu {
 enum ItemType {
   SIDE
   PROTEIN
+}
+
+enum OrderStatusType {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  DELIVERED
 }
