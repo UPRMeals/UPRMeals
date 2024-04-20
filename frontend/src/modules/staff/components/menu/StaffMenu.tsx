@@ -18,6 +18,7 @@ import { indigo, lightGreen } from "@mui/material/colors";
 import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
 import AddItemDialog from "../AddItemDialog";
+import AddComboDialog from "../AddComboDialog";
 
 const MenuDetails = ({ label, value }: { label: string; value: string }) => {
   return (
@@ -198,6 +199,13 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
         }}
         menuId={menu.id}
         itemType={"PROTEIN"}
+      />
+      <AddComboDialog
+        open={openAddComboDialog}
+        handleClose={async () => {
+          setOpenAddComboDialog(false);
+        }}
+        menuId={menu.id}
       />
     </Box>
   );

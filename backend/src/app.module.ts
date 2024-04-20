@@ -9,6 +9,7 @@ import { UserController } from './user/user.controller';
 import { MenuModule } from './menu/menu.module';
 import { MenuController } from './menu/menu.controller';
 import { ItemModule } from './item/item.module';
+import { ComboModule } from './combo/combo.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ItemModule } from './item/item.module';
     UserModule,
     MenuModule,
     ItemModule,
+    ComboModule,
   ],
   controllers: [AppController, AuthController, UserController, MenuController],
   providers: [AppService],

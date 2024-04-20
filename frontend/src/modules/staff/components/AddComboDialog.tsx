@@ -6,20 +6,23 @@ import { Schema } from "yup";
 import * as yup from "yup";
 
 import toast from "react-hot-toast";
-import { useItemService } from "../../../shared/hooks/useItemService";
+import { useComboService } from "@/shared/hooks/useComboService";
 
-export interface MenuItemFormType {
-  price: number;
+export interface MenuComboFormType {
   name: string;
+  description?: string | null | undefined;
+  price: number;
 }
 
-const itemInitialValues: MenuItemFormType = {
-  price: 0,
+const comboInitialValues: MenuComboFormType = {
   name: "",
+  description: null,
+  price: 0,
 };
 
-const itemValidationSchema: Schema<MenuItemFormType> = yup.object().shape({
+const comboValidationSchema: Schema<MenuComboFormType> = yup.object().shape({
   name: yup.string().required("Name is required."),
+  description: yup.string().notRequired(),
   price: yup.number().required("Price is required."),
 });
 
@@ -27,36 +30,20 @@ export default function AddItemDialog({
   open,
   handleClose,
   menuId,
-  itemType,
 }: {
   open: boolean;
   handleClose: () => void;
   menuId: number;
-  itemType: "SIDE" | "PROTEIN";
 }) {
-  const { createItem } = useItemService();
-  const itemText = itemType === "SIDE" ? "Acompañante" : "Proteina";
+  const { createCombo } = useComboService();
 
-  const formik = useFormik<MenuItemFormType>({
-    initialValues: itemInitialValues,
-    validationSchema: itemValidationSchema,
+  const formik = useFormik<MenuComboFormType>({
+    initialValues: comboInitialValues,
+    validationSchema: comboValidationSchema,
     onSubmit: handleCreateMenu,
   });
 
-  async function handleCreateMenu(values: MenuItemFormType) {
-    const item = await createItem({
-      ...values,
-      menuId: menuId,
-      type: itemType,
-      status: "available",
-    });
-    if (item.id) {
-      const successMessage = `${itemText} ${
-        itemType === "SIDE" ? "creado." : "creada."
-      }  `;
-      toast.success(successMessage);
-    }
-
+  async function handleCreateMenu(values: MenuComboFormType) {
     handleClose();
   }
 
@@ -73,7 +60,7 @@ export default function AddItemDialog({
       open={open}
       handleClose={handleClose}
       handleSubmit={formik.submitForm}
-      dialogTitle={`Añadir ${itemText}`}
+      dialogTitle={`Añadir Combo`}
       dialogContent={MenuModal}
       buttonDetails={{
         primary: { text: "Crear", position: "right" },
