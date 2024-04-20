@@ -10,6 +10,9 @@ import { MenuModule } from './menu/menu.module';
 import { MenuController } from './menu/menu.controller';
 import { ItemModule } from './item/item.module';
 import { ComboModule } from './combo/combo.module';
+import { OrderModule } from './order/order.module';
+import { OrderController } from './order/order.controller';
+import { ItemController } from './item/item.controller';
 
 @Module({
   imports: [
@@ -21,8 +24,17 @@ import { ComboModule } from './combo/combo.module';
     MenuModule,
     ItemModule,
     ComboModule,
+    OrderModule,
   ],
-  controllers: [AppController, AuthController, UserController, MenuController],
+  controllers: [
+    AppController,
+    AuthController,
+    UserController,
+    MenuController,
+    OrderController,
+    ItemController,
+    MenuController,
+  ],
   providers: [AppService],
 })
 export class AppModule {}

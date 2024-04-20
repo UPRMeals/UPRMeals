@@ -39,6 +39,7 @@ export interface Menu {
 }
 
 export interface Combo {
+  id: number;
   name: string;
   description: string;
   price: number;

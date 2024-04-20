@@ -24,7 +24,6 @@ export class MenuController {
   @StaffOnly()
   @Post('')
   async createMenu(@Body() data: CreateMenuData): Promise<MenuResponse> {
-    // TODO: Validation for Req
     const menu = await this.menuService.createMenu({ data });
     return menu;
   }

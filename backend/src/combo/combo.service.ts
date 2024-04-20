@@ -33,13 +33,13 @@ export class ComboService {
     const combo = await this.prismaService.combo.create({
       data: {
         ...comboData,
-        items: {
+        comboItems: {
           create: createdItems,
         },
       },
       include: {
         menu: true,
-        items: {
+        comboItems: {
           include: {
             item: true,
           },
