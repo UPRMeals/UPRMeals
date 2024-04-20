@@ -7,5 +7,5 @@ export interface CreateMenuItem {
   name: string;
   status: string;
   menuId: number;
-  type: ItemType;
+  type: 'PROTEIN' | 'SIDE';
 }

@@ -3,7 +3,6 @@ import {
   Combo,
   CreateMenuCombo,
 } from "../../../../backend/src/combo/combo.dto";
-import { CreateMenuItem } from "../../../../backend/src/item/item.dto";
 
 export const useComboService = () => {
   const comboControllerBase = "combo";
@@ -11,13 +10,13 @@ export const useComboService = () => {
 
   const createCombo = async (
     comboData: CreateMenuCombo,
-    itemData: CreateMenuItem[]
+    itemIds: number[]
   ): Promise<Combo> =>
     baseApi({
       url: `${comboControllerBase}/`,
       method: "POST",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      data: { comboData, itemData },
+      data: { comboData, itemIds },
     });
 
   return {

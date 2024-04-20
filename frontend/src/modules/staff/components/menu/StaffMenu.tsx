@@ -40,6 +40,49 @@ const EmptyState = ({ itemType }: { itemType: string }) => {
   );
 };
 
+const MenuSection = ({
+  handleOpenDialog,
+  sectionTitle,
+  sectionContent,
+}: {
+  handleOpenDialog: () => void;
+  sectionTitle: string;
+  sectionContent: JSX.Element | null;
+}) => {
+  return (
+    <>
+      <Stack
+        direction="row"
+        width="100%"
+        sx={{ display: "flex", justifyContent: "space-between" }}
+      >
+        <Typography variant="h5">{sectionTitle}</Typography>
+        <Button startIcon={<AddIcon />} onClick={handleOpenDialog}>
+          Añadir
+        </Button>
+      </Stack>
+      <Divider sx={{ width: "100%" }} />
+
+      <Stack
+        direction={{ md: "column", lg: "row" }}
+        width="100%"
+        spacing={{ xs: 2, md: 3 }}
+        useFlexGap
+        flexWrap="wrap"
+        mt={3}
+        mb={2}
+        px="2%"
+      >
+        {sectionContent ? (
+          <>{sectionContent}</>
+        ) : (
+          <EmptyState itemType={sectionTitle.toLocaleLowerCase()} />
+        )}
+      </Stack>
+    </>
+  );
+};
+
 const StaffMenu = ({ menu }: { menu: Menu }) => {
   const [openAddComboDialog, setOpenAddComboDialog] = useState<boolean>(false);
   const [openAddProteinDialog, setOpenAddProteinDialog] =
@@ -83,106 +126,50 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
         )}
       </Stack>
 
-      <Stack
-        direction="row"
-        width="100%"
-        sx={{ display: "flex", justifyContent: "space-between" }}
-      >
-        <Typography variant="h5">Combos</Typography>
-        <Button
-          startIcon={<AddIcon />}
-          onClick={() => setOpenAddComboDialog(true)}
-        >
-          Añadir
-        </Button>
-      </Stack>
-      <Divider sx={{ width: "100%" }} />
+      <MenuSection
+        handleOpenDialog={() => {
+          setOpenAddProteinDialog(true);
+        }}
+        sectionTitle={"Proteinas"}
+        sectionContent={
+          menu?.proteins?.length > 0 ? (
+            <>
+              {menu?.proteins?.map((protein: any, index) => (
+                <ItemCard key={index} item={protein} />
+              ))}
+            </>
+          ) : null
+        }
+      />
+      <MenuSection
+        handleOpenDialog={() => setOpenAddSideDialog(true)}
+        sectionTitle={"Acompañantes"}
+        sectionContent={
+          menu?.sides?.length > 0 ? (
+            <>
+              {menu?.sides?.map((protein: any, index) => (
+                <ItemCard key={index} item={protein} />
+              ))}
+            </>
+          ) : null
+        }
+      />
 
-      <Stack
-        direction={{ md: "column", lg: "row" }}
-        width="100%"
-        spacing={{ xs: 2, md: 3 }}
-        useFlexGap
-        flexWrap="wrap"
-        mt={3}
-        mb={2}
-        px="2%"
-      >
-        {menu?.combos?.length > 0 ? (
-          menu?.combos?.map((combo: any, index) => (
-            <ComboCard key={index} combo={combo} />
-          ))
-        ) : (
-          <EmptyState itemType="combinaciones" />
-        )}
-      </Stack>
-
-      <Stack
-        direction="row"
-        width="100%"
-        sx={{ display: "flex", justifyContent: "space-between" }}
-      >
-        <Typography variant="h5">Proteinas</Typography>
-        <Button
-          startIcon={<AddIcon />}
-          onClick={() => setOpenAddProteinDialog(true)}
-        >
-          Añadir
-        </Button>
-      </Stack>
-      <Divider sx={{ width: "100%" }} />
-
-      <Stack
-        direction={{ xs: "column", md: "row" }}
-        width="100%"
-        spacing={{ xs: 2, md: 3 }}
-        useFlexGap
-        flexWrap="wrap"
-        mt={3}
-        mb={2}
-        px="2%"
-      >
-        {menu?.proteins?.length > 0 ? (
-          menu?.proteins?.map((protein: any, index) => (
-            <ItemCard key={index} item={protein} />
-          ))
-        ) : (
-          <EmptyState itemType="proteinas" />
-        )}
-      </Stack>
-
-      <Stack
-        direction="row"
-        width="100%"
-        sx={{ display: "flex", justifyContent: "space-between" }}
-      >
-        <Typography variant="h5">Acompañantes</Typography>
-        <Button
-          startIcon={<AddIcon />}
-          onClick={() => setOpenAddSideDialog(true)}
-        >
-          Añadir
-        </Button>
-      </Stack>
-      <Divider sx={{ width: "100%" }} />
-      <Stack
-        direction={{ xs: "column", md: "row" }}
-        px="2%"
-        width="100%"
-        spacing={{ xs: 2, md: 3 }}
-        useFlexGap
-        flexWrap="wrap"
-        mt={3}
-        mb={2}
-      >
-        {menu?.sides?.length > 0 ? (
-          menu?.sides?.map((side: any, index) => (
-            <ItemCard key={index} item={side} />
-          ))
-        ) : (
-          <EmptyState itemType="acompañantes" />
-        )}
-      </Stack>
+      <MenuSection
+        handleOpenDialog={() => {
+          setOpenAddComboDialog(true);
+        }}
+        sectionTitle={"Combinaciones"}
+        sectionContent={
+          menu?.combos?.length > 0 ? (
+            <>
+              {menu?.combos?.map((combo: any, index) => (
+                <ComboCard key={index} combo={combo} />
+              ))}
+            </>
+          ) : null
+        }
+      />
 
       <AddItemDialog
         open={openAddSideDialog}
@@ -206,6 +193,8 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
           setOpenAddComboDialog(false);
         }}
         menuId={menu.id}
+        menuProteins={menu.proteins}
+        menuSides={menu.sides}
       />
     </Box>
   );
