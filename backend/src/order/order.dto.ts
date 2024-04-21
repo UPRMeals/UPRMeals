@@ -1,5 +1,5 @@
 import { OrderStatusType, Prisma } from '@prisma/client';
-import { Combo, Item } from 'src/menu/menu.dto';
+import { Combo, Item } from '../menu/menu.dto';
 
 export interface CreateOrderData {
   items: { id: number }[];
