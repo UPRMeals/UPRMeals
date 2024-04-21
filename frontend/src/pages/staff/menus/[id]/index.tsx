@@ -15,7 +15,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 export default function MenuPage() {
   const router = useRouter();
   const { getMenu } = useMenuService();
-  const [menuWithItems, setMenuWithItems] = useState<Menu>();
+  const [menuWithItems, setMenuWithItems] = useState<Menu | null>();
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -24,8 +24,9 @@ export default function MenuPage() {
       const menu = await getMenu(Number(menuId));
       setMenuWithItems(menu);
     };
+
     if (!menuWithItems) fetchMenu();
-  }, [getMenu]);
+  }, [getMenu, menuWithItems]);
 
   return (
     <Box
@@ -66,7 +67,12 @@ export default function MenuPage() {
             </Button>
           </Box>
 
-          <StaffMenu menu={menuWithItems} />
+          <StaffMenu
+            menu={menuWithItems}
+            refreshMenu={() => {
+              setMenuWithItems(undefined);
+            }}
+          />
         </Stack>
       )}
     </Box>

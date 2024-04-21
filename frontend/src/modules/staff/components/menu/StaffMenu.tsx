@@ -86,7 +86,13 @@ const MenuSection = ({
   );
 };
 
-const StaffMenu = ({ menu }: { menu: Menu }) => {
+const StaffMenu = ({
+  menu,
+  refreshMenu,
+}: {
+  menu: Menu;
+  refreshMenu: () => void;
+}) => {
   const [openAddComboDialog, setOpenAddComboDialog] = useState<boolean>(false);
   const [openAddProteinDialog, setOpenAddProteinDialog] =
     useState<boolean>(false);
@@ -151,6 +157,7 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
                     setOpenEditItemDialog(true);
                     setEditItem(protein);
                   }}
+                  handleRefresh={refreshMenu}
                 />
               ))}
             </>
@@ -171,6 +178,7 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
                     setOpenEditItemDialog(true);
                     setEditItem(protein);
                   }}
+                  handleRefresh={refreshMenu}
                 />
               ))}
             </>
@@ -195,6 +203,7 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
                     setEditCombo(combo);
                   }}
                   menuId={menu?.id}
+                  handleRefresh={refreshMenu}
                 />
               ))}
             </>
@@ -205,6 +214,7 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
       <HandleItemDialog
         open={openAddSideDialog}
         handleClose={async () => {
+          refreshMenu();
           setOpenAddSideDialog(false);
         }}
         menuId={menu.id}
@@ -213,6 +223,7 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
       <HandleItemDialog
         open={openAddProteinDialog}
         handleClose={async () => {
+          refreshMenu();
           setOpenAddProteinDialog(false);
         }}
         menuId={menu.id}
@@ -221,6 +232,7 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
       <HandleComboDialog
         open={openAddComboDialog}
         handleClose={async () => {
+          refreshMenu();
           setOpenAddComboDialog(false);
         }}
         menuId={menu.id}
@@ -231,6 +243,7 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
         <HandleItemDialog
           open={openEditItemDialog}
           handleClose={async () => {
+            refreshMenu();
             setOpenEditItemDialog(false);
           }}
           menuId={menu?.id}
@@ -244,6 +257,7 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
         <HandleComboDialog
           open={openEditComboDialog}
           handleClose={async () => {
+            refreshMenu();
             setOpenEditComboDialog(false);
           }}
           menuProteins={menu.proteins}

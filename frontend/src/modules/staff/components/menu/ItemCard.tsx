@@ -16,9 +16,11 @@ import toast from "react-hot-toast";
 export const ItemCard = ({
   item,
   handleEdit,
+  handleRefresh,
 }: {
   item: Item;
   handleEdit: () => void;
+  handleRefresh: () => void;
 }) => {
   const { deleteItem } = useItemService();
 
@@ -31,6 +33,7 @@ export const ItemCard = ({
     } else if ("error" in res) {
       toast.error(res.error);
     }
+    handleRefresh();
   }
 
   return (

@@ -19,10 +19,12 @@ const ComboCard = ({
   combo,
   handleEdit,
   menuId,
+  handleRefresh,
 }: {
   combo: Combo;
   handleEdit: () => void;
   menuId: number;
+  handleRefresh: () => void;
 }) => {
   const { deleteCombo } = useComboService();
 
@@ -36,6 +38,7 @@ const ComboCard = ({
     if (res.id) {
       toast.success("Combo borrado.");
     }
+    handleRefresh();
   }
 
   return (
