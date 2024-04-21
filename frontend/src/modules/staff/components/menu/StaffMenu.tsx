@@ -17,9 +17,10 @@ import AddIcon from "@mui/icons-material/Add";
 import { indigo, lightGreen } from "@mui/material/colors";
 import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
-import AddItemDialog from "../HandleItemDialog";
-import AddComboDialog from "../AddComboDialog";
+import HandleItemDialog from "../HandleItemDialog";
+import HandleComboDialog from "../HandleComboDialog";
 import { Item } from "../../../../../../backend/src/item/item.dto";
+import { Combo } from "../../../../../../backend/src/menu/menu.dto";
 
 const MenuDetails = ({ label, value }: { label: string; value: string }) => {
   return (
@@ -92,6 +93,9 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
   const [openAddSideDialog, setOpenAddSideDialog] = useState<boolean>(false);
   const [openEditItemDialog, setOpenEditItemDialog] = useState<boolean>(false);
   const [editItem, setEditItem] = useState<Item>();
+  const [openEditComboDialog, setOpenEditComboDialog] =
+    useState<boolean>(false);
+  const [editCombo, setEditCombo] = useState<Combo>();
 
   return (
     <Box
@@ -183,14 +187,22 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
           menu?.combos?.length > 0 ? (
             <>
               {menu?.combos?.map((combo: any, index) => (
-                <ComboCard key={index} combo={combo} />
+                <ComboCard
+                  key={index}
+                  combo={combo}
+                  handleEdit={() => {
+                    setOpenEditComboDialog(true);
+                    setEditCombo(combo);
+                  }}
+                  menuId={menu?.id}
+                />
               ))}
             </>
           ) : null
         }
       />
 
-      <AddItemDialog
+      <HandleItemDialog
         open={openAddSideDialog}
         handleClose={async () => {
           setOpenAddSideDialog(false);
@@ -198,7 +210,7 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
         menuId={menu.id}
         itemType={"SIDE"}
       />
-      <AddItemDialog
+      <HandleItemDialog
         open={openAddProteinDialog}
         handleClose={async () => {
           setOpenAddProteinDialog(false);
@@ -206,7 +218,7 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
         menuId={menu.id}
         itemType={"PROTEIN"}
       />
-      <AddComboDialog
+      <HandleComboDialog
         open={openAddComboDialog}
         handleClose={async () => {
           setOpenAddComboDialog(false);
@@ -216,7 +228,7 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
         menuSides={menu.sides}
       />
       {editItem ? (
-        <AddItemDialog
+        <HandleItemDialog
           open={openEditItemDialog}
           handleClose={async () => {
             setOpenEditItemDialog(false);
@@ -224,6 +236,20 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
           menuId={menu?.id}
           itemType={editItem.type}
           existingItem={editItem}
+        />
+      ) : (
+        <></>
+      )}
+      {editCombo ? (
+        <HandleComboDialog
+          open={openEditComboDialog}
+          handleClose={async () => {
+            setOpenEditComboDialog(false);
+          }}
+          menuProteins={menu.proteins}
+          menuSides={menu.sides}
+          menuId={menu?.id}
+          existingCombo={editCombo}
         />
       ) : (
         <></>

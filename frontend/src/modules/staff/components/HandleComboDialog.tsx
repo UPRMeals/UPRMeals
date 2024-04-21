@@ -19,6 +19,7 @@ import { useComboService } from "@/shared/hooks/useComboService";
 import { Colors } from "@/styles/theme";
 import { CreateMenuCombo } from "../../../../../backend/src/combo/combo.dto";
 import { Item } from "../../../../../backend/src/item/item.dto";
+import { Combo } from "../../../../../backend/src/menu/menu.dto";
 
 export interface MenuComboFormType {
   name: string;
@@ -29,16 +30,6 @@ export interface MenuComboFormType {
   proteinCount: number | null;
   sideCount: number | null;
 }
-
-const comboInitialValues: MenuComboFormType = {
-  name: "",
-  description: null,
-  price: null,
-  proteinIds: [],
-  sideIds: [],
-  proteinCount: null,
-  sideCount: null,
-};
 
 const comboValidationSchema: Schema<MenuComboFormType> = yup.object().shape({
   name: yup.string().required("El nombre es requerido."),
@@ -75,20 +66,43 @@ const comboValidationSchema: Schema<MenuComboFormType> = yup.object().shape({
     .integer("La cantidad de acompañantes debe ser un numero entero."),
 });
 
-export default function AddComboDialog({
+export default function HandleComboDialog({
   open,
   handleClose,
   menuId,
   menuProteins,
   menuSides,
+  existingCombo,
 }: {
   open: boolean;
   handleClose: () => void;
   menuId: number;
   menuProteins: Item[];
   menuSides: Item[];
+  existingCombo?: Combo;
 }) {
   const { createCombo } = useComboService();
+
+  let proteinIds: number[] = [];
+  let sideIds: number[] = [];
+  if (existingCombo) {
+    proteinIds = existingCombo.proteins.flatMap((protein) => {
+      return protein.id;
+    });
+    sideIds = existingCombo.sides.flatMap((side) => {
+      return side.id;
+    });
+  }
+
+  const comboInitialValues: MenuComboFormType = {
+    name: existingCombo?.name ?? "",
+    description: existingCombo?.description ?? null,
+    price: existingCombo?.price ?? null,
+    proteinIds,
+    sideIds,
+    proteinCount: existingCombo?.proteinCount ?? null,
+    sideCount: existingCombo?.sideCount ?? null,
+  };
 
   const formik = useFormik<MenuComboFormType>({
     initialValues: comboInitialValues,
