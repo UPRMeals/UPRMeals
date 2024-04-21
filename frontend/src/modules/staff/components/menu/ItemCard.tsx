@@ -1,7 +1,39 @@
-import { Card, CardContent, Stack, Typography } from "@mui/material";
-import { Item } from "../../../../../../backend/src/menu/menu.dto";
+import {
+  Card,
+  CardActions,
+  CardContent,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { Item } from "../../../../../../backend/src/item/item.dto";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import { Colors } from "@/styles/theme";
+import { useState } from "react";
+import { useItemService } from "@/shared/hooks/useItemService";
+import toast from "react-hot-toast";
 
-export const ItemCard = ({ item }: { item: Item }) => {
+export const ItemCard = ({
+  item,
+  handleEdit,
+}: {
+  item: Item;
+  handleEdit: () => void;
+}) => {
+  const { deleteItem } = useItemService();
+
+  async function handleDelete() {
+    const res = await deleteItem(item);
+    if ("id" in res && res.id) {
+      const message =
+        res.type === "PROTEIN" ? "Proteina borrada" : "Acompañante borrado";
+      toast.success(message);
+    } else if ("error" in res) {
+      toast.error(res.error);
+    }
+  }
+
   return (
     <Card
       variant="outlined"
@@ -23,6 +55,16 @@ export const ItemCard = ({ item }: { item: Item }) => {
           </Typography>
         </Stack>
       </CardContent>
+      <CardActions sx={{ justifyContent: "right" }}>
+        <IconButton onClick={handleDelete}>
+          <DeleteOutlineOutlinedIcon
+            sx={{ color: Colors.Red + "cc", fontSize: 20 }}
+          />
+        </IconButton>
+        <IconButton onClick={handleEdit}>
+          <EditOutlinedIcon sx={{ color: Colors.Charcoal, fontSize: 20 }} />
+        </IconButton>
+      </CardActions>
     </Card>
   );
 };

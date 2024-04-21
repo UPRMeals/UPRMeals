@@ -13,7 +13,25 @@ export const useItemService = () => {
       data,
     });
 
+  const updateItem = async (data: Item): Promise<Item> =>
+    baseApi({
+      url: `${itemControllerBase}/${data.id}/update`,
+      method: "POST",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      data,
+    });
+
+  const deleteItem = async (data: Item): Promise<Item | { error: string }> =>
+    baseApi({
+      url: `${itemControllerBase}/${data.id}/delete`,
+      method: "POST",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      data,
+    });
+
   return {
     createItem,
+    updateItem,
+    deleteItem,
   };
 };

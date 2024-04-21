@@ -82,10 +82,15 @@ export class MenuService {
     const tempMenuResponse = await this.prismaService.menu.findFirst({
       where: { ...where, removed: false },
       include: {
-        items: true,
+        items: { where: { removed: false } },
         combos: {
-          include: { comboItems: { include: { item: true } } },
-          orderBy: { price: 'asc' },
+          where: { removed: false },
+          include: {
+            comboItems: {
+              where: { removed: false, item: { removed: false } },
+              include: { item: true },
+            },
+          },
         },
       },
     });

@@ -267,9 +267,9 @@ export default function AddComboDialog({
           )}
         </Stack>
 
-        {menuProteins.length > 0 && (
+        {menuProteins?.length > 0 && (
           <FormGroup sx={{ ml: 1.5 }}>
-            {menuProteins.map((protein, index) => {
+            {menuProteins?.map((protein, index) => {
               const selectedProteins = Array.from(formik.values.proteinIds);
 
               return (
@@ -302,9 +302,9 @@ export default function AddComboDialog({
             </Typography>
           )}
         </Stack>
-        {menuSides.length > 0 && (
+        {menuSides?.length > 0 && (
           <FormGroup sx={{ ml: 1.5 }}>
-            {menuSides.map((side, index) => {
+            {menuSides?.map((side, index) => {
               const selectedSides = Array.from(formik.values.sideIds);
               return (
                 <>

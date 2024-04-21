@@ -17,8 +17,9 @@ import AddIcon from "@mui/icons-material/Add";
 import { indigo, lightGreen } from "@mui/material/colors";
 import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
-import AddItemDialog from "../AddItemDialog";
+import AddItemDialog from "../HandleItemDialog";
 import AddComboDialog from "../AddComboDialog";
+import { Item } from "../../../../../../backend/src/item/item.dto";
 
 const MenuDetails = ({ label, value }: { label: string; value: string }) => {
   return (
@@ -55,6 +56,7 @@ const MenuSection = ({
         direction="row"
         width="100%"
         sx={{ display: "flex", justifyContent: "space-between" }}
+        pt={2}
       >
         <Typography variant="h5">{sectionTitle}</Typography>
         <Button startIcon={<AddIcon />} onClick={handleOpenDialog}>
@@ -88,6 +90,9 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
   const [openAddProteinDialog, setOpenAddProteinDialog] =
     useState<boolean>(false);
   const [openAddSideDialog, setOpenAddSideDialog] = useState<boolean>(false);
+  const [openEditItemDialog, setOpenEditItemDialog] = useState<boolean>(false);
+  const [editItem, setEditItem] = useState<Item>();
+
   return (
     <Box
       display={"flex"}
@@ -95,7 +100,7 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
       justifyContent="start"
       alignItems="start"
       width={"100%"}
-      pb={3}
+      pb={1}
     >
       <Stack my={3} width={"100%"}>
         <Stack direction="row" width={"100%"} justifyContent={"space-between"}>
@@ -135,7 +140,14 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
           menu?.proteins?.length > 0 ? (
             <>
               {menu?.proteins?.map((protein: any, index) => (
-                <ItemCard key={index} item={protein} />
+                <ItemCard
+                  key={index}
+                  item={protein}
+                  handleEdit={() => {
+                    setOpenEditItemDialog(true);
+                    setEditItem(protein);
+                  }}
+                />
               ))}
             </>
           ) : null
@@ -148,7 +160,14 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
           menu?.sides?.length > 0 ? (
             <>
               {menu?.sides?.map((protein: any, index) => (
-                <ItemCard key={index} item={protein} />
+                <ItemCard
+                  key={index}
+                  item={protein}
+                  handleEdit={() => {
+                    setOpenEditItemDialog(true);
+                    setEditItem(protein);
+                  }}
+                />
               ))}
             </>
           ) : null
@@ -196,6 +215,19 @@ const StaffMenu = ({ menu }: { menu: Menu }) => {
         menuProteins={menu.proteins}
         menuSides={menu.sides}
       />
+      {editItem ? (
+        <AddItemDialog
+          open={openEditItemDialog}
+          handleClose={async () => {
+            setOpenEditItemDialog(false);
+          }}
+          menuId={menu?.id}
+          itemType={editItem.type}
+          existingItem={editItem}
+        />
+      ) : (
+        <></>
+      )}
     </Box>
   );
 };

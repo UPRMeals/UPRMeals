@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import BaseDialog from "../../../shared/components/baseDialog";
 import TextInput from "../../../shared/inputs/TextInput";
 import { useFormik } from "formik";
@@ -7,35 +7,41 @@ import * as yup from "yup";
 
 import toast from "react-hot-toast";
 import { useItemService } from "../../../shared/hooks/useItemService";
+import { Item } from "../../../../../backend/src/item/item.dto";
 
 export interface MenuItemFormType {
-  price: number;
+  price: number | null;
   name: string;
 }
 
-const itemInitialValues: MenuItemFormType = {
-  price: 0,
-  name: "",
-};
-
 const itemValidationSchema: Schema<MenuItemFormType> = yup.object().shape({
-  name: yup.string().required("Name is required."),
-  price: yup.number().required("Price is required."),
+  name: yup.string().required("El nombre es requerido."),
+  price: yup
+    .number()
+    .required("El precio es requerido.")
+    .moreThan(0, "El precio no puede ser negativo."),
 });
 
-export default function AddItemDialog({
+export default function HandleItemDialog({
   open,
   handleClose,
   menuId,
   itemType,
+  existingItem,
 }: {
   open: boolean;
   handleClose: () => void;
   menuId: number;
   itemType: "SIDE" | "PROTEIN";
+  existingItem?: Item;
 }) {
-  const { createItem } = useItemService();
+  const { createItem, updateItem } = useItemService();
   const itemText = itemType === "SIDE" ? "Acompañante" : "Proteina";
+
+  const itemInitialValues: MenuItemFormType = {
+    price: existingItem?.price ?? null,
+    name: existingItem?.name ?? "",
+  };
 
   const formik = useFormik<MenuItemFormType>({
     initialValues: itemInitialValues,
@@ -44,12 +50,23 @@ export default function AddItemDialog({
   });
 
   async function handleCreateMenu(values: MenuItemFormType) {
-    const item = await createItem({
-      ...values,
-      menuId: menuId,
-      type: itemType,
-      status: "available",
-    });
+    const { name, price } = values;
+
+    if (!price) return;
+
+    let item;
+    if (existingItem) {
+      item = await updateItem({ ...existingItem, name, price });
+    } else {
+      item = await createItem({
+        name,
+        price,
+        menuId: menuId,
+        type: itemType,
+        status: "available",
+      });
+    }
+
     if (item.id) {
       const successMessage = `${itemText} ${
         itemType === "SIDE" ? "creado." : "creada."
@@ -63,20 +80,30 @@ export default function AddItemDialog({
   const MenuModal = (
     <Stack py={3} gap={3}>
       <TextInput formik={formik} name="name" label="Nombre" required />
-      <TextInput formik={formik} name="description" label="Descripción" />
-      <TextInput formik={formik} name="price" label="Precio" type="number" />
+      <TextInput
+        formik={formik}
+        name="price"
+        label="Precio"
+        type="number"
+        required
+      />
     </Stack>
   );
 
+  const continueButtonText = existingItem ? "Guardar" : "Crear";
   return (
     <BaseDialog
       open={open}
       handleClose={handleClose}
       handleSubmit={formik.submitForm}
-      dialogTitle={`Añadir ${itemText}`}
+      dialogTitle={
+        <Typography variant="h4" fontWeight={500}>
+          {`${existingItem ? "Editar" : "Añadir"} ${itemText}`}
+        </Typography>
+      }
       dialogContent={MenuModal}
       buttonDetails={{
-        primary: { text: "Crear", position: "right" },
+        primary: { text: continueButtonText, position: "right" },
         secondary: { text: "Cancelar" },
       }}
     />
