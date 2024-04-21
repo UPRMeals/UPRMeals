@@ -2,6 +2,7 @@ import { useBaseAPI } from "../../shared/hooks/useBaseAPI";
 import {
   Combo,
   CreateMenuCombo,
+  UpdateComboInput,
 } from "../../../../backend/src/combo/combo.dto";
 
 export const useComboService = () => {
@@ -27,8 +28,20 @@ export const useComboService = () => {
       data,
     });
 
+  const updateCombo = async (
+    comboId: number,
+    data: UpdateComboInput
+  ): Promise<Combo> =>
+    baseApi({
+      url: `${comboControllerBase}/${comboId}/update`,
+      method: "POST",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      data,
+    });
+
   return {
     createCombo,
     deleteCombo,
+    updateCombo,
   };
 };

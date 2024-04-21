@@ -9,7 +9,7 @@ import {
 import { Combo } from '@prisma/client';
 
 import { StaffOnly } from '../auth/decorators/isStaff.decorator';
-import { CreateComboInput } from './combo.dto';
+import { CreateComboInput, UpdateComboInput } from './combo.dto';
 import { ComboService } from './combo.service';
 
 @Controller('combo')
@@ -29,14 +29,30 @@ export class ComboController {
   @StaffOnly()
   @Post(':comboId/delete')
   async deleteCombo(
-    @Param('comboId', ParseIntPipe) itemId: number,
+    @Param('comboId', ParseIntPipe) comboId: number,
     @Body() data: Combo,
   ): Promise<Combo> {
-    if (itemId !== data.id) {
+    if (comboId !== data.id) {
       throw new BadRequestException();
     }
 
     const item = await this.comboService.deleteCombo(data);
     return item;
+  }
+
+  @StaffOnly()
+  @Post(':comboId/update')
+  async updateCombo(
+    @Param('comboId', ParseIntPipe) comboId: number,
+    @Body() data: UpdateComboInput,
+  ): Promise<Combo> {
+    const combo = await this.comboService.updateCombo(
+      comboId,
+      data.comboData,
+      data.itemIds,
+      data.menuId,
+    );
+
+    return combo;
   }
 }

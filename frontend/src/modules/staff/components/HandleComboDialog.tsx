@@ -81,7 +81,7 @@ export default function HandleComboDialog({
   menuSides: Item[];
   existingCombo?: Combo;
 }) {
-  const { createCombo } = useComboService();
+  const { createCombo, updateCombo } = useComboService();
 
   let proteinIds: number[] = [];
   let sideIds: number[] = [];
@@ -121,7 +121,7 @@ export default function HandleComboDialog({
       proteinIds,
     } = values;
 
-    if (!sideCount || !proteinCount || !price) return; // TODO
+    if (!sideCount || !proteinCount || !price) return;
 
     const comboData: CreateMenuCombo = {
       name,
@@ -133,9 +133,21 @@ export default function HandleComboDialog({
     };
 
     const itemIds = [...sideIds, ...proteinIds];
-    const comboRes = await createCombo(comboData, itemIds);
+    let comboRes;
+    let successMessage = "Combo creado exitosamente.";
+    if (existingCombo) {
+      comboRes = await updateCombo(existingCombo.id, {
+        menuId,
+        comboData,
+        itemIds,
+      });
+    } else {
+      comboRes = await createCombo(comboData, itemIds);
+      successMessage = "Combo editado exitosamente.";
+    }
+
     if (comboRes.id) {
-      toast.success("Combo creado.");
+      toast.success(successMessage);
     }
     handleClose();
   }
@@ -342,6 +354,7 @@ export default function HandleComboDialog({
     </Stack>
   );
 
+  const continueButtonText = existingCombo ? "Guardar" : "Crear";
   return (
     <BaseDialog
       open={open}
@@ -357,7 +370,7 @@ export default function HandleComboDialog({
       }
       dialogContent={MenuModal}
       buttonDetails={{
-        primary: { text: "Crear", position: "right" },
+        primary: { text: continueButtonText, position: "right" },
         secondary: { text: "Cancelar" },
       }}
     />
