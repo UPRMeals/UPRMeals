@@ -82,13 +82,10 @@ export class OrderService {
         },
         orderCombos: {
           include: {
-            combo: {
+            combo: true,
+            orderComboItems: {
               include: {
-                comboItems: {
-                  include: {
-                    item: true,
-                  },
-                },
+                item: true,
               },
             },
           },

@@ -119,7 +119,7 @@ const OrderCard: React.FC<Props> = ({
                 <ListItemText primary={orderCombo.combo.name} />
               </ListItem>
               <List dense disablePadding sx={{ pl: 4 }}>
-                {orderCombo.combo.comboItems.map((comboItem, subIndex) => (
+                {orderCombo.orderComboItems.map((comboItem, subIndex) => (
                   <ListItem key={subIndex}>
                     <ListItemText
                       primary={comboItem.item.name}

@@ -42,6 +42,7 @@ export interface OrderCombo {
   orderId: number;
   combo: Combo;
   removed: boolean;
+  orderComboItems: ComboItem[];
 }
 
 export interface User {
