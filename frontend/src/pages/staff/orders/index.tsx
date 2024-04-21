@@ -31,7 +31,6 @@ const StaffOrdersPage: React.FC = () => {
       try {
         const fetchedOrders = await getTodaysOrders();
         setOrders(fetchedOrders);
-        console.log("Fetched orders:", fetchedOrders);
       } catch (error) {
         console.error("Failed to fetch orders:", error);
       }
