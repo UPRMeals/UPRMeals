@@ -68,4 +68,18 @@ export class ComboService {
 
     return items;
   }
+
+  async deleteCombo(combo: Combo): Promise<Combo> {
+    await this.prismaService.comboItem.updateMany({
+      where: { comboId: combo.id },
+      data: { removed: true },
+    });
+
+    const deletedCombo = await this.prismaService.combo.update({
+      where: { id: combo.id },
+      data: { removed: true },
+    });
+
+    return deletedCombo;
+  }
 }

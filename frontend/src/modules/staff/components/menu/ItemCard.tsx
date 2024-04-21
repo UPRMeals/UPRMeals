@@ -10,7 +10,6 @@ import { Item } from "../../../../../../backend/src/item/item.dto";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Colors } from "@/styles/theme";
-import { useState } from "react";
 import { useItemService } from "@/shared/hooks/useItemService";
 import toast from "react-hot-toast";
 

@@ -19,7 +19,16 @@ export const useComboService = () => {
       data: { comboData, itemIds },
     });
 
+  const deleteCombo = async (data: Combo): Promise<Combo> =>
+    baseApi({
+      url: `${comboControllerBase}/${data.id}/delete`,
+      method: "POST",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      data,
+    });
+
   return {
     createCombo,
+    deleteCombo,
   };
 };

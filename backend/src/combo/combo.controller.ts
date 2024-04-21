@@ -1,4 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 import { Combo } from '@prisma/client';
 
 import { StaffOnly } from '../auth/decorators/isStaff.decorator';
@@ -17,5 +24,19 @@ export class ComboController {
       data.itemIds,
     );
     return combo;
+  }
+
+  @StaffOnly()
+  @Post(':comboId/delete')
+  async deleteCombo(
+    @Param('comboId', ParseIntPipe) itemId: number,
+    @Body() data: Combo,
+  ): Promise<Combo> {
+    if (itemId !== data.id) {
+      throw new BadRequestException();
+    }
+
+    const item = await this.comboService.deleteCombo(data);
+    return item;
   }
 }

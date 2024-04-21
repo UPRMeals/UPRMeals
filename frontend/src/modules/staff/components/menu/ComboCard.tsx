@@ -1,9 +1,43 @@
-import { Card, CardContent, Chip, Stack, Typography } from "@mui/material";
+import {
+  Card,
+  CardActions,
+  CardContent,
+  Chip,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { Combo } from "../../../../../../backend/src/menu/menu.dto";
 import { Colors } from "@/styles/theme";
 import { indigo } from "@mui/material/colors";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import { useComboService } from "@/shared/hooks/useComboService";
+import toast from "react-hot-toast";
 
-const ComboCard = ({ combo }: { combo: Combo }) => {
+const ComboCard = ({
+  combo,
+  handleEdit,
+  menuId,
+}: {
+  combo: Combo;
+  handleEdit: () => void;
+  menuId: number;
+}) => {
+  const { deleteCombo } = useComboService();
+
+  async function handleDelete() {
+    const res = await deleteCombo({
+      ...combo,
+      status: "available",
+      removed: false,
+      menuId,
+    });
+    if (res.id) {
+      toast.success("Combo borrado.");
+    }
+  }
+
   return (
     <Card
       variant="outlined"
@@ -63,6 +97,16 @@ const ComboCard = ({ combo }: { combo: Combo }) => {
           ))}
         </Stack>
       </CardContent>
+      <CardActions sx={{ justifyContent: "right" }}>
+        <IconButton onClick={handleDelete}>
+          <DeleteOutlineOutlinedIcon
+            sx={{ color: Colors.Red + "cc", fontSize: 20 }}
+          />
+        </IconButton>
+        <IconButton onClick={handleEdit}>
+          <EditOutlinedIcon sx={{ color: Colors.Charcoal, fontSize: 20 }} />
+        </IconButton>
+      </CardActions>
     </Card>
   );
 };
