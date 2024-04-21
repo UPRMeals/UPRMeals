@@ -157,6 +157,18 @@ export class ComboService {
       where: { itemId: { in: itemsToRemove } },
     });
 
+    // Ids of the items we need to add
+    const itemsToAdd = newItemIds.filter(
+      (itemId) => ![...existingProteins, ...existingSides].includes(itemId),
+    );
+
+    await this.prismaService.comboItem.createMany({
+      data: itemsToAdd.map((itemId) => ({
+        comboId: comboId,
+        itemId: itemId,
+      })),
+    });
+
     const { name, description, sideCount, proteinCount, price } = comboData;
 
     const updatedCombo = await this.prismaService.combo.update({

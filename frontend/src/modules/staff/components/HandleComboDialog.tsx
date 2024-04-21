@@ -141,9 +141,9 @@ export default function HandleComboDialog({
         comboData,
         itemIds,
       });
+      successMessage = "Combo editado exitosamente.";
     } else {
       comboRes = await createCombo(comboData, itemIds);
-      successMessage = "Combo editado exitosamente.";
     }
 
     if (comboRes.id) {
