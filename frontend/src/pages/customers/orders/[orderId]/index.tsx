@@ -43,25 +43,6 @@ enum OrderStatus {
   DELIVERED = "Delivered",
 }
 
-const ComboItemsDisplay = ({ combo }: { combo: any }) => {
-  return (
-    <Stack mt={1}>
-      <Typography variant="caption">
-        <Typography variant="caption" fontWeight={600}>
-          Protein(s):&nbsp;
-        </Typography>
-        {combo.proteins?.map((p: Item) => p.name).join(", ")}
-      </Typography>
-      <Typography variant="caption">
-        <Typography variant="caption" fontWeight={600}>
-          Side(s):&nbsp;
-        </Typography>
-        {combo.sides?.map((s: Item) => s.name).join(", ")}
-      </Typography>
-    </Stack>
-  );
-};
-
 const ORDER_STATUS_LIST = Object.values(OrderStatus);
 
 const OrderStatusPage = () => {
@@ -195,7 +176,20 @@ const OrderStatusPage = () => {
                     <Typography variant="caption">
                       {combo.description || ""}
                     </Typography>
-                    <ComboItemsDisplay combo={combo} />
+                    <Stack mt={1}>
+                      <Typography variant="caption">
+                        <Typography variant="caption" fontWeight={600}>
+                          Protein(s):&nbsp;
+                        </Typography>
+                        {combo.proteins?.map((p: Item) => p.name).join(", ")}
+                      </Typography>
+                      <Typography variant="caption">
+                        <Typography variant="caption" fontWeight={600}>
+                          Side(s):&nbsp;
+                        </Typography>
+                        {combo.sides?.map((s: Item) => s.name).join(", ")}
+                      </Typography>
+                    </Stack>
                     <Divider sx={{ my: 2 }} />
                   </Stack>
                 ))}
