@@ -63,7 +63,7 @@ const OrderCard: React.FC<Props> = ({
         <Divider variant="fullWidth" sx={{ mb: 2 }} />
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography color="textSecondary" sx={{ mr: 2, flexGrow: 1 }}>
-            Customer: {order.user.username}
+            Customer: {order.user.firstName + " " + order.user.lastName}
           </Typography>
           <Chip
             label={order.status}
@@ -97,33 +97,33 @@ const OrderCard: React.FC<Props> = ({
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Typography paragraph sx={{ pb: 0, mb: 0 }}>
+          <Typography paragraph sx={{ pb: 0, mb: 0, fontWeight: "bold" }}>
             Order Items:
           </Typography>
           <List dense sx={{ pl: 2 }}>
-            {order.orderItems.map((item, index) => (
+            {order.orderItems.map((orderItem, index) => (
               <ListItem key={index}>
                 <ListItemText
-                  primary={item.name}
-                  secondary={`Quantity: ${item.quantity}`}
+                  primary={orderItem.item.name}
+                  //secondary={`Quantity: ... (however you calculate quantity)`}
                 />
               </ListItem>
             ))}
           </List>
-          <Typography paragraph sx={{ pb: 0, mb: 0 }}>
+          <Typography paragraph sx={{ pb: 0, mb: 0, fontWeight: "bold" }}>
             Combos:
           </Typography>
-          {order.orderCombos.map((combo, index) => (
+          {order.orderCombos.map((orderCombo, index) => (
             <React.Fragment key={index}>
               <ListItem sx={{ pb: 0, mb: 0 }}>
-                <ListItemText primary={combo.name} />
+                <ListItemText primary={orderCombo.combo.name} />
               </ListItem>
               <List dense disablePadding sx={{ pl: 4 }}>
-                {combo.items.map((subItem, subIndex) => (
+                {orderCombo.combo.comboItems.map((comboItem, subIndex) => (
                   <ListItem key={subIndex}>
                     <ListItemText
-                      primary={subItem.name}
-                      secondary={`Quantity: ${subItem.quantity}`}
+                      primary={comboItem.item.name}
+                      //secondary={`Quantity: ... (however you calculate quantity)`}
                     />
                   </ListItem>
                 ))}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Typography,
@@ -12,16 +12,37 @@ import {
 import {
   Order,
   OrderStatus,
-  initialOrders,
 } from "../../../modules/staff/components/orders/types";
 import { SelectChangeEvent } from "@mui/material";
 import OrderList from "../../../modules/staff/components/orders/OrderList";
+import { useOrderService } from "@/shared/hooks/useOrderService";
 
 const StaffOrdersPage: React.FC = () => {
-  const [orders, setOrders] = useState<Order[]>(initialOrders);
+  const { getTodaysOrders } = useOrderService();
+  const [orders, setOrders] = useState<Order[]>([]);
   const [expanded, setExpanded] = useState<{ [key: number]: boolean }>({});
   const [openDialog, setOpenDialog] = useState(false);
   const [currentOrder, setCurrentOrder] = useState<number | null>(null);
+
+  const [fetchAttempted, setFetchAttempted] = useState(false);
+
+  useEffect(() => {
+    const getOrders = async () => {
+      try {
+        const fetchedOrders = await getTodaysOrders();
+        setOrders(fetchedOrders);
+        console.log("Fetched orders:", fetchedOrders);
+      } catch (error) {
+        console.error("Failed to fetch orders:", error);
+      }
+    };
+
+    if (!fetchAttempted) {
+      getOrders();
+      setFetchAttempted(true);
+      console.log("Fetching orders");
+    }
+  }, [getTodaysOrders, fetchAttempted, orders]);
 
   const handleExpandClick = (orderId: number) => {
     setExpanded((prev) => ({ ...prev, [orderId]: !prev[orderId] }));
@@ -32,7 +53,7 @@ const StaffOrdersPage: React.FC = () => {
     event: SelectChangeEvent<OrderStatus>
   ) => {
     const newStatus = event.target.value as OrderStatus;
-    if (newStatus === "Rejected") {
+    if (newStatus === "REJECTED") {
       setOpenDialog(true);
       setCurrentOrder(orderId);
     } else {
@@ -46,6 +67,7 @@ const StaffOrdersPage: React.FC = () => {
         order.id === orderId ? { ...order, status: newStatus } : order
       )
     );
+    // Call API to update the order status
     setExpanded((prev) => ({ ...prev, [orderId]: false }));
   };
 
@@ -60,7 +82,7 @@ const StaffOrdersPage: React.FC = () => {
 
   const confirmRemoveOrReject = () => {
     if (currentOrder != null) {
-      updateOrderStatus(currentOrder, "Rejected");
+      updateOrderStatus(currentOrder, "REJECTED");
       handleCloseDialog();
     }
   };

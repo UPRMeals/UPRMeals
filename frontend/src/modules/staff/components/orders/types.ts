@@ -1,122 +1,77 @@
 export type OrderStatus =
-  | "Pending"
-  | "In Progress"
-  | "Completed"
-  | "Delivered"
-  | "Rejected";
+  | "PENDING"
+  | "IN PROGRESS"
+  | "COMPLETED"
+  | "DELIVERED"
+  | "REJECTED";
 
-export type OrderItem = {
-  name: string;
-  quantity: number;
-};
-
-export type Combo = {
-  name: string;
-  items: OrderItem[];
-};
-
-export type Order = {
+export interface BasicItem {
   id: number;
-  user: { username: string };
+  name: string;
+  description?: string;
+  price: number;
+  type?: string;
+  status?: string;
+}
+
+export interface OrderItem {
+  id: number;
+  item: BasicItem;
+  orderId: number;
+  removed: boolean;
+}
+
+export interface ComboItem {
+  id: number;
+  combo: Combo;
+  item: BasicItem;
+  removed: boolean;
+}
+
+export interface Combo {
+  id: number;
+  name: string;
+  description?: string;
+  price: number;
+  status?: string;
+  comboItems: ComboItem[];
+}
+
+export interface OrderCombo {
+  comboId: number;
+  orderId: number;
+  combo: Combo;
+  removed: boolean;
+}
+
+export interface User {
+  id: number;
+  username: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+}
+
+export interface Order {
+  id: number;
+  userId: number;
+  user: User;
   status: OrderStatus;
+  totalPrice: number;
   orderItems: OrderItem[];
-  orderCombos: Combo[];
-};
+  orderCombos: OrderCombo[];
+  createdAt: Date;
+  updatedAt: Date;
+  removed: boolean;
+}
 
 export const statusColors: Record<
   OrderStatus,
   "default" | "primary" | "error" | "success" | "warning"
 > = {
-  Pending: "default",
-  "In Progress": "primary",
-  Completed: "error",
-  Delivered: "success",
-  Rejected: "warning",
+  PENDING: "default",
+  "IN PROGRESS": "primary",
+  COMPLETED: "error",
+  DELIVERED: "success",
+  REJECTED: "warning",
 };
-
-export const initialOrders: Order[] = [
-  {
-    id: 1,
-    user: { username: "jorge.cruz23" },
-    status: "Pending",
-    orderItems: [{ name: "Jamon y Queso", quantity: 1 }],
-    orderCombos: [
-      {
-        name: "Combo Internacional",
-        items: [
-          { name: "Combo Item 1", quantity: 2 },
-          { name: "Combo Item 2", quantity: 1 },
-        ],
-      },
-    ],
-  },
-  {
-    id: 2,
-    user: { username: "user_two" },
-    status: "In Progress",
-    orderItems: [{ name: "Steak and Cheese", quantity: 1 }],
-    orderCombos: [
-      {
-        name: "Medianoche Special",
-        items: [{ name: "Combo Item A", quantity: 3 }],
-      },
-    ],
-  },
-  {
-    id: 3,
-    user: { username: "user_three" },
-    status: "Completed",
-    orderItems: [{ name: "Pernil", quantity: 1 }],
-    orderCombos: [
-      {
-        name: "Cubano",
-        items: [
-          { name: "Combo Item X", quantity: 2 },
-          { name: "Combo Item Y", quantity: 1 },
-        ],
-      },
-    ],
-  },
-  {
-    id: 4,
-    user: { username: "user_four" },
-    status: "Delivered",
-    orderItems: [{ name: "Steak and Cheese", quantity: 1 }],
-    orderCombos: [
-      {
-        name: "Cubano",
-        items: [
-          { name: "Combo Item X", quantity: 2 },
-          { name: "Combo Item Y", quantity: 1 },
-        ],
-      },
-    ],
-  },
-  {
-    id: 5,
-    user: { username: "user_five" },
-    status: "Pending",
-    orderItems: [{ name: "Medianoche", quantity: 3 }],
-    orderCombos: [
-      {
-        name: "Combo Internacional",
-        items: [
-          { name: "Combo Item 1", quantity: 2 },
-          { name: "Combo Item 2", quantity: 1 },
-        ],
-      },
-    ],
-  },
-  {
-    id: 6,
-    user: { username: "user_six" },
-    status: "Rejected",
-    orderItems: [{ name: "Jamon y Queso", quantity: 1 }],
-    orderCombos: [
-      {
-        name: "Medianoche Special",
-        items: [{ name: "Combo Item A", quantity: 3 }],
-      },
-    ],
-  },
-];

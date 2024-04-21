@@ -1,14 +1,20 @@
 import { useBaseAPI } from "../../shared/hooks/useBaseAPI";
 
-import { CreateOrderData } from "../../../../backend/src/order/order.dto";
+import {
+  CreateOrderData,
+  CreateOrderResponse,
+  SimplifiedOrder,
+} from "../../../../backend/src/order/order.dto";
 
 export const useOrderService = () => {
-  const userControllerBase = "order";
+  const orderControllerBase = "order";
   const baseApi = useBaseAPI();
 
-  const createOrder = async (data: CreateOrderData): Promise<any> =>
+  const createOrder = async (
+    data: CreateOrderData
+  ): Promise<CreateOrderResponse> =>
     baseApi({
-      url: `${userControllerBase}/`,
+      url: `${orderControllerBase}/`,
       method: "POST",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -16,7 +22,37 @@ export const useOrderService = () => {
       data,
     });
 
+  const getTodaysOrders = async (): Promise<any> =>
+    baseApi({
+      url: `${orderControllerBase}/today`,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+  const getOrder = (orderId: string): Promise<SimplifiedOrder> =>
+    baseApi({
+      url: `${orderControllerBase}/${orderId}`,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+  const getAllOrdersForUser = async (): Promise<SimplifiedOrder[]> =>
+    baseApi({
+      url: `${orderControllerBase}/`,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
   return {
     createOrder,
+    getOrder,
+    getAllOrdersForUser,
+    getTodaysOrders,
   };
 };

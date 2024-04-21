@@ -52,7 +52,7 @@ const OrderList: React.FC<Props> = ({
             />
             <Grid container spacing={2}>
               {orders
-                .filter((order) => order.status === status)
+                .filter((order) => order.status === status.toUpperCase())
                 .map((order) => (
                   <Grid item xs={12} sm={6} md={4} key={order.id}>
                     <OrderCard
