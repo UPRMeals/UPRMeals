@@ -105,7 +105,7 @@ const OrdersPage = () => {
                     />
                   </Stack>
                   <Typography variant="h6" fontWeight={600}>
-                    ${order.totalPrice}
+                    ${order.totalPrice.toFixed(2)}
                   </Typography>
                 </Stack>
                 <Stack
