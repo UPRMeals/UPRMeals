@@ -108,7 +108,7 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
       const response = await createOrder({
         items,
         combos,
-        totalPrice,
+        totalPrice: Number(totalPrice.toFixed(2)),
       });
       formik.setValues(cartInitialValues);
       //TODO: Change this to the new order status page
@@ -215,38 +215,26 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
     formik.submitForm();
   };
 
-  const value = useMemo(
-    () => ({
-      cartCount,
-      totalPrice,
-      addCombo,
-      removeCombo,
-      getComboCount,
-      addItem,
-      removeItem,
-      getItemCount,
-      getCombos,
-      getItems,
-      clearItem,
-      submitOrder,
-    }),
-    [
-      cartCount,
-      totalPrice,
-      addCombo,
-      removeCombo,
-      getComboCount,
-      addItem,
-      removeItem,
-      getItemCount,
-      getCombos,
-      getItems,
-      clearItem,
-      submitOrder,
-    ]
+  return (
+    <CartContext.Provider
+      value={{
+        cartCount,
+        totalPrice,
+        addCombo,
+        removeCombo,
+        getComboCount,
+        addItem,
+        removeItem,
+        getItemCount,
+        getCombos,
+        getItems,
+        clearItem,
+        submitOrder,
+      }}
+    >
+      {children}
+    </CartContext.Provider>
   );
-
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
 
 export function getCartLayout(page: React.ReactElement) {

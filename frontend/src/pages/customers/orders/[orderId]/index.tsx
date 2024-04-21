@@ -86,7 +86,7 @@ const OrderStatusPage = () => {
           <Stack direction="row" justifyContent={"space-between"} mb={1} mx={1}>
             <Typography variant="body1">{order.createdAt}</Typography>
             <Typography variant="body1" fontWeight={600}>
-              Total: ${order.totalPrice}
+              Total: ${order.totalPrice.toFixed(2)}
             </Typography>
           </Stack>
           <Divider />
@@ -171,7 +171,7 @@ const OrderStatusPage = () => {
                       alignItems="center"
                     >
                       <Typography fontWeight={500}>{combo.name}</Typography>
-                      <Typography>${combo.price}</Typography>
+                      <Typography>${combo.price.toFixed(2)}</Typography>
                     </Stack>
                     <Typography variant="caption">
                       {combo.description || ""}
@@ -201,7 +201,7 @@ const OrderStatusPage = () => {
                       alignItems="center"
                     >
                       <Typography fontWeight={500}>{item.name}</Typography>
-                      <Typography>${item.price}</Typography>
+                      <Typography>${item.price.toFixed(2)}</Typography>
                     </Stack>
                     <Divider sx={{ my: 2 }} />
                   </Stack>
