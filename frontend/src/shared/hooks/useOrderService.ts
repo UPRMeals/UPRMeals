@@ -5,6 +5,7 @@ import {
   CreateOrderResponse,
   SimplifiedOrder,
 } from "../../../../backend/src/order/order.dto";
+import { OrderStatus } from "@/modules/staff/components/orders/types";
 
 export const useOrderService = () => {
   const orderControllerBase = "order";
@@ -49,10 +50,23 @@ export const useOrderService = () => {
       },
     });
 
+  const updateOrderStatus = async (orderId: number, newStatus: OrderStatus) =>
+    baseApi({
+      url: `${orderControllerBase}/${orderId}/status`,
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      data: {
+        status: newStatus,
+      },
+    });
+
   return {
     createOrder,
     getOrder,
     getAllOrdersForUser,
     getTodaysOrders,
+    updateOrderStatus,
   };
 };

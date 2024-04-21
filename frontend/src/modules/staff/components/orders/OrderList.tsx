@@ -13,6 +13,7 @@ type Props = {
     event: SelectChangeEvent<OrderStatus>
   ) => void;
   handleRemoveOrder: (id: number) => void;
+  handleExpandClick: (id: number) => void;
 };
 
 const OrderList: React.FC<Props> = ({
@@ -21,11 +22,8 @@ const OrderList: React.FC<Props> = ({
   setExpanded,
   handleStatusChange,
   handleRemoveOrder,
+  handleExpandClick,
 }) => {
-  const handleExpandClick = (id: number) => {
-    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-
   return (
     <>
       {["Pending", "In Progress", "Completed", "Delivered", "Rejected"].map(
@@ -52,7 +50,11 @@ const OrderList: React.FC<Props> = ({
             />
             <Grid container spacing={2}>
               {orders
-                .filter((order) => order.status === status.toUpperCase())
+                .filter(
+                  (order) =>
+                    order.status === status.toUpperCase() ||
+                    order.status === status.replace(" ", "_").toUpperCase()
+                )
                 .map((order) => (
                   <Grid item xs={12} sm={6} md={4} key={order.id}>
                     <OrderCard

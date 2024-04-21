@@ -18,7 +18,7 @@ import OrderList from "../../../modules/staff/components/orders/OrderList";
 import { useOrderService } from "@/shared/hooks/useOrderService";
 
 const StaffOrdersPage: React.FC = () => {
-  const { getTodaysOrders } = useOrderService();
+  const { getTodaysOrders, updateOrderStatus } = useOrderService();
   const [orders, setOrders] = useState<Order[]>([]);
   const [expanded, setExpanded] = useState<{ [key: number]: boolean }>({});
   const [openDialog, setOpenDialog] = useState(false);
@@ -43,10 +43,6 @@ const StaffOrdersPage: React.FC = () => {
     }
   }, [getTodaysOrders, fetchAttempted, orders]);
 
-  const handleExpandClick = (orderId: number) => {
-    setExpanded((prev) => ({ ...prev, [orderId]: !prev[orderId] }));
-  };
-
   const handleStatusChange = (
     orderId: number,
     event: SelectChangeEvent<OrderStatus>
@@ -56,17 +52,22 @@ const StaffOrdersPage: React.FC = () => {
       setOpenDialog(true);
       setCurrentOrder(orderId);
     } else {
-      updateOrderStatus(orderId, newStatus);
+      updateStatus(orderId, newStatus);
     }
   };
 
-  const updateOrderStatus = (orderId: number, newStatus: OrderStatus) => {
-    setOrders((prevOrders) =>
-      prevOrders.map((order) =>
-        order.id === orderId ? { ...order, status: newStatus } : order
-      )
-    );
+  const updateStatus = async (orderId: number, newStatus: OrderStatus) => {
     // Call API to update the order status
+    try {
+      await updateOrderStatus(orderId, newStatus);
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order.id === orderId ? { ...order, status: newStatus } : order
+        )
+      );
+    } catch (error) {
+      console.error("Failed to update order status:", error);
+    }
     setExpanded((prev) => ({ ...prev, [orderId]: false }));
   };
 
@@ -79,9 +80,13 @@ const StaffOrdersPage: React.FC = () => {
     setOpenDialog(false);
   };
 
+  const handleExpandClick = (id: number) => {
+    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
   const confirmRemoveOrReject = () => {
     if (currentOrder != null) {
-      updateOrderStatus(currentOrder, "REJECTED");
+      updateStatus(currentOrder, "REJECTED");
       handleCloseDialog();
     }
   };
@@ -97,6 +102,7 @@ const StaffOrdersPage: React.FC = () => {
         setExpanded={setExpanded}
         handleStatusChange={handleStatusChange}
         handleRemoveOrder={handleRemoveOrder}
+        handleExpandClick={handleExpandClick}
       />
       <Dialog
         open={openDialog}

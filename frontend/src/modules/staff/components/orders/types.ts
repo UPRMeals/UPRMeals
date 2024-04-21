@@ -1,6 +1,6 @@
 export type OrderStatus =
   | "PENDING"
-  | "IN PROGRESS"
+  | "IN_PROGRESS"
   | "COMPLETED"
   | "DELIVERED"
   | "REJECTED";
@@ -71,7 +71,7 @@ export const statusColors: Record<
   "default" | "primary" | "error" | "success" | "warning"
 > = {
   PENDING: "default",
-  "IN PROGRESS": "primary",
+  IN_PROGRESS: "primary",
   COMPLETED: "error",
   DELIVERED: "success",
   REJECTED: "warning",

@@ -6,6 +6,7 @@ import {
   ParseIntPipe,
   Post,
   Req,
+  Put,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import {
@@ -13,6 +14,7 @@ import {
   CreateOrderResponse,
   SimplifiedOrder,
 } from './order.dto';
+import { OrderStatusType } from '@prisma/client';
 
 @Controller('order')
 export class OrderController {
@@ -28,6 +30,14 @@ export class OrderController {
   async getTodaysOrders() {
     const orders = await this.orderService.getTodaysOrders();
     return orders;
+  }
+
+  @Put(':orderId/status')
+  async updateOrderStatus(
+    @Param('orderId', ParseIntPipe) orderId: number,
+    @Body('status') newStatus: OrderStatusType,
+  ) {
+    return await this.orderService.updateOrderStatus(orderId, newStatus);
   }
 
   @Get('')

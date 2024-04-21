@@ -5,7 +5,7 @@ import {
   PrismaFindOrderResponse,
   SimplifiedOrder,
 } from './order.dto';
-import { Item, ItemType } from '@prisma/client';
+import { Item, ItemType, OrderStatusType } from '@prisma/client';
 import { endOfDay, startOfDay } from 'date-fns';
 
 @Injectable()
@@ -52,6 +52,18 @@ export class OrderService {
       },
     });
     return { orderId: order.id };
+  }
+
+  async updateOrderStatus(orderId: number, newStatus: OrderStatusType) {
+    const order = await this.prismaService.order.update({
+      where: {
+        id: orderId,
+      },
+      data: {
+        status: newStatus,
+      },
+    });
+    return order;
   }
 
   async getTodaysOrders(): Promise<any[]> {
