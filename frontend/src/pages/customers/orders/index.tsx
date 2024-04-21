@@ -15,12 +15,13 @@ import { blueGrey, indigo, lightGreen } from "@mui/material/colors";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import { SimplifiedOrder } from "../../../../../backend/src/order/order.dto";
 
 const StatusColors = {
-  Pending: indigo[500],
-  "In Progress": "",
-  Completed: "",
-  Delivered: lightGreen[500],
+  PENDING: indigo[500],
+  IN_PROGRESS: "",
+  COMPLETED: "",
+  DELIVERED: lightGreen[500],
 };
 
 enum OrderStatus {
@@ -37,7 +38,7 @@ const OrdersPage = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const { getAllOrdersForUser } = useOrderService();
-  const [orders, setOrders] = useState<any[]>();
+  const [orders, setOrders] = useState<SimplifiedOrder[]>();
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -67,7 +68,6 @@ const OrdersPage = () => {
           <Typography variant="h3" fontWeight={600} mb={1}>
             Order History
           </Typography>
-          <Divider sx={{ mb: 4 }} />
           {orders.map((order) => (
             <Card
               key={order.id}

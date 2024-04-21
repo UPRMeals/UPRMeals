@@ -105,14 +105,14 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
         };
       });
 
-      await createOrder({
+      const response = await createOrder({
         items,
         combos,
         totalPrice,
       });
       formik.setValues(cartInitialValues);
       //TODO: Change this to the new order status page
-      router.push("/customers/menu");
+      router.push(`/customers/orders/${response.orderId}`);
     },
   });
 

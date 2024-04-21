@@ -1,12 +1,18 @@
 import { useBaseAPI } from "../../shared/hooks/useBaseAPI";
 
-import { CreateOrderData } from "../../../../backend/src/order/order.dto";
+import {
+  CreateOrderData,
+  CreateOrderResponse,
+  SimplifiedOrder,
+} from "../../../../backend/src/order/order.dto";
 
 export const useOrderService = () => {
   const orderControllerBase = "order";
   const baseApi = useBaseAPI();
 
-  const createOrder = async (data: CreateOrderData): Promise<any> =>
+  const createOrder = async (
+    data: CreateOrderData
+  ): Promise<CreateOrderResponse> =>
     baseApi({
       url: `${orderControllerBase}/`,
       method: "POST",
@@ -16,7 +22,7 @@ export const useOrderService = () => {
       data,
     });
 
-  const getOrder = (orderId: string) =>
+  const getOrder = (orderId: string): Promise<SimplifiedOrder> =>
     baseApi({
       url: `${orderControllerBase}/${orderId}`,
       method: "GET",
@@ -25,7 +31,7 @@ export const useOrderService = () => {
       },
     });
 
-  const getAllOrdersForUser = async (): Promise<any> =>
+  const getAllOrdersForUser = async (): Promise<SimplifiedOrder[]> =>
     baseApi({
       url: `${orderControllerBase}/`,
       method: "GET",

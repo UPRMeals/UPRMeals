@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
-import { CreateOrderData, PrismaFindOrderResponse } from './order.dto';
+import {
+  CreateOrderData,
+  PrismaFindOrderResponse,
+  SimplifiedOrder,
+} from './order.dto';
 import { Item, ItemType } from '@prisma/client';
 
 @Injectable()
@@ -46,7 +50,7 @@ export class OrderService {
         },
       },
     });
-    return order;
+    return { orderId: order.id };
   }
 
   async getAllOrdersForUser(userId: number): Promise<any> {
@@ -112,7 +116,7 @@ export class OrderService {
   }
 
   //gets rid of the relationships (easier for frontend)
-  private getSimplifiedOrder(order: PrismaFindOrderResponse) {
+  private getSimplifiedOrder(order: PrismaFindOrderResponse): SimplifiedOrder {
     const orderItems = order.orderItems.map((orderItem) => orderItem.item);
 
     const orderCombos = order.orderCombos.map((orderCombo) => {
@@ -141,6 +145,7 @@ export class OrderService {
         proteinCount: orderCombo.combo.proteinCount,
         sideCount: orderCombo.combo.sideCount,
         menuId: orderCombo.combo.menuId,
+        removed: orderCombo.combo.removed,
         proteins,
         sides,
       };

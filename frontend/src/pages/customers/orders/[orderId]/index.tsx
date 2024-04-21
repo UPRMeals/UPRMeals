@@ -1,6 +1,5 @@
 import { useOrderService } from "@/shared/hooks/useOrderService";
 import theme, { Colors } from "@/styles/theme";
-import { Timeline } from "@mui/lab";
 import {
   Box,
   CircularProgress,
@@ -15,6 +14,8 @@ import AutorenewOutlinedIcon from "@mui/icons-material/AutorenewOutlined";
 import OutdoorGrillOutlinedIcon from "@mui/icons-material/OutdoorGrillOutlined";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
+import { SimplifiedOrder } from "../../../../../../backend/src/order/order.dto";
+import { Item } from "../../../../../../backend/src/menu/menu.dto";
 
 const StatusOptions = {
   Pending: {
@@ -42,6 +43,25 @@ enum OrderStatus {
   DELIVERED = "Delivered",
 }
 
+const ComboItemsDisplay = ({ combo }: { combo: any }) => {
+  return (
+    <Stack mt={1}>
+      <Typography variant="caption">
+        <Typography variant="caption" fontWeight={600}>
+          Protein(s):&nbsp;
+        </Typography>
+        {combo.proteins?.map((p: Item) => p.name).join(", ")}
+      </Typography>
+      <Typography variant="caption">
+        <Typography variant="caption" fontWeight={600}>
+          Side(s):&nbsp;
+        </Typography>
+        {combo.sides?.map((s: Item) => s.name).join(", ")}
+      </Typography>
+    </Stack>
+  );
+};
+
 const ORDER_STATUS_LIST = Object.values(OrderStatus);
 
 const OrderStatusPage = () => {
@@ -49,7 +69,7 @@ const OrderStatusPage = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const { getOrder } = useOrderService();
-  const [order, setOrder] = useState<any>();
+  const [order, setOrder] = useState<SimplifiedOrder>();
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -78,11 +98,8 @@ const OrderStatusPage = () => {
           <CircularProgress size={80} />
         </Box>
       ) : (
-        <Stack p={2} width={isMobile ? "100%" : "60%"}>
-          <Typography variant="h3" fontWeight={600}>
-            Order Status
-          </Typography>
-          <Typography variant="h5" fontWeight={400} ml={1} mb={2}>
+        <Stack p={2} width={isMobile ? "100%" : "70%"}>
+          <Typography variant="h3" fontWeight={600} mb={1}>
             Order: {order.id}
           </Typography>
           <Stack direction="row" justifyContent={"space-between"} mb={1} mx={1}>
@@ -92,13 +109,22 @@ const OrderStatusPage = () => {
             </Typography>
           </Stack>
           <Divider />
-          <Box>
-            <Timeline>
+          <Stack direction={isMobile ? "column" : "row"}>
+            <Box my={2} width={isMobile ? "100%" : "50%"}>
+              <Typography variant="h6" fontWeight={600} mb={1}>
+                Order Status
+              </Typography>
               {ORDER_STATUS_LIST.map((status, index: number) => {
                 const isCurrentStatus =
-                  index <= ORDER_STATUS_LIST.indexOf(OrderStatus["COMPLETED"]);
+                  index <= ORDER_STATUS_LIST.indexOf(OrderStatus[order.status]);
                 return (
-                  <Stack key={index} direction="row" alignItems="start" gap={1}>
+                  <Stack
+                    key={index}
+                    direction="row"
+                    alignItems="start"
+                    gap={1}
+                    ml={1}
+                  >
                     <Stack
                       direction="column"
                       justifyContent="center"
@@ -113,7 +139,7 @@ const OrderStatusPage = () => {
                         <Divider
                           sx={{
                             height: "8vh",
-                            borderWidth: 2,
+                            borderWidth: 1,
                             my: 1,
                             backgroundColor: isCurrentStatus
                               ? Colors.Teal
@@ -146,9 +172,50 @@ const OrderStatusPage = () => {
                   </Stack>
                 );
               })}
-            </Timeline>
-          </Box>
-          <Divider />
+            </Box>
+            <Divider
+              orientation={isMobile ? "horizontal" : "vertical"}
+              sx={{ mt: 1 }}
+            />
+            <Box width={isMobile ? "100%" : "50%"} p={2}>
+              <Typography variant="h6" fontWeight={600}>
+                Order Details
+              </Typography>
+              <Stack>
+                {order.orderCombos.map((combo) => (
+                  <Stack key={combo.id}>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <Typography fontWeight={500}>{combo.name}</Typography>
+                      <Typography>${combo.price}</Typography>
+                    </Stack>
+                    <Typography variant="caption">
+                      {combo.description || ""}
+                    </Typography>
+                    <ComboItemsDisplay combo={combo} />
+                    <Divider sx={{ my: 2 }} />
+                  </Stack>
+                ))}
+                {order.orderItems.map((item) => (
+                  <Stack key={item.id}>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <Typography fontWeight={500}>{item.name}</Typography>
+                      <Typography>${item.price}</Typography>
+                    </Stack>
+                    <Divider sx={{ my: 2 }} />
+                  </Stack>
+                ))}
+              </Stack>
+            </Box>
+          </Stack>
+          <Divider sx={{ mt: 2 }} />
         </Stack>
       )}
     </Box>
