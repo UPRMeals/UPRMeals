@@ -1,7 +1,8 @@
 import { Box, Stack, Typography } from "@mui/material";
 import ComboCard from "./ComboCard";
-import { Combo, Item, Menu } from "../../../../../../backend/src/menu/menu.dto";
+import { Combo, Menu } from "../../../../../../backend/src/menu/menu.dto";
 import { ItemCard } from "./ItemCard";
+import { Item } from "../../../../../../backend/src/item/item.dto";
 
 const CustomerMenu = ({
   isOrderPage,

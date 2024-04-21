@@ -5,9 +5,10 @@ import React, {
   useContext,
   useMemo,
 } from "react";
-import { Combo, Item } from "../../../../backend/src/menu/menu.dto";
+import { Combo } from "../../../../backend/src/menu/menu.dto";
 import { useOrderService } from "../hooks/useOrderService";
 import { useRouter } from "next/router";
+import { Item } from "../../../../backend/src/item/item.dto";
 
 const cartInitialValues = {
   combos: [],
