@@ -78,4 +78,14 @@ export class UserController {
 
     return userProfile;
   }
+
+  @StaffOnly()
+  @Post('customer/:userId/flag')
+  async flagUser(
+    @Param('userId', ParseIntPipe) userId: number,
+  ): Promise<UserProfile> {
+    const userProfile = await this.userService.flagUser(userId);
+
+    return userProfile;
+  }
 }

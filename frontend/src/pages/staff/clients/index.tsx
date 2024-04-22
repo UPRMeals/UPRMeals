@@ -18,6 +18,7 @@ import DropdownMenu, {
 import { useUserService } from "../../../shared/hooks/useUserService";
 import { UserProfile } from "../../../../../backend/src/user/user.dto";
 import SetEmployeeDialog from "@/modules/staff/components/SetEmployeeDialog";
+import FlagCustomerDialog from "@/modules/staff/components/FlagCustomerDialog";
 
 export default function CustomerProfilesPage() {
   const { getCustomerProfiles } = useUserService();
@@ -193,6 +194,14 @@ export default function CustomerProfilesPage() {
             open={openSetEmployeeDialog}
             handleClose={async () => {
               setOpenSetEmployeeDialog(false);
+              setAllCustomers(await getCustomerProfiles());
+            }}
+            userId={selectedCustomerId}
+          />
+          <FlagCustomerDialog
+            open={openSuspendCustomerDialog}
+            handleClose={async () => {
+              setOpenSuspendCustomerDialog(false);
               setAllCustomers(await getCustomerProfiles());
             }}
             userId={selectedCustomerId}
