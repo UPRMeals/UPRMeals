@@ -23,6 +23,24 @@ export const useOrderService = () => {
       data,
     });
 
+  const getOrder = (orderId: string): Promise<SimplifiedOrder> =>
+    baseApi({
+      url: `${orderControllerBase}/${orderId}`,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+  const getAllOrdersForUser = async (): Promise<SimplifiedOrder[]> =>
+    baseApi({
+      url: `${orderControllerBase}/`,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
   const getTodaysOrders = async (): Promise<any> =>
     baseApi({
       url: `${orderControllerBase}/today`,
@@ -68,5 +86,7 @@ export const useOrderService = () => {
     getAllOrdersForUser,
     getTodaysOrders,
     updateOrderStatus,
+    getOrder,
+    getAllOrdersForUser,
   };
 };
