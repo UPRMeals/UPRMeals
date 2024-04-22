@@ -114,6 +114,7 @@ model Menu {
   isActive        Boolean       @default(false)
   items           Item[]
   combos          Combo[]
+  canBeEdited  Boolean       @default(true)
 }
 
 enum ItemType {

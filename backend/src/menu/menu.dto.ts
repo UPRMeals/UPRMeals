@@ -27,6 +27,7 @@ export interface GetAllMenusResponse {
   isActive: boolean;
   items: Item[];
   combos: Combo[];
+  canBeEdited: boolean;
 }
 
 export interface Menu {
@@ -38,6 +39,7 @@ export interface Menu {
   proteins: Item[];
   sides: Item[];
   combos: Combo[];
+  canBeEdited: boolean;
 }
 
 export interface Combo {

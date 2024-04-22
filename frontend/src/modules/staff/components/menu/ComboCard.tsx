@@ -20,15 +20,19 @@ const ComboCard = ({
   handleEdit,
   menuId,
   handleRefresh,
+  isEditable,
 }: {
   combo: Combo;
   handleEdit: () => void;
   menuId: number;
   handleRefresh: () => void;
+  isEditable: boolean;
 }) => {
   const { deleteCombo } = useComboService();
 
   async function handleDelete() {
+    if (!isEditable) return;
+
     const res = await deleteCombo({
       ...combo,
       status: "available",
@@ -100,16 +104,18 @@ const ComboCard = ({
           ))}
         </Stack>
       </CardContent>
-      <CardActions sx={{ justifyContent: "right" }}>
-        <IconButton onClick={handleDelete}>
-          <DeleteOutlineOutlinedIcon
-            sx={{ color: Colors.Red + "cc", fontSize: 20 }}
-          />
-        </IconButton>
-        <IconButton onClick={handleEdit}>
-          <EditOutlinedIcon sx={{ color: Colors.Charcoal, fontSize: 20 }} />
-        </IconButton>
-      </CardActions>
+      {isEditable && (
+        <CardActions sx={{ justifyContent: "right" }}>
+          <IconButton onClick={handleDelete}>
+            <DeleteOutlineOutlinedIcon
+              sx={{ color: Colors.Red + "cc", fontSize: 20 }}
+            />
+          </IconButton>
+          <IconButton onClick={handleEdit}>
+            <EditOutlinedIcon sx={{ color: Colors.Charcoal, fontSize: 20 }} />
+          </IconButton>
+        </CardActions>
+      )}
     </Card>
   );
 };

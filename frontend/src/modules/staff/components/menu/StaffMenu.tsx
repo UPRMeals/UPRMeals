@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  ButtonBase,
   Chip,
   Divider,
   IconButton,
@@ -50,10 +49,12 @@ const MenuSection = ({
   handleOpenDialog,
   sectionTitle,
   sectionContent,
+  isEditable,
 }: {
   handleOpenDialog: () => void;
   sectionTitle: string;
   sectionContent: JSX.Element | null;
+  isEditable: boolean;
 }) => {
   return (
     <>
@@ -64,9 +65,11 @@ const MenuSection = ({
         pt={2}
       >
         <Typography variant="h5">{sectionTitle}</Typography>
-        <Button startIcon={<AddIcon />} onClick={handleOpenDialog}>
-          Añadir
-        </Button>
+        {isEditable && (
+          <Button startIcon={<AddIcon />} onClick={handleOpenDialog}>
+            Añadir
+          </Button>
+        )}
       </Stack>
       <Divider sx={{ width: "100%" }} />
 
@@ -135,18 +138,23 @@ const StaffMenu = ({
               }}
             />
           </Stack>
-          <IconButton onClick={() => setOpenEditMenuDialog(true)}>
-            <EditIcon />
-          </IconButton>
+          {menu.canBeEdited && (
+            <IconButton onClick={() => setOpenEditMenuDialog(true)}>
+              <EditIcon />
+            </IconButton>
+          )}
         </Stack>
 
         <MenuDetails
           label="Fecha"
           value={new Date(menu.date).toLocaleDateString()}
         />
-        {!!menu.description && (
+        {menu?.description ? (
           <MenuDetails label="Descripción" value={menu.description} />
+        ) : (
+          <></>
         )}
+
         <Box>
           <Link
             onClick={() => {
@@ -179,11 +187,13 @@ const StaffMenu = ({
                     setEditItem(protein);
                   }}
                   handleRefresh={refreshMenu}
+                  isEditable={menu.canBeEdited}
                 />
               ))}
             </>
           ) : null
         }
+        isEditable={menu.canBeEdited}
       />
       <MenuSection
         handleOpenDialog={() => setOpenAddSideDialog(true)}
@@ -200,11 +210,13 @@ const StaffMenu = ({
                     setEditItem(protein);
                   }}
                   handleRefresh={refreshMenu}
+                  isEditable={menu.canBeEdited}
                 />
               ))}
             </>
           ) : null
         }
+        isEditable={menu.canBeEdited}
       />
 
       <MenuSection
@@ -225,11 +237,13 @@ const StaffMenu = ({
                   }}
                   menuId={menu?.id}
                   handleRefresh={refreshMenu}
+                  isEditable={menu.canBeEdited}
                 />
               ))}
             </>
           ) : null
         }
+        isEditable={menu.canBeEdited}
       />
 
       <HandleItemDialog

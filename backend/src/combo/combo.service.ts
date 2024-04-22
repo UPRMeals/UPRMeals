@@ -1,14 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { ItemType } from '@prisma/client';
 import { Item } from 'src/item/item.dto';
 import { PrismaService } from '../database/prisma.service';
 import { CreateMenuCombo, UpdateComboData } from './combo.dto';
 import { Combo } from './combo.dto';
 import { Combo as MenuCombo } from '../menu/menu.dto';
+import { MenuService } from 'src/menu/menu.service';
 
 @Injectable()
 export class ComboService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private readonly menuService: MenuService,
+  ) {}
 
   async createCombo(
     comboData: CreateMenuCombo,
@@ -72,6 +76,11 @@ export class ComboService {
   }
 
   async deleteCombo(combo: Combo): Promise<Combo> {
+    const existingMenu = await this.menuService.getMenuById(combo.menuId);
+    if (!existingMenu.canBeEdited) {
+      throw new ForbiddenException();
+    }
+
     await this.prismaService.comboItem.updateMany({
       where: { comboId: combo.id },
       data: { removed: true },
@@ -141,6 +150,11 @@ export class ComboService {
     newItemIds: number[],
     menuId: number,
   ): Promise<Combo> {
+    const existingMenu = await this.menuService.getMenuById(menuId);
+    if (!existingMenu.canBeEdited) {
+      throw new ForbiddenException();
+    }
+
     const existingCombo = await this.getComboById(comboId, menuId);
     const existingProteins = existingCombo.proteins.map(
       (protein) => protein.id,

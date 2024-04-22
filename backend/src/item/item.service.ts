@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { Item, ItemType } from '@prisma/client';
 import { ComboService } from 'src/combo/combo.service';
+import { MenuService } from 'src/menu/menu.service';
 import { PrismaService } from '../database/prisma.service';
 import { CreateMenuItem } from './item.dto';
 
@@ -9,6 +10,7 @@ export class ItemService {
   constructor(
     private prismaService: PrismaService,
     private readonly comboService: ComboService,
+    private readonly menuService: MenuService,
   ) {}
 
   async createItem(data: CreateMenuItem): Promise<Item> {
@@ -19,6 +21,11 @@ export class ItemService {
   }
 
   async updateItem(data: Item): Promise<Item> {
+    const existingMenu = await this.menuService.getMenuById(data.menuId);
+    if (!existingMenu.canBeEdited) {
+      throw new ForbiddenException();
+    }
+
     const { id, name, price, menuId, status, removed } = data;
     const item = await this.prismaService.item.update({
       where: { id, menuId },
@@ -28,6 +35,11 @@ export class ItemService {
   }
 
   async deleteItem(data: Item): Promise<Item | { error: string }> {
+    const existingMenu = await this.menuService.getMenuById(data.menuId);
+    if (!existingMenu.canBeEdited) {
+      throw new ForbiddenException();
+    }
+
     // Determine if removing this item would go under the protein or side count
     const combosUsingItem = await this.comboService.getCombosByItem(data);
 

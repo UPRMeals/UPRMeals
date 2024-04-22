@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ItemType, Prisma } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
 import {
@@ -62,6 +66,7 @@ export class MenuService {
         isActive: menu.isActive,
         items: menu.items,
         combos: combos,
+        canBeEdited: menu.canBeEdited,
       };
     });
 
@@ -132,10 +137,16 @@ export class MenuService {
       proteins,
       sides,
       combos,
+      canBeEdited: tempMenuResponse.canBeEdited,
     };
   }
 
   async deleteMenu(menuId: number): Promise<MenuResponse> {
+    const existingMenu = await this.getMenuById(menuId);
+    if (!existingMenu.canBeEdited) {
+      throw new ForbiddenException();
+    }
+
     const menu = await this.prismaService.menu.update({
       where: { id: Number(menuId) },
       data: { removed: true },
@@ -153,7 +164,7 @@ export class MenuService {
 
     const menu = await this.prismaService.menu.update({
       where: { id: Number(menuId) },
-      data: { isActive: true },
+      data: { isActive: true, canBeEdited: false },
     });
 
     return menu;
@@ -163,6 +174,11 @@ export class MenuService {
     menuId: number,
     menuData: UpdateMenuInput,
   ): Promise<MenuResponse> {
+    const existingMenu = await this.getMenuById(menuId);
+    if (!existingMenu.canBeEdited) {
+      throw new ForbiddenException();
+    }
+
     const menu = await this.prismaService.menu.update({
       where: { id: menuId },
       data: { ...menuData },

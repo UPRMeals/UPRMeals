@@ -17,14 +17,18 @@ export const ItemCard = ({
   item,
   handleEdit,
   handleRefresh,
+  isEditable,
 }: {
   item: Item;
   handleEdit: () => void;
   handleRefresh: () => void;
+  isEditable: boolean;
 }) => {
   const { deleteItem } = useItemService();
 
   async function handleDelete() {
+    if (isEditable) return;
+
     const res = await deleteItem(item);
     if ("id" in res && res.id) {
       const message =
@@ -57,16 +61,18 @@ export const ItemCard = ({
           </Typography>
         </Stack>
       </CardContent>
-      <CardActions sx={{ justifyContent: "right" }}>
-        <IconButton onClick={handleDelete}>
-          <DeleteOutlineOutlinedIcon
-            sx={{ color: Colors.Red + "cc", fontSize: 20 }}
-          />
-        </IconButton>
-        <IconButton onClick={handleEdit}>
-          <EditOutlinedIcon sx={{ color: Colors.Charcoal, fontSize: 20 }} />
-        </IconButton>
-      </CardActions>
+      {isEditable && (
+        <CardActions sx={{ justifyContent: "right" }}>
+          <IconButton onClick={handleDelete}>
+            <DeleteOutlineOutlinedIcon
+              sx={{ color: Colors.Red + "cc", fontSize: 20 }}
+            />
+          </IconButton>
+          <IconButton onClick={handleEdit}>
+            <EditOutlinedIcon sx={{ color: Colors.Charcoal, fontSize: 20 }} />
+          </IconButton>
+        </CardActions>
+      )}
     </Card>
   );
 };

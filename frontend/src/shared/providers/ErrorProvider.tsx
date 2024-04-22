@@ -17,6 +17,11 @@ export const ErrorProvider = ({ children }: PropsWithChildren) => {
     //we can add more cases as we go
     if (error?.response?.status === 401 || error.message.includes("401")) {
       toast.error("User not authorized.");
+    } else if (
+      error?.response?.status === 403 ||
+      error.message.includes("403")
+    ) {
+      toast.error("You do not have permission to acces or edit this resource.");
     } else {
       toast.error("An unexpected error has occurred.");
     }

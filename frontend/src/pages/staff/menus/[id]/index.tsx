@@ -1,12 +1,6 @@
 import StaffMenu from "../../../../modules/staff/components/menu/StaffMenu";
 import { useMenuService } from "../../../../shared/hooks/useMenuService";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Button, CircularProgress, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Menu } from "../../../../../../backend/src/menu/menu.dto";
