@@ -1,2 +1,0 @@
--- CreateEnum
-CREATE TYPE "OrderStatusType" AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'DELIVERED');
