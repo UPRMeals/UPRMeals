@@ -67,6 +67,48 @@ export class OrderService {
     return order;
   }
 
+  async getTodaysOrders(): Promise<any[]> {
+    // Return type as any[] for simplicity
+    const todayStart = startOfDay(new Date());
+    const todayEnd = endOfDay(new Date());
+
+    const ordersResponse = await this.prismaService.order.findMany({
+      where: {
+        createdAt: {
+          gte: todayStart,
+          lte: todayEnd,
+        },
+        removed: false,
+      },
+      include: {
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            username: true,
+          },
+        },
+        orderItems: {
+          include: {
+            item: true,
+          },
+        },
+        orderCombos: {
+          include: {
+            combo: true,
+            orderComboItems: {
+              include: {
+                item: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return ordersResponse; // Directly return the fetched data
+  }
+
   async getAllOrdersForUser(userId: number): Promise<any> {
     if (!userId) throw new Error('User not found');
     const tempOrdersResponse = await this.prismaService.order.findMany({
@@ -183,47 +225,5 @@ export class OrderService {
       orderItems,
       orderCombos,
     };
-  }
-
-  async getTodaysOrders(): Promise<any[]> {
-    // Return type as any[] for simplicity
-    const todayStart = startOfDay(new Date());
-    const todayEnd = endOfDay(new Date());
-
-    const ordersResponse = await this.prismaService.order.findMany({
-      where: {
-        createdAt: {
-          gte: todayStart,
-          lte: todayEnd,
-        },
-        removed: false,
-      },
-      include: {
-        user: {
-          select: {
-            firstName: true,
-            lastName: true,
-            username: true,
-          },
-        },
-        orderItems: {
-          include: {
-            item: true,
-          },
-        },
-        orderCombos: {
-          include: {
-            combo: true,
-            orderComboItems: {
-              include: {
-                item: true,
-              },
-            },
-          },
-        },
-      },
-    });
-
-    return ordersResponse; // Directly return the fetched data
   }
 }
