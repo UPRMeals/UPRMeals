@@ -57,7 +57,7 @@ export interface Menu {
 export interface Combo {
   id: number;
   name: string;
-  description: string;
+  description: string | null;
   price: number;
   proteinCount: number;
   sideCount: number;

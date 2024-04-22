@@ -50,7 +50,7 @@ const MyCartPage: NextPageWithLayout = () => {
 
   const ComboItemsDisplay = ({ combo }: { combo: CartCombo }) => {
     return (
-      <Stack>
+      <Stack mt={1}>
         <Typography variant="caption">
           <Typography variant="caption" fontWeight={600}>
             Protein(s):&nbsp;
@@ -78,7 +78,7 @@ const MyCartPage: NextPageWithLayout = () => {
       mb={20}
     >
       <TableContainer sx={{ maxWidth: { xs: "95%", lg: "70%" } }}>
-        <Typography variant="h4" alignSelf={"start"} fontWeight={600} mb={1}>
+        <Typography variant="h3" alignSelf={"start"} fontWeight={600} mb={1}>
           My Cart
         </Typography>
         <Typography variant="body1" alignSelf={"start"} mb={3} fontWeight={300}>
@@ -154,7 +154,7 @@ const MyCartPage: NextPageWithLayout = () => {
         pt={2}
       >
         <Typography variant={"h5"} fontWeight={500}>
-          Subtotal:
+          Total:
         </Typography>
         <Typography variant={"h5"} fontWeight={500}>
           ${totalPrice.toFixed(2)}
