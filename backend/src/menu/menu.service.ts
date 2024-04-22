@@ -5,7 +5,7 @@ import {
   Menu,
   MenuResponse,
   GetAllMenusResponse,
-  GetMenuWithItemsInput,
+  UpdateMenuInput,
 } from './menu.dto';
 
 @Injectable()
@@ -154,6 +154,18 @@ export class MenuService {
     const menu = await this.prismaService.menu.update({
       where: { id: Number(menuId) },
       data: { isActive: true },
+    });
+
+    return menu;
+  }
+
+  async updateMenu(
+    menuId: number,
+    menuData: UpdateMenuInput,
+  ): Promise<MenuResponse> {
+    const menu = await this.prismaService.menu.update({
+      where: { id: menuId },
+      data: { ...menuData },
     });
 
     return menu;

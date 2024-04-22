@@ -1,9 +1,11 @@
 import {
   Box,
   Button,
+  ButtonBase,
   Chip,
   Divider,
   IconButton,
+  Link,
   Stack,
   Typography,
 } from "@mui/material";
@@ -21,6 +23,8 @@ import HandleItemDialog from "../HandleItemDialog";
 import HandleComboDialog from "../HandleComboDialog";
 import { Item } from "../../../../../../backend/src/item/item.dto";
 import { Combo } from "../../../../../../backend/src/menu/menu.dto";
+import HandleMenuDialog from "../HandleMenuDialog";
+import ActivateMenuDialog from "../ActivateMenuDialog";
 
 const MenuDetails = ({ label, value }: { label: string; value: string }) => {
   return (
@@ -102,6 +106,9 @@ const StaffMenu = ({
   const [openEditComboDialog, setOpenEditComboDialog] =
     useState<boolean>(false);
   const [editCombo, setEditCombo] = useState<Combo>();
+  const [openEditMenuDialog, setOpenEditMenuDialog] = useState<boolean>();
+  const [openActivateMenuDialog, setOpenActivateMenuDialog] =
+    useState<boolean>();
 
   return (
     <Box
@@ -128,10 +135,11 @@ const StaffMenu = ({
               }}
             />
           </Stack>
-          <IconButton>
+          <IconButton onClick={() => setOpenEditMenuDialog(true)}>
             <EditIcon />
           </IconButton>
         </Stack>
+
         <MenuDetails
           label="Fecha"
           value={new Date(menu.date).toLocaleDateString()}
@@ -139,6 +147,19 @@ const StaffMenu = ({
         {!!menu.description && (
           <MenuDetails label="Descripción" value={menu.description} />
         )}
+        <Box>
+          <Link
+            onClick={() => {
+              setOpenActivateMenuDialog(true);
+            }}
+            sx={{
+              fontWeight: 600,
+              ":hover": { cursor: "pointer" },
+            }}
+          >
+            Activar Menú
+          </Link>
+        </Box>
       </Stack>
 
       <MenuSection
@@ -264,6 +285,35 @@ const StaffMenu = ({
           menuSides={menu.sides}
           menuId={menu?.id}
           existingCombo={editCombo}
+        />
+      ) : (
+        <></>
+      )}
+      {openEditMenuDialog ? (
+        <HandleMenuDialog
+          open={openEditMenuDialog}
+          handleClose={async () => {
+            refreshMenu();
+            setOpenEditMenuDialog(false);
+          }}
+          existingMenu={{
+            id: menu?.id,
+            name: menu?.name,
+            description: menu?.description,
+            date: menu?.date,
+          }}
+        />
+      ) : (
+        <></>
+      )}
+      {openActivateMenuDialog ? (
+        <ActivateMenuDialog
+          open={openActivateMenuDialog}
+          handleClose={async () => {
+            refreshMenu();
+            setOpenActivateMenuDialog(false);
+          }}
+          menuId={menu.id}
         />
       ) : (
         <></>

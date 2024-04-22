@@ -12,6 +12,7 @@ import {
   MenuResponse,
   GetAllMenusResponse,
   Menu,
+  UpdateMenuInput,
 } from './menu.dto';
 import { MenuService } from './menu.service';
 import { StaffOnly } from '../auth/decorators/isStaff.decorator';
@@ -72,5 +73,15 @@ export class MenuController {
   @Get('active-menu')
   async getActiveMenu(): Promise<Menu> {
     return await this.menuService.getActiveMenu();
+  }
+
+  @StaffOnly()
+  @Post(':menuId/update')
+  async updateMenu(
+    @Param('menuId', ParseIntPipe) menuId: number,
+    @Body() data: UpdateMenuInput,
+  ): Promise<MenuResponse> {
+    const menu = await this.menuService.updateMenu(menuId, data);
+    return menu;
   }
 }

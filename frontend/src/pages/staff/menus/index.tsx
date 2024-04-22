@@ -16,7 +16,6 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useEffect, useState } from "react";
-import CreateMenuDialog from "../../../modules/staff/components/CreateMenuDialog";
 import { useMenuService } from "../../../shared/hooks/useMenuService";
 import { GetAllMenusResponse } from "../../../../../backend/src/menu/menu.dto";
 import { useRouter } from "next/router";
@@ -29,6 +28,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { indigo } from "@mui/material/colors";
 import ActivateMenuDialog from "../../../modules/staff/components/ActivateMenuDialog";
+import HandleMenuDialog from "../../../modules/staff/components/HandleMenuDialog";
 
 export default function MenusPage() {
   const { getAllMenus } = useMenuService();
@@ -278,7 +278,7 @@ export default function MenusPage() {
           </Table>
         </TableContainer>
       </Box>
-      <CreateMenuDialog
+      <HandleMenuDialog
         open={openCreateMenuDialog}
         handleClose={async () => {
           setOpenCreateMenuDialog(false);

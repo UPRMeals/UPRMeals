@@ -6,6 +6,8 @@ export interface CreateMenuData {
   date: Date;
 }
 
+export interface UpdateMenuInput extends CreateMenuData {}
+
 export interface MenuResponse {
   id: number;
   name: string;
