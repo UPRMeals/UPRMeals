@@ -19,16 +19,15 @@ import { useUserService } from "../../../shared/hooks/useUserService";
 import { UserProfile } from "../../../../../backend/src/user/user.dto";
 import SetEmployeeDialog from "@/modules/staff/components/SetEmployeeDialog";
 import FlagCustomerDialog from "@/modules/staff/components/FlagCustomerDialog";
+import toast from "react-hot-toast";
 
 export default function CustomerProfilesPage() {
-  const { getCustomerProfiles } = useUserService();
+  const { getCustomerProfiles, unflagCustomer } = useUserService();
   const [openSuspendCustomerDialog, setOpenSuspendCustomerDialog] =
-    useState(false);
-  const [openRemoveSuspensionDialog, setOpenRemoveSuspensionDialog] =
     useState(false);
   const [openSetEmployeeDialog, setOpenSetEmployeeDialog] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState<number>();
-  const [allCustomers, setAllCustomers] = useState<UserProfile[]>();
+  const [allCustomers, setAllCustomers] = useState<UserProfile[] | null>();
   const router = useRouter();
 
   useEffect(() => {
@@ -40,9 +39,21 @@ export default function CustomerProfilesPage() {
     if (!allCustomers) {
       getCustomers();
     }
-  }, [getCustomerProfiles]);
+  }, [getCustomerProfiles, allCustomers]);
 
   const tableHeaders = ["Nombre", "Email", "", "", ""];
+
+  async function handleRemovingCustomerFlag(customerId: number) {
+    if (!customerId) {
+      toast.error("Error ocurrido.");
+      return;
+    }
+    const unflaggedUser = await unflagCustomer(customerId);
+    setAllCustomers(null);
+    if (unflaggedUser.id && !unflaggedUser.isFlagged) {
+      toast.success("Suspensión removida exitosamente.");
+    }
+  }
 
   function handleMenuOptionsClick(
     selectedOption: "suspendCustomer" | "setEmployee" | "removeSuspension",
@@ -54,7 +65,7 @@ export default function CustomerProfilesPage() {
         setOpenSuspendCustomerDialog(true);
         break;
       case "removeSuspension":
-        setOpenRemoveSuspensionDialog(true);
+        handleRemovingCustomerFlag(customerId);
         break;
       case "setEmployee":
         setOpenSetEmployeeDialog(true);

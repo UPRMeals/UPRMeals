@@ -109,9 +109,9 @@ const StaffMenu = ({
   const [openEditComboDialog, setOpenEditComboDialog] =
     useState<boolean>(false);
   const [editCombo, setEditCombo] = useState<Combo>();
-  const [openEditMenuDialog, setOpenEditMenuDialog] = useState<boolean>();
+  const [openEditMenuDialog, setOpenEditMenuDialog] = useState<boolean>(false);
   const [openActivateMenuDialog, setOpenActivateMenuDialog] =
-    useState<boolean>();
+    useState<boolean>(false);
 
   return (
     <Box
@@ -275,6 +275,27 @@ const StaffMenu = ({
         menuProteins={menu.proteins}
         menuSides={menu.sides}
       />
+      <HandleMenuDialog
+        open={openEditMenuDialog}
+        handleClose={async () => {
+          refreshMenu();
+          setOpenEditMenuDialog(false);
+        }}
+        existingMenu={{
+          id: menu?.id,
+          name: menu?.name,
+          description: menu?.description,
+          date: menu?.date,
+        }}
+      />
+      <ActivateMenuDialog
+        open={openActivateMenuDialog}
+        handleClose={async () => {
+          refreshMenu();
+          setOpenActivateMenuDialog(false);
+        }}
+        menuId={menu.id}
+      />
       {editItem ? (
         <HandleItemDialog
           open={openEditItemDialog}
@@ -300,35 +321,6 @@ const StaffMenu = ({
           menuSides={menu.sides}
           menuId={menu?.id}
           existingCombo={editCombo}
-        />
-      ) : (
-        <></>
-      )}
-      {openEditMenuDialog ? (
-        <HandleMenuDialog
-          open={openEditMenuDialog}
-          handleClose={async () => {
-            refreshMenu();
-            setOpenEditMenuDialog(false);
-          }}
-          existingMenu={{
-            id: menu?.id,
-            name: menu?.name,
-            description: menu?.description,
-            date: menu?.date,
-          }}
-        />
-      ) : (
-        <></>
-      )}
-      {openActivateMenuDialog ? (
-        <ActivateMenuDialog
-          open={openActivateMenuDialog}
-          handleClose={async () => {
-            refreshMenu();
-            setOpenActivateMenuDialog(false);
-          }}
-          menuId={menu.id}
         />
       ) : (
         <></>

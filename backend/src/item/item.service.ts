@@ -53,7 +53,7 @@ export class ItemService {
         data.type === ItemType.PROTEIN
           ? comboData.proteinCount
           : comboData.sideCount;
-      console.log(comboData.name, filteredComboItems.length, filterByCount);
+
       if (filteredComboItems.length - 1 < filterByCount) {
         error = 'No se puede remover un articulo que pertence al menu.';
       }

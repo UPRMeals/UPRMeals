@@ -61,6 +61,13 @@ export const useUserService = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
 
+  const unflagCustomer = async (userId: number): Promise<UserProfile> =>
+    baseApi({
+      url: `${userControllerBase}/customer/${userId}/unflag`,
+      method: "POST",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+
   return {
     getProfile,
     getProfileById,
@@ -70,5 +77,6 @@ export const useUserService = () => {
     setEmployee,
     removeEmployee,
     flagCustomer,
+    unflagCustomer,
   };
 };

@@ -135,4 +135,13 @@ export class UserService {
 
     return employeeProfile;
   }
+
+  async unflagUser(userId: number): Promise<UserProfile> {
+    const employeeProfile = await this.prismaService.user.update({
+      where: { id: userId, removed: false },
+      data: { isFlagged: false },
+    });
+
+    return employeeProfile;
+  }
 }

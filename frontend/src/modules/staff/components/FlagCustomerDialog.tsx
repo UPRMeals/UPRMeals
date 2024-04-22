@@ -16,7 +16,7 @@ export default function FlagCustomerDialog({
   async function handleSubmit() {
     const user = await flagCustomer(userId);
 
-    if (user.id && user.isStaff) {
+    if (user.id && user.isFlagged) {
       toast.success("Cliente suspendido.");
     }
 
