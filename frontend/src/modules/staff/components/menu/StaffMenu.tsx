@@ -154,20 +154,21 @@ const StaffMenu = ({
         ) : (
           <></>
         )}
-
-        <Box>
-          <Link
-            onClick={() => {
-              setOpenActivateMenuDialog(true);
-            }}
-            sx={{
-              fontWeight: 600,
-              ":hover": { cursor: "pointer" },
-            }}
-          >
-            Activar Menú
-          </Link>
-        </Box>
+        {!menu.isActive && (
+          <Box>
+            <Link
+              onClick={() => {
+                setOpenActivateMenuDialog(true);
+              }}
+              sx={{
+                fontWeight: 600,
+                ":hover": { cursor: "pointer" },
+              }}
+            >
+              Activar Menú
+            </Link>
+          </Box>
+        )}
       </Stack>
 
       <MenuSection

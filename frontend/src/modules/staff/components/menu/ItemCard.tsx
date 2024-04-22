@@ -27,7 +27,7 @@ export const ItemCard = ({
   const { deleteItem } = useItemService();
 
   async function handleDelete() {
-    if (isEditable) return;
+    if (!isEditable) return;
 
     const res = await deleteItem(item);
     if ("id" in res && res.id) {
