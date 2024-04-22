@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { Item, ItemType } from '@prisma/client';
-import { ComboService } from 'src/combo/combo.service';
-import { MenuService } from 'src/menu/menu.service';
+import { ComboService } from '../combo/combo.service';
+import { MenuService } from '../menu/menu.service';
 import { PrismaService } from '../database/prisma.service';
 import { CreateMenuItem } from './item.dto';
 
