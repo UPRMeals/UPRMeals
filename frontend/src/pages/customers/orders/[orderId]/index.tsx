@@ -16,6 +16,7 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import { SimplifiedOrder } from "../../../../../../backend/src/order/order.dto";
 import { Item } from "../../../../../../backend/src/menu/menu.dto";
+import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
 
 const StatusOptions = {
   Pending: {
@@ -91,75 +92,97 @@ const OrderStatusPage = () => {
           </Stack>
           <Divider />
           <Stack direction={isMobile ? "column" : "row"}>
-            <Box my={2} width={isMobile ? "100%" : "50%"}>
-              <Typography variant="h6" fontWeight={600} mb={1}>
+            <Box width={isMobile ? "100%" : "50%"} p={2}>
+              <Typography variant="h5" fontWeight={600} mb={1}>
                 Order Status
               </Typography>
-              {ORDER_STATUS_LIST.map((status, index: number) => {
-                const isCurrentStatus =
-                  index <= ORDER_STATUS_LIST.indexOf(OrderStatus[order.status]);
-                return (
-                  <Stack
-                    key={index}
-                    direction="row"
-                    alignItems="start"
-                    gap={1}
-                    ml={1}
-                  >
-                    <Stack
-                      direction="column"
-                      justifyContent="center"
-                      alignItems="center"
-                    >
-                      {StatusOptions[status].icon({
-                        sx: {
-                          color: isCurrentStatus ? Colors.Teal : "lightgray",
-                        },
-                      })}
-                      {index !== ORDER_STATUS_LIST.length - 1 && (
-                        <Divider
-                          sx={{
-                            height: "8vh",
-                            borderWidth: 1,
-                            my: 1,
-                            backgroundColor: isCurrentStatus
-                              ? Colors.Teal
-                              : "lightgray",
-                          }}
-                          orientation="vertical"
-                        />
-                      )}
-                    </Stack>
-                    <Stack
-                      direction="column"
-                      justifyContent="center"
-                      alignItems="start"
-                    >
-                      <Typography
-                        variant="body1"
-                        fontWeight={600}
-                        color={isCurrentStatus ? Colors.Charcoal : "lightgray"}
-                        mb={1}
-                      >
-                        {status}
-                      </Typography>
-                      <Typography
-                        variant="caption"
-                        color={isCurrentStatus ? Colors.Charcoal : "lightgray"}
-                      >
-                        {StatusOptions[status].text}
-                      </Typography>
-                    </Stack>
+              {order.status === "REJECTED" ? (
+                <Stack>
+                  <Stack direction="row" gap={1} alignItems="center">
+                    <Typography color={Colors.Red} gap={1}>
+                      Your order has been rejected!
+                    </Typography>
+                    <SentimentVeryDissatisfiedIcon />
                   </Stack>
-                );
-              })}
+                  <Typography variant="caption">
+                    We are very sorry to hear this. Please contact the cafeteria
+                    for more details.
+                  </Typography>
+                </Stack>
+              ) : (
+                ORDER_STATUS_LIST.map((status, index: number) => {
+                  const isCurrentStatus =
+                    index <=
+                    ORDER_STATUS_LIST.indexOf(
+                      OrderStatus[order.status as keyof typeof OrderStatus]
+                    );
+                  return (
+                    <Stack
+                      key={index}
+                      direction="row"
+                      alignItems="start"
+                      gap={1}
+                      ml={1}
+                    >
+                      <Stack
+                        direction="column"
+                        justifyContent="center"
+                        alignItems="center"
+                      >
+                        {StatusOptions[status].icon({
+                          sx: {
+                            color: isCurrentStatus ? Colors.Teal : "lightgray",
+                          },
+                        })}
+                        {index !== ORDER_STATUS_LIST.length - 1 && (
+                          <Divider
+                            sx={{
+                              height: "8vh",
+                              borderWidth: 1,
+                              my: 1,
+                              backgroundColor: isCurrentStatus
+                                ? Colors.Teal
+                                : "lightgray",
+                            }}
+                            orientation="vertical"
+                          />
+                        )}
+                      </Stack>
+                      <Stack
+                        direction="column"
+                        justifyContent="center"
+                        alignItems="start"
+                      >
+                        <Typography
+                          variant="body1"
+                          fontWeight={600}
+                          color={
+                            isCurrentStatus ? Colors.Charcoal : "lightgray"
+                          }
+                          mb={1}
+                        >
+                          {status}
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          color={
+                            isCurrentStatus ? Colors.Charcoal : "lightgray"
+                          }
+                        >
+                          {StatusOptions[status].text}
+                        </Typography>
+                      </Stack>
+                    </Stack>
+                  );
+                })
+              )}
             </Box>
             <Divider
               orientation={isMobile ? "horizontal" : "vertical"}
               sx={{ mt: 1 }}
             />
             <Box width={isMobile ? "100%" : "50%"} p={2}>
-              <Typography variant="h6" fontWeight={600}>
+              <Typography variant="h5" fontWeight={600} mb={1}>
                 Order Details
               </Typography>
               <Stack>

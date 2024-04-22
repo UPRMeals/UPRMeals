@@ -1,5 +1,5 @@
 import { useOrderService } from "@/shared/hooks/useOrderService";
-import theme from "@/styles/theme";
+import theme, { Colors } from "@/styles/theme";
 import {
   Box,
   Card,
@@ -19,9 +19,10 @@ import { SimplifiedOrder } from "../../../../../backend/src/order/order.dto";
 
 const StatusColors = {
   PENDING: indigo[500],
-  IN_PROGRESS: "",
-  COMPLETED: "",
-  DELIVERED: lightGreen[500],
+  IN_PROGRESS: Colors.OrangeSunset,
+  COMPLETED: lightGreen[500],
+  DELIVERED: Colors.Teal,
+  REJECTED: Colors.Red,
 };
 
 enum OrderStatus {
@@ -29,6 +30,7 @@ enum OrderStatus {
   IN_PROGRESS = "In Progress",
   COMPLETED = "Completed",
   DELIVERED = "Delivered",
+  REJECTED = "Rejected",
 }
 
 const ORDER_STATUS_LIST = Object.values(OrderStatus);
@@ -101,7 +103,7 @@ const OrdersPage = () => {
                             order.status as keyof typeof StatusColors
                           ],
                       }}
-                      label={order.status}
+                      label={OrderStatus[order.status]}
                     />
                   </Stack>
                   <Typography variant="h6" fontWeight={600}>

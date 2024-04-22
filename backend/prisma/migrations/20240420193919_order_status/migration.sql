@@ -5,7 +5,7 @@
 
 */
 -- CreateEnum
-CREATE TYPE "OrderStatusType" AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'DELIVERED');
+CREATE TYPE "OrderStatusType" AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'DELIVERED', 'REJECTED');
 
 -- AlterTable
 ALTER TABLE "Order" DROP COLUMN "status",
