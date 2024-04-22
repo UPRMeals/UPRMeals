@@ -44,10 +44,7 @@ const OrderList: React.FC<Props> = ({
             >
               {status}
             </Typography>
-            <Divider
-              variant="middle"
-              sx={{ mb: 2, boxShadow: "0px 2px 4px rgba(0,0,0,0.1)" }}
-            />
+
             <Grid container spacing={2}>
               {orders
                 .filter(

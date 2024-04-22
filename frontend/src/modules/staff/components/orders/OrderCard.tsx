@@ -21,6 +21,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import CloseIcon from "@mui/icons-material/Close";
 import { Order, OrderStatus, statusColors } from "./types";
+import { blueGrey } from "@mui/material/colors";
 
 type Props = {
   order: Order;
@@ -41,7 +42,15 @@ const OrderCard: React.FC<Props> = ({
   handleRemoveOrder,
 }) => {
   return (
-    <Card variant="outlined" sx={{ m: 1, boxShadow: 3, overflow: "visible" }}>
+    <Card
+      variant="outlined"
+      sx={{
+        m: 1,
+        boxShadow: "1px 2px 7px 1px " + blueGrey[100] + "99",
+        overflow: "visible",
+      }}
+    >
+      {" "}
       <CardContent>
         <Box
           display="flex"
@@ -72,7 +81,6 @@ const OrderCard: React.FC<Props> = ({
           />
         </Box>
       </CardContent>
-
       <CardActions>
         <FormControl fullWidth sx={{ m: 1 }}>
           <Select

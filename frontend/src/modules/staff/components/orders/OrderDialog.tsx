@@ -1,47 +1,28 @@
-import React from "react";
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Button,
-} from "@mui/material";
+import BaseDialog from "../../../../shared/components/baseDialog";
 
-interface OrderDialogProps {
-  open: boolean;
-  handleCloseDialog: () => void;
-  confirmRemoveOrReject: () => void;
-}
-
-const OrderDialog: React.FC<OrderDialogProps> = ({
+export default function OrderDialog({
   open,
   handleCloseDialog,
   confirmRemoveOrReject,
-}) => {
-  return (
-    <Dialog
-      open={open}
-      onClose={handleCloseDialog}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">{"Confirm Action"}</DialogTitle>
-      <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          Are you sure you want to reject this order?
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleCloseDialog} color="primary">
-          Cancel
-        </Button>
-        <Button onClick={confirmRemoveOrReject} color="primary" autoFocus>
-          Confirm
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
+}: {
+  open: boolean;
+  handleCloseDialog: () => void;
+  confirmRemoveOrReject: () => void;
+}) {
+  const dialogTitle = "Confirmar eliminación";
+  const dialogContent = "Estas seguro de que deseas eliminar este pedido?";
 
-export default OrderDialog;
+  return (
+    <BaseDialog
+      open={open}
+      handleClose={handleCloseDialog}
+      handleSubmit={confirmRemoveOrReject}
+      dialogTitle={dialogTitle}
+      dialogContent={dialogContent}
+      buttonDetails={{
+        primary: { text: "No", position: "left" },
+        secondary: { text: "Sí" },
+      }}
+    />
+  );
+}

@@ -16,6 +16,7 @@ import {
 import { SelectChangeEvent } from "@mui/material";
 import OrderList from "../../../modules/staff/components/orders/OrderList";
 import { useOrderService } from "@/shared/hooks/useOrderService";
+import OrderDialog from "@/modules/staff/components/orders/OrderDialog";
 
 const StaffOrdersPage: React.FC = () => {
   const { getTodaysOrders, updateOrderStatus } = useOrderService();
@@ -104,27 +105,13 @@ const StaffOrdersPage: React.FC = () => {
         handleRemoveOrder={handleRemoveOrder}
         handleExpandClick={handleExpandClick}
       />
-      <Dialog
+      <OrderDialog
         open={openDialog}
-        onClose={handleCloseDialog}
+        handleCloseDialog={handleCloseDialog}
+        confirmRemoveOrReject={confirmRemoveOrReject}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"Confirm Action"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Are you sure you want to reject this order?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={confirmRemoveOrReject} color="primary" autoFocus>
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
+      />
     </Container>
   );
 };
