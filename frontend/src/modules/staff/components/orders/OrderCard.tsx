@@ -50,7 +50,6 @@ const OrderCard: React.FC<Props> = ({
         overflow: "visible",
       }}
     >
-      {" "}
       <CardContent>
         <Box
           display="flex"
