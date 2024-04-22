@@ -29,21 +29,6 @@ export class OrderController {
     return order;
   }
 
-  @Get('')
-  async getAllOrdersForCustomers(@Req() req): Promise<SimplifiedOrder[]> {
-    const orders = await this.orderService.getAllOrdersForUser(req.user.userId);
-    return orders;
-  }
-
-  @Get(':orderId')
-  async getOrder(
-    @Req() req,
-    @Param('orderId', ParseIntPipe) orderId: number,
-  ): Promise<SimplifiedOrder> {
-    const order = await this.orderService.getOrderById(orderId);
-    return order;
-  }
-
   @Get('today')
   async getTodaysOrders() {
     const orders = await this.orderService.getTodaysOrders();
