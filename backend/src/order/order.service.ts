@@ -87,7 +87,7 @@ export class OrderService {
   }
 
   async getOrderById(orderId: number) {
-    if (!orderId) throw new Error('Method not implemented.');
+    if (!orderId) throw new Error('Order not found.');
     const order = await this.prismaService.order.findUnique({
       where: {
         id: orderId,
