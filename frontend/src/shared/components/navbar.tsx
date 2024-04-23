@@ -34,6 +34,7 @@ type NavItemProps = {
 
 const customerNavBarItems: NavItemProps[] = [
   { text: "Menu", href: "/customers/menu", requiresAuthentication: false },
+  { text: "Orders", href: "/customers/orders", requiresAuthentication: true },
 ];
 
 const staffNavBarItems: NavItemProps[] = [
@@ -158,7 +159,7 @@ const Navbar: NextPageWithLayout<{
             </Link>
           </Box>
           <Box>
-            {authenticated ? (
+            {authenticated && !isStaffPage ? (
               <IconButton
                 onClick={() => router.push("/customers/cart")}
                 sx={{ display: { sm: "none" } }}
@@ -200,7 +201,7 @@ const Navbar: NextPageWithLayout<{
                   />
                 ) : null
               )}
-              {authenticated ? (
+              {authenticated && !isStaffPage ? (
                 <IconButton
                   onClick={() => router.push("/customers/cart")}
                   sx={{ ml: 4, ":hover": { backgroundColor: "transparent" } }}
