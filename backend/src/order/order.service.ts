@@ -5,13 +5,15 @@ import {
   PrismaFindOrderResponse,
   SimplifiedOrder,
 } from './order.dto';
-import { Item, ItemType } from '@prisma/client';
+import { Item, ItemType, OrderStatusType } from '@prisma/client';
+import { endOfDay, startOfDay } from 'date-fns';
 
 @Injectable()
 export class OrderService {
   constructor(private prismaService: PrismaService) {}
 
   async createOrder(userId: number, data: CreateOrderData): Promise<any> {
+    if (!userId) throw new Error('User not found');
     if (!userId) throw new Error('User not found');
     const orderItems = data.items.flatMap((item) => ({
       item: {
@@ -51,6 +53,60 @@ export class OrderService {
       },
     });
     return { orderId: order.id };
+  }
+
+  async updateOrderStatus(orderId: number, newStatus: OrderStatusType) {
+    const order = await this.prismaService.order.update({
+      where: {
+        id: orderId,
+      },
+      data: {
+        status: newStatus,
+      },
+    });
+    return order;
+  }
+
+  async getTodaysOrders(): Promise<any[]> {
+    // Return type as any[] for simplicity
+    const todayStart = startOfDay(new Date());
+    const todayEnd = endOfDay(new Date());
+
+    const ordersResponse = await this.prismaService.order.findMany({
+      where: {
+        createdAt: {
+          gte: todayStart,
+          lte: todayEnd,
+        },
+        removed: false,
+      },
+      include: {
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            username: true,
+          },
+        },
+        orderItems: {
+          include: {
+            item: true,
+          },
+        },
+        orderCombos: {
+          include: {
+            combo: true,
+            orderComboItems: {
+              include: {
+                item: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return ordersResponse; // Directly return the fetched data
   }
 
   async getAllOrdersForUser(userId: number): Promise<any> {
