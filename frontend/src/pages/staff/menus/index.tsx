@@ -120,7 +120,7 @@ export default function MenusPage() {
           <TableCell>
             <ButtonBase
               onClick={() => {
-                router.push(`menus/${menu.id}`); //TODO
+                router.push(`menus/${menu.id}`);
               }}
               sx={{
                 fontWeight: 700,

@@ -45,7 +45,7 @@ export default function CustomerProfilesPage() {
 
   async function handleRemovingCustomerFlag(customerId: number) {
     if (!customerId) {
-      toast.error("Error ocurrido.");
+      toast.error("No se pudo levantar la suspensión.");
       return;
     }
     const unflaggedUser = await unflagCustomer(customerId);
