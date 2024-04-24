@@ -8,16 +8,29 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { DropdownMenuOptionType } from "../../../../shared/components/DropdownMenu";
 import WarningIcon from "@mui/icons-material/Warning";
 import SetEmployeeDialog from "@/modules/staff/components/SetEmployeeDialog";
+import toast from "react-hot-toast";
+import FlagCustomerDialog from "@/modules/staff/components/FlagCustomerDialog";
 
 export default function ClientProfilePage() {
   const router = useRouter();
-  const { getProfileById } = useUserService();
-  const [userProfile, setUserProfile] = useState<UserProfile>();
+  const { getProfileById, unflagCustomer } = useUserService();
+  const [userProfile, setUserProfile] = useState<UserProfile | null>();
   const [openSuspendCustomerDialog, setOpenSuspendCustomerDialog] =
     useState(false);
-  const [openRemoveSuspensionDialog, setOpenRemoveSuspensionDialog] =
-    useState(false);
+
   const [openSetEmployeeDialog, setOpenSetEmployeeDialog] = useState(false);
+
+  async function handleRemovingCustomerFlag() {
+    if (!userProfile?.id) {
+      toast.error("No se pudo levantar la suspensión.");
+      return;
+    }
+    const unflaggedUser = await unflagCustomer(userProfile.id);
+    setUserProfile(null);
+    if (unflaggedUser.id && !unflaggedUser.isFlagged) {
+      toast.success("Suspensión removida exitosamente.");
+    }
+  }
 
   const dropdownMenuOptions: DropdownMenuOptionType[] = [
     {
@@ -29,7 +42,7 @@ export default function ClientProfilePage() {
   if (userProfile?.isFlagged) {
     dropdownMenuOptions.push({
       title: "Remover Suspensión",
-      onClick: () => setOpenRemoveSuspensionDialog(true),
+      onClick: () => handleRemovingCustomerFlag(),
       color: "error.main",
     });
   } else if (!userProfile?.isFlagged) {
@@ -51,7 +64,7 @@ export default function ClientProfilePage() {
     if (!userProfile) {
       getUserProfile();
     }
-  }, [getProfileById]);
+  }, [getProfileById, userProfile]);
 
   return (
     <Box
@@ -98,6 +111,14 @@ export default function ClientProfilePage() {
             }}
             userId={userProfile.id}
             rerouteLink={"/staff/employees"}
+          />
+          <FlagCustomerDialog
+            open={openSuspendCustomerDialog}
+            handleClose={async () => {
+              setUserProfile(null);
+              setOpenSuspendCustomerDialog(false);
+            }}
+            userId={userProfile.id}
           />
         </>
       ) : null}

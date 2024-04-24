@@ -1,10 +1,12 @@
-import { Item as PrismaItem } from '@prisma/client';
+import { Item } from '../item/item.dto';
 
 export interface CreateMenuData {
   description?: string | null;
   name: string;
   date: Date;
 }
+
+export interface UpdateMenuInput extends CreateMenuData {}
 
 export interface MenuResponse {
   id: number;
@@ -25,33 +27,19 @@ export interface GetAllMenusResponse {
   isActive: boolean;
   items: Item[];
   combos: Combo[];
-}
-
-export interface CreateMenuItemData {
-  price: number;
-  description: string;
-  name: string;
-  type: string; // This should be an enum
-}
-
-export interface CreateMenuItemResponse {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  type: string;
-  status: string;
-  removed: boolean;
-  menuId: number;
+  canBeEdited: boolean;
 }
 
 export interface Menu {
   id: number;
   name: string;
   date: Date;
+  isActive: boolean;
+  description: string;
   proteins: Item[];
   sides: Item[];
   combos: Combo[];
+  canBeEdited: boolean;
 }
 
 export interface Combo {
@@ -65,4 +53,7 @@ export interface Combo {
   sides: Item[];
 }
 
-export interface Item extends PrismaItem {}
+export interface GetMenuWithItemsInput {
+  id?: number;
+  isActive: boolean;
+}

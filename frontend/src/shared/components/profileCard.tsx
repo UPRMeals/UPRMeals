@@ -80,17 +80,20 @@ function getUserRole(user: UserProfile): UserRoles {
 const ProfileCard = ({
   user,
   dropdownOptions,
+  isStaffProfile = false,
 }: {
   user: UserProfile;
   dropdownOptions?: DropdownMenuOptionType[];
+  isStaffProfile?: boolean;
 }) => {
   const [letterColor, setLetterColor] = useState<string>();
 
-  let profileTitle = "Profile";
+  let profileTitle = isStaffProfile ? "Perfil" : "Profile";
   let titleColor = Colors.Teal + "bb";
 
   const isStaffPortal = window.location.pathname.includes("staff");
-  if (isStaffPortal) {
+
+  if (isStaffPortal && !isStaffProfile) {
     const userRole = getUserRole(user);
     profileTitle = userRole;
     titleColor = titleColors[userRole].color;

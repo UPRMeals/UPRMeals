@@ -93,7 +93,6 @@ model OrderComboItem {
 model Item {
   id              Int           @default(autoincrement()) @id
   name            String
-  description     String?
   price           Float
   type            ItemType      
   status          String        @default("available")
@@ -115,6 +114,7 @@ model Menu {
   isActive        Boolean       @default(false)
   items           Item[]
   combos          Combo[]
+  canBeEdited  Boolean       @default(true)
 }
 
 enum ItemType {

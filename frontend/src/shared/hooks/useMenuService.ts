@@ -4,6 +4,7 @@ import {
   CreateMenuData,
   MenuResponse,
   GetAllMenusResponse,
+  UpdateMenuInput,
 } from "../../../../backend/src/menu/menu.dto";
 
 export const useMenuService = () => {
@@ -18,7 +19,7 @@ export const useMenuService = () => {
       data,
     });
 
-  const getMenu = async (menuId: number): Promise<MenuResponse> =>
+  const getMenu = async (menuId: number): Promise<Menu> =>
     baseApi({
       url: `${menuControllerBase}/${menuId}/menu`,
       method: "GET",
@@ -53,6 +54,17 @@ export const useMenuService = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
 
+  const updateMenu = async (
+    menuId: number,
+    data: UpdateMenuInput
+  ): Promise<MenuResponse> =>
+    baseApi({
+      url: `${menuControllerBase}/${menuId}/update`,
+      method: "POST",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      data,
+    });
+
   return {
     createMenu,
     getMenu,
@@ -60,5 +72,6 @@ export const useMenuService = () => {
     deleteMenu,
     getActiveMenu,
     activateMenu,
+    updateMenu,
   };
 };

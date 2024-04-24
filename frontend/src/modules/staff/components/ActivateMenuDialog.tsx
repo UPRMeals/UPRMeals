@@ -29,7 +29,7 @@ export default function ActivateMenuDialog({
       handleClose={handleClose}
       handleSubmit={handleSubmit}
       dialogTitle="¿Activar menu?"
-      dialogContent={`¿Estás seguro de que deseas activar este menú? Se desactivara el menu actual.`}
+      dialogContent={`¿Estás seguro de que deseas activar este menú? Se desactivara el menu actual. Luego de activar este menú, no se podra editar.`}
       buttonDetails={{
         primary: { text: "Sí", position: "right" },
         secondary: { text: "No" },
