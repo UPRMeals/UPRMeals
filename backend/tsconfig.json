@@ -15,7 +15,9 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "module": "commonJS",
-    "target": "ES2021"
+    "lib": ["esnext"],
+    "module": "CommonJS",
+    "target": "esnext",
+    "moduleResolution": "node"
   }
 }
