@@ -75,7 +75,11 @@ const OrderCard: React.FC<Props> = ({
           </Typography>
           <Chip
             label={order.status}
-            color={statusColors[order.status]}
+            sx={{
+              bgcolor: statusColors[order.status],
+              color: (theme) =>
+                theme.palette.getContrastText(statusColors[order.status]),
+            }}
             size="small"
           />
         </Box>
@@ -110,10 +114,7 @@ const OrderCard: React.FC<Props> = ({
           <List dense sx={{ pl: 2 }}>
             {order.orderItems.map((orderItem, index) => (
               <ListItem key={index}>
-                <ListItemText
-                  primary={orderItem.item.name}
-                  //secondary={`Quantity: ... (however you calculate quantity)`}
-                />
+                <ListItemText primary={orderItem.item.name} />
               </ListItem>
             ))}
           </List>

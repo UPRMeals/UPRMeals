@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { SimplifiedOrder } from "../../../../../backend/src/order/order.dto";
 
-const StatusColors = {
+export const StatusColors = {
   PENDING: indigo[500],
   IN_PROGRESS: Colors.OrangeSunset,
   COMPLETED: lightGreen[500],

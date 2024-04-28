@@ -14,7 +14,6 @@ export class OrderService {
 
   async createOrder(userId: number, data: CreateOrderData): Promise<any> {
     if (!userId) throw new Error('User not found');
-    if (!userId) throw new Error('User not found');
     const orderItems = data.items.flatMap((item) => ({
       item: {
         connect: {

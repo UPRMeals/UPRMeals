@@ -1,4 +1,3 @@
-import { Colors } from "@/styles/theme";
 import { Box, Button, Typography, Stack, ButtonGroup } from "@mui/material";
 import Image from "next/legacy/image";
 import { useRouter } from "next/router";
