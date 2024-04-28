@@ -13,6 +13,7 @@ import { ComboModule } from './combo/combo.module';
 import { OrderModule } from './order/order.module';
 import { OrderController } from './order/order.controller';
 import { ItemController } from './item/item.controller';
+import { ComboController } from './combo/combo.controller';
 
 @Module({
   imports: [
@@ -30,10 +31,10 @@ import { ItemController } from './item/item.controller';
     AppController,
     AuthController,
     UserController,
-    MenuController,
     OrderController,
     ItemController,
     MenuController,
+    ComboController,
   ],
   providers: [AppService],
 })
