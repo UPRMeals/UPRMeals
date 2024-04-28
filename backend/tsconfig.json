@@ -7,7 +7,6 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
@@ -15,9 +14,7 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "lib": ["esnext"],
-    "module": "CommonJS",
-    "target": "esnext",
-    "moduleResolution": "node"
+    "module": "commonJS",
+    "target": "ES2021"
   }
 }
