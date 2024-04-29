@@ -17,7 +17,7 @@ import OutdoorGrillOutlinedIcon from "@mui/icons-material/OutdoorGrillOutlined";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import { SimplifiedOrder } from "../../../../../../backend/src/order/order.dto";
-import { Item } from "../../../../../../backend/src/menu/menu.dto";
+import { Item } from "../../../../../../backend/src/item/item.dto";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
 
 const StatusOptions = {

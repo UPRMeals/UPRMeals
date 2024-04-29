@@ -1,5 +1,6 @@
 import BaseDialog from "@/shared/components/baseDialog";
-import { Combo, Item } from "../../../../../../backend/src/menu/menu.dto";
+import { Combo } from "../../../../../../backend/src/menu/menu.dto";
+import { Item } from "../../../../../../backend/src/item/item.dto";
 import {
   Card,
   Checkbox,

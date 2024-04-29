@@ -1,9 +1,18 @@
-import { Body, Controller, Get, Param, Post, Request } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Request,
+} from '@nestjs/common';
 import {
   CreateMenuData,
   MenuResponse,
   GetAllMenusResponse,
   Menu,
+  UpdateMenuInput,
 } from './menu.dto';
 import { MenuService } from './menu.service';
 import { StaffOnly } from '../auth/decorators/isStaff.decorator';
@@ -24,8 +33,8 @@ export class MenuController {
   @Get(':menuId/menu')
   async getMenu(
     @Request() req,
-    @Param('menuId') menuId: number,
-  ): Promise<MenuResponse> {
+    @Param('menuId', ParseIntPipe) menuId: number,
+  ): Promise<Menu> {
     const menu = await this.menuService.getMenuById(menuId);
 
     return menu;
@@ -64,5 +73,15 @@ export class MenuController {
   @Get('active-menu')
   async getActiveMenu(): Promise<Menu> {
     return await this.menuService.getActiveMenu();
+  }
+
+  @StaffOnly()
+  @Post(':menuId/update')
+  async updateMenu(
+    @Param('menuId', ParseIntPipe) menuId: number,
+    @Body() data: UpdateMenuInput,
+  ): Promise<MenuResponse> {
+    const menu = await this.menuService.updateMenu(menuId, data);
+    return menu;
   }
 }

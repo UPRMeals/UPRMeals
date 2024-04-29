@@ -29,7 +29,7 @@ import {
 import { NextPageWithLayout } from "@/pages/_app";
 import theme, { Colors } from "@/styles/theme";
 import EditButtons from "@/shared/components/ItemAdder";
-import { Item } from "../../../../../backend/src/menu/menu.dto";
+import { Item } from "../../../../../backend/src/item/item.dto";
 
 const MyCartPage: NextPageWithLayout = () => {
   const router = useRouter();

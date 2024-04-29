@@ -6,7 +6,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Item } from "../../../../../../backend/src/menu/menu.dto";
+import { Item } from "../../../../../../backend/src/item/item.dto";
 import AddIcon from "@mui/icons-material/Add";
 
 import { Colors } from "@/styles/theme";

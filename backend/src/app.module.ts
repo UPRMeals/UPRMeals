@@ -8,8 +8,12 @@ import { UserModule } from './user/user.module';
 import { UserController } from './user/user.controller';
 import { MenuModule } from './menu/menu.module';
 import { MenuController } from './menu/menu.controller';
+import { ItemModule } from './item/item.module';
+import { ComboModule } from './combo/combo.module';
 import { OrderModule } from './order/order.module';
 import { OrderController } from './order/order.controller';
+import { ItemController } from './item/item.controller';
+import { ComboController } from './combo/combo.controller';
 
 @Module({
   imports: [
@@ -19,14 +23,18 @@ import { OrderController } from './order/order.controller';
     AuthModule,
     UserModule,
     MenuModule,
+    ItemModule,
+    ComboModule,
     OrderModule,
   ],
   controllers: [
     AppController,
     AuthController,
     UserController,
-    MenuController,
     OrderController,
+    ItemController,
+    MenuController,
+    ComboController,
   ],
   providers: [AppService],
 })

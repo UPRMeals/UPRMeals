@@ -1,7 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ItemType, Prisma } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
-import { Menu, MenuResponse, GetAllMenusResponse } from './menu.dto';
+import {
+  Menu,
+  MenuResponse,
+  GetAllMenusResponse,
+  UpdateMenuInput,
+} from './menu.dto';
 
 @Injectable()
 export class MenuService {
@@ -9,13 +18,6 @@ export class MenuService {
 
   async createMenu(data: Prisma.MenuCreateArgs): Promise<MenuResponse> {
     const menu = await this.prismaService.menu.create(data);
-    return menu;
-  }
-
-  async getMenuById(menuId: number): Promise<MenuResponse> {
-    const menu = await this.prismaService.menu.findUnique({
-      where: { id: menuId, removed: false },
-    });
     return menu;
   }
 
@@ -64,20 +66,36 @@ export class MenuService {
         isActive: menu.isActive,
         items: menu.items,
         combos: combos,
+        canBeEdited: menu.canBeEdited,
       };
     });
 
     return menus;
   }
 
+  async getMenuById(menuId: number): Promise<Menu> {
+    const menu = await this.getMenuWithItems({ id: menuId });
+    return menu;
+  }
+
   async getActiveMenu(): Promise<Menu> {
+    const activeMenu = this.getMenuWithItems({ isActive: true });
+    return activeMenu;
+  }
+
+  private async getMenuWithItems(where: Prisma.MenuWhereInput): Promise<Menu> {
     const tempMenuResponse = await this.prismaService.menu.findFirst({
-      where: { isActive: true, removed: false },
+      where: { ...where, removed: false },
       include: {
-        items: true,
+        items: { where: { removed: false } },
         combos: {
-          include: { comboItems: { include: { item: true } } },
-          orderBy: { price: 'asc' },
+          where: { removed: false },
+          include: {
+            comboItems: {
+              where: { removed: false, item: { removed: false } },
+              include: { item: true },
+            },
+          },
         },
       },
     });
@@ -114,13 +132,21 @@ export class MenuService {
       id: tempMenuResponse.id,
       name: tempMenuResponse.name,
       date: tempMenuResponse.date,
+      description: tempMenuResponse.description,
+      isActive: tempMenuResponse.isActive,
       proteins,
       sides,
       combos,
+      canBeEdited: tempMenuResponse.canBeEdited,
     };
   }
 
   async deleteMenu(menuId: number): Promise<MenuResponse> {
+    const existingMenu = await this.getMenuById(menuId);
+    if (!existingMenu.canBeEdited) {
+      throw new ForbiddenException();
+    }
+
     const menu = await this.prismaService.menu.update({
       where: { id: Number(menuId) },
       data: { removed: true },
@@ -138,7 +164,24 @@ export class MenuService {
 
     const menu = await this.prismaService.menu.update({
       where: { id: Number(menuId) },
-      data: { isActive: true },
+      data: { isActive: true, canBeEdited: false },
+    });
+
+    return menu;
+  }
+
+  async updateMenu(
+    menuId: number,
+    menuData: UpdateMenuInput,
+  ): Promise<MenuResponse> {
+    const existingMenu = await this.getMenuById(menuId);
+    if (!existingMenu.canBeEdited) {
+      throw new ForbiddenException();
+    }
+
+    const menu = await this.prismaService.menu.update({
+      where: { id: menuId },
+      data: { ...menuData },
     });
 
     return menu;
