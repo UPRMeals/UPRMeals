@@ -1,3 +1,6 @@
+import { Colors } from "@/styles/theme";
+import { indigo, lightGreen } from "@mui/material/colors";
+
 export type OrderStatus =
   | "PENDING"
   | "IN_PROGRESS"
@@ -66,13 +69,10 @@ export interface Order {
   removed: boolean;
 }
 
-export const statusColors: Record<
-  OrderStatus,
-  "default" | "primary" | "error" | "success" | "warning"
-> = {
-  PENDING: "default",
-  IN_PROGRESS: "primary",
-  COMPLETED: "error",
-  DELIVERED: "success",
-  REJECTED: "warning",
+export const statusColors: Record<OrderStatus, string> = {
+  PENDING: indigo[500],
+  IN_PROGRESS: Colors.OrangeSunset,
+  COMPLETED: lightGreen[500],
+  DELIVERED: Colors.Teal,
+  REJECTED: Colors.Red,
 };

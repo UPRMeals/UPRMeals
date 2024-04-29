@@ -12,7 +12,9 @@ import {
   useMediaQuery,
   Divider,
   Stack,
+  Tooltip,
 } from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -156,9 +158,14 @@ const MyCartPage: NextPageWithLayout = () => {
         <Typography variant={"h5"} fontWeight={500}>
           Total:
         </Typography>
-        <Typography variant={"h5"} fontWeight={500}>
-          ${totalPrice.toFixed(2)}
-        </Typography>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Typography variant="h5" fontWeight={500}>
+            ${totalPrice.toFixed(2)}
+          </Typography>
+          <Tooltip title="Tax not included. It will be calculated during payment at the site.">
+            <InfoIcon color="action" />
+          </Tooltip>
+        </Stack>
       </Stack>
       <Paper
         sx={{
