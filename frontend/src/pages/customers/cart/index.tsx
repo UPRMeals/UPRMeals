@@ -162,7 +162,7 @@ const MyCartPage: NextPageWithLayout = () => {
           <Typography variant="h5" fontWeight={500}>
             ${totalPrice.toFixed(2)}
           </Typography>
-          <Tooltip title="Tax not included. It will be calculated during payment at the site.">
+          <Tooltip title="Tax not included. It will be calculated during payment at the cafeteria.">
             <InfoIcon color="action" />
           </Tooltip>
         </Stack>

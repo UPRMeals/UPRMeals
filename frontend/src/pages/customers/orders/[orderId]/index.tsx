@@ -92,7 +92,7 @@ const OrderStatusPage = () => {
               <Typography variant="body1" fontWeight={600}>
                 Total: ${order.totalPrice.toFixed(2)}
               </Typography>
-              <Tooltip title="Tax not included. It will be calculated during payment at the site.">
+              <Tooltip title="Tax not included. It will be calculated during payment at the cafeteria.">
                 <InfoIcon color="action" />
               </Tooltip>
             </Stack>
