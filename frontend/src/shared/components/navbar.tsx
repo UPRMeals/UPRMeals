@@ -22,9 +22,8 @@ import { grey } from "@mui/material/colors";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { NextPageWithLayout } from "@/pages/_app";
 import { getCartLayout, useCartContext } from "../providers/CartProvider";
-
-// TODO: Implement functionality
-export const isFlaggedAccount = true;
+import { useUserService } from "../hooks/useUserService";
+import { UserProfile } from "../../../../backend/src/user/user.dto";
 
 type NavItemProps = {
   text: string;
@@ -77,6 +76,7 @@ const Navbar: NextPageWithLayout<{
   const router = useRouter();
   const currentPath = router.asPath;
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const [currUser, setCurrUser] = useState<UserProfile>();
   const [isStaffPage, setIsStaffPage] = useState<boolean>(false);
   const theme = useTheme();
   const largerScreen = useMediaQuery(theme.breakpoints.up("md"));
@@ -85,6 +85,18 @@ const Navbar: NextPageWithLayout<{
     : customerNavBarItems;
 
   const { cartCount } = useCartContext();
+  const { getProfile } = useUserService();
+
+  useEffect(() => {
+    const getUserProfile = async () => {
+      const user = await getProfile();
+      setCurrUser(user);
+    };
+
+    if (!currUser && authenticated) {
+      getUserProfile();
+    }
+  }, [getProfile, authenticated]);
 
   useEffect(() => {
     setIsStaffPage(window.location.pathname.includes("staff"));
@@ -228,7 +240,7 @@ const Navbar: NextPageWithLayout<{
                   }
                   sx={{ ml: 4 }}
                 >
-                  {isFlaggedAccount ? (
+                  {currUser && currUser.isFlagged ? (
                     <Badge badgeContent={1} color="error">
                       <AccountCircleIcon
                         fontSize={"large"}
