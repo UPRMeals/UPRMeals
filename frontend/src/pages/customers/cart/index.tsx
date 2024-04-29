@@ -167,48 +167,50 @@ const MyCartPage: NextPageWithLayout = () => {
           </Tooltip>
         </Stack>
       </Stack>
-      <Paper
-        sx={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: isMobile ? "15%" : "10%",
-          display: "flex",
-          flexDirection: isMobile ? "column" : "row-reverse",
-          justifyContent: "space-between",
-          alignItems: "center",
-          backgroundColor: "#fbfbff",
-          py: isMobile ? 2 : 0,
-        }}
-        elevation={3}
-      >
-        <Button
-          variant={isMobile ? "contained" : "text"}
+      {items?.length > 0 && (
+        <Paper
           sx={{
-            borderRadius: isMobile ? 4 : 0,
-            height: isMobile ? "45%" : "100%",
-            width: isMobile ? "70%" : "20%",
+            position: "fixed",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: isMobile ? "15%" : "10%",
+            display: "flex",
+            flexDirection: isMobile ? "column" : "row-reverse",
+            justifyContent: "space-between",
+            alignItems: "center",
+            backgroundColor: "#fbfbff",
+            py: isMobile ? 2 : 0,
           }}
-          endIcon={!isMobile && <DoneIcon />}
-          disabled={cartCount === 0}
-          onClick={submitOrder}
+          elevation={3}
         >
-          Place Order
-        </Button>
-        <Button
-          variant={isMobile ? "outlined" : "text"}
-          sx={{
-            borderRadius: isMobile ? 4 : 0,
-            height: isMobile ? "45%" : "100%",
-            width: isMobile ? "70%" : "20%",
-          }}
-          startIcon={!isMobile && <ArrowBackIcon />}
-          onClick={() => router.push("/customers/order")}
-        >
-          Edit Items
-        </Button>
-      </Paper>
+          <Button
+            variant={isMobile ? "contained" : "text"}
+            sx={{
+              borderRadius: isMobile ? 4 : 0,
+              height: isMobile ? "45%" : "100%",
+              width: isMobile ? "70%" : "20%",
+            }}
+            endIcon={!isMobile && <DoneIcon />}
+            disabled={cartCount === 0}
+            onClick={submitOrder}
+          >
+            Place Order
+          </Button>
+          <Button
+            variant={isMobile ? "outlined" : "text"}
+            sx={{
+              borderRadius: isMobile ? 4 : 0,
+              height: isMobile ? "45%" : "100%",
+              width: isMobile ? "70%" : "20%",
+            }}
+            startIcon={!isMobile && <ArrowBackIcon />}
+            onClick={() => router.push("/customers/order")}
+          >
+            Edit Items
+          </Button>
+        </Paper>
+      )}
     </Box>
   );
 };
