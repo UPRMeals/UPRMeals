@@ -5,9 +5,11 @@ import {
   CircularProgress,
   Divider,
   Stack,
+  Tooltip,
   Typography,
   useMediaQuery,
 } from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import AutorenewOutlinedIcon from "@mui/icons-material/AutorenewOutlined";
@@ -86,9 +88,14 @@ const OrderStatusPage = () => {
           </Typography>
           <Stack direction="row" justifyContent={"space-between"} mb={1} mx={1}>
             <Typography variant="body1">{order.createdAt}</Typography>
-            <Typography variant="body1" fontWeight={600}>
-              Total: ${order.totalPrice.toFixed(2)}
-            </Typography>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography variant="body1" fontWeight={600}>
+                Total: ${order.totalPrice.toFixed(2)}
+              </Typography>
+              <Tooltip title="Tax not included. It will be calculated during payment at the site.">
+                <InfoIcon color="action" />
+              </Tooltip>
+            </Stack>
           </Stack>
           <Divider />
           <Stack direction={isMobile ? "column" : "row"}>
