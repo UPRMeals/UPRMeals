@@ -19,6 +19,8 @@ import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutli
 import { SimplifiedOrder } from "../../../../../../backend/src/order/order.dto";
 import { Item } from "../../../../../../backend/src/item/item.dto";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
+import { NextPageWithLayout } from "@/pages/_app";
+import { getCartLayout } from "@/shared/providers/CartProvider";
 
 const StatusOptions = {
   Pending: {
@@ -48,7 +50,7 @@ enum OrderStatus {
 
 const ORDER_STATUS_LIST = Object.values(OrderStatus);
 
-const OrderStatusPage = () => {
+const OrderStatusPage: NextPageWithLayout = () => {
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -245,4 +247,5 @@ const OrderStatusPage = () => {
   );
 };
 
+OrderStatusPage.getLayout = getCartLayout;
 export default OrderStatusPage;

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import {
   CreateOrderData,
@@ -14,7 +14,14 @@ export class OrderService {
 
   async createOrder(userId: number, data: CreateOrderData): Promise<any> {
     if (!userId) throw new Error('User not found');
-    if (!userId) throw new Error('User not found');
+    const user = await this.prismaService.user.findUnique({
+      where: { id: userId, removed: false },
+    });
+    if (!user) throw new Error('User not found or has been removed.');
+
+    if (user.isFlagged)
+      throw new ForbiddenException('User is flagged and cannot place orders.');
+
     const orderItems = data.items.flatMap((item) => ({
       item: {
         connect: {

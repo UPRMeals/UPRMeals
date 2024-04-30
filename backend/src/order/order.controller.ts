@@ -15,6 +15,7 @@ import {
   SimplifiedOrder,
 } from './order.dto';
 import { OrderStatusType } from '@prisma/client';
+import { StaffOnly } from '../auth/decorators/isStaff.decorator';
 
 @Controller('order')
 export class OrderController {
@@ -35,6 +36,7 @@ export class OrderController {
     return orders;
   }
 
+  @StaffOnly()
   @Put(':orderId/status')
   async updateOrderStatus(
     @Param('orderId', ParseIntPipe) orderId: number,

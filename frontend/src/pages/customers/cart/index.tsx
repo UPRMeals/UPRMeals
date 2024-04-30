@@ -167,7 +167,7 @@ const MyCartPage: NextPageWithLayout = () => {
           </Tooltip>
         </Stack>
       </Stack>
-      {items?.length > 0 && (
+      {cartCount > 0 && (
         <Paper
           sx={{
             position: "fixed",

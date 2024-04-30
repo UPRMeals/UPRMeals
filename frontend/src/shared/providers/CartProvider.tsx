@@ -113,7 +113,8 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
       });
       formik.setValues(cartInitialValues);
       //TODO: Change this to the new order status page
-      router.push(`/customers/orders/${response.orderId}`);
+      if (response?.orderId)
+        router.push(`/customers/orders/${response.orderId}`);
     },
   });
 

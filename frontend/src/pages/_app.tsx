@@ -106,7 +106,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
               {"'"}s discretion.
             </Alert>
           )}
-          <Box sx={{ marginTop: user?.isFlagged ? 0 : 10 }}>
+          <Box sx={{ pt: user?.isFlagged ? 0 : 10 }}>
             <Component {...pageProps} />
           </Box>
         </CartProvider>

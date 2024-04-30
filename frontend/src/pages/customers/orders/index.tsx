@@ -6,7 +6,6 @@ import {
   CardActionArea,
   Chip,
   CircularProgress,
-  Divider,
   Stack,
   Typography,
   useMediaQuery,
@@ -16,6 +15,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { SimplifiedOrder } from "../../../../../backend/src/order/order.dto";
+import { NextPageWithLayout } from "@/pages/_app";
+import { getCartLayout } from "@/shared/providers/CartProvider";
 
 export const StatusColors = {
   PENDING: indigo[500],
@@ -35,7 +36,7 @@ enum OrderStatus {
 
 const ORDER_STATUS_LIST = Object.values(OrderStatus);
 
-const OrdersPage = () => {
+const OrdersPage: NextPageWithLayout = () => {
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -126,4 +127,5 @@ const OrdersPage = () => {
   );
 };
 
+OrdersPage.getLayout = getCartLayout;
 export default OrdersPage;
