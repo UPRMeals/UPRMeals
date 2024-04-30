@@ -241,12 +241,10 @@ const Navbar: NextPageWithLayout<{
                   sx={{ ml: 4 }}
                 >
                   {currUser && currUser.isFlagged ? (
-                    <Badge badgeContent="i" color="error">
-                      <AccountCircleIcon
-                        fontSize={"large"}
-                        sx={{ color: grey[400] }}
-                      />
-                    </Badge>
+                    <AccountCircleIcon
+                      fontSize={"large"}
+                      sx={{ color: grey[400] }}
+                    />
                   ) : (
                     <AccountCircleIcon
                       fontSize={"large"}
