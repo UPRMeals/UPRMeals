@@ -6,8 +6,6 @@ import {
   Stack,
   Divider,
   Avatar,
-  Tooltip,
-  IconButton,
   Grid,
   CardHeader,
 } from "@mui/material";
@@ -15,13 +13,11 @@ import {
   deepPurple,
   amber,
   cyan,
-  grey,
   blueGrey,
   lightGreen,
 } from "@mui/material/colors";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 import { useEffect, useState } from "react";
 import DropdownMenu, {
@@ -99,9 +95,6 @@ const ProfileCard = ({
     titleColor = titleColors[userRole].color;
   }
 
-  const notes =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
-
   function pickIconColor() {
     const randNumber = Math.floor(Math.random() * accountIconColors.length);
 
@@ -155,84 +148,62 @@ const ProfileCard = ({
           justifyContent={{ xs: "center", md: "start" }}
           p={{ xs: 3, md: 2 }}
         >
-          <Stack>
-            <Grid container>
-              <Grid item order={{ xs: 1, md: 1 }} xs={10} md={2.5} lg={2}>
-                <Avatar
-                  sx={{
-                    bgcolor: letterColor,
-                    width: 156,
-                    height: 156,
-                    fontSize: 120,
-                    fontFamily: "Bungee",
-                  }}
-                >
-                  {user?.firstName?.charAt(0).toUpperCase()}
-                </Avatar>
-              </Grid>
-              <Grid
-                item
-                order={{ xs: 3, md: 2 }}
-                xs={12}
-                md={6.5}
-                lg={8}
-                display="flex"
-                alignItems="center"
+          <Grid container>
+            <Grid item order={{ xs: 1, md: 1 }} xs={10} md={2.5} lg={3}>
+              <Avatar
+                sx={{
+                  bgcolor: letterColor,
+                  width: 156,
+                  height: 156,
+                  fontSize: 120,
+                  fontFamily: "Bungee",
+                }}
               >
-                <Box display="flex">
-                  <Divider
-                    flexItem
-                    orientation="vertical"
-                    sx={{ display: { xs: "none", md: "block" }, mx: 4 }}
-                  />
-
-                  <Stack gap={3} mt={{ xs: 3, md: 0 }}>
-                    <IconDetailsRow
-                      icon={<PersonIcon />}
-                      text={user.firstName + " " + user.lastName}
-                    />
-                    <IconDetailsRow icon={<EmailIcon />} text={user.email} />
-                  </Stack>
-                </Box>
-              </Grid>
-
-              <Grid
-                item
-                order={{ xs: 2, md: 3 }}
-                xs={2}
-                md={3}
-                lg={2}
-                display="flex"
-                justifyContent={"flex-end"}
-              >
-                {dropdownOptions && dropdownOptions.length !== 0 ? (
-                  <DropdownMenu menuItems={dropdownOptions} />
-                ) : (
-                  <></>
-                )}
-              </Grid>
+                {user?.firstName?.charAt(0).toUpperCase()}
+              </Avatar>
             </Grid>
-            <Divider sx={{ display: { xs: "block", md: "none" }, mt: 3 }} />
-            <Stack mt={3}>
-              <Box display="flex" flexDirection="row" alignItems={"center"}>
-                <Typography variant="h6">
-                  <b>Notes</b>
-                </Typography>
-                <Tooltip
-                  title="These notes are added to your account by the cafeteria staff or an admin user."
-                  placement="top"
-                >
-                  <IconButton>
-                    <InfoOutlinedIcon
-                      fontSize="small"
-                      sx={{ color: grey[400] }}
-                    />
-                  </IconButton>
-                </Tooltip>
+            <Grid
+              item
+              order={{ xs: 3, md: 2 }}
+              xs={12}
+              md={6.5}
+              lg={8}
+              display="flex"
+              alignItems="center"
+            >
+              <Box display="flex">
+                <Divider
+                  flexItem
+                  orientation="vertical"
+                  sx={{ display: { xs: "none", md: "block" }, mx: 8 }}
+                />
+
+                <Stack gap={3} mt={{ xs: 3, md: 0 }}>
+                  <IconDetailsRow
+                    icon={<PersonIcon />}
+                    text={user.firstName + " " + user.lastName}
+                  />
+                  <IconDetailsRow icon={<EmailIcon />} text={user.email} />
+                </Stack>
               </Box>
-              <Typography> {notes}</Typography>
-            </Stack>
-          </Stack>
+            </Grid>
+
+            <Grid
+              item
+              order={{ xs: 2, md: 3 }}
+              xs={2}
+              md={3}
+              lg={1}
+              display="flex"
+              justifyContent={"flex-end"}
+            >
+              {dropdownOptions && dropdownOptions.length !== 0 ? (
+                <DropdownMenu menuItems={dropdownOptions} />
+              ) : (
+                <></>
+              )}
+            </Grid>
+          </Grid>
         </Box>
       </CardContent>
     </Card>
