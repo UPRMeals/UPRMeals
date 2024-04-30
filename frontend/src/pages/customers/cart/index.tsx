@@ -71,7 +71,7 @@ const MyCartPage: NextPageWithLayout = () => {
 
   return (
     <Box
-      mt={14}
+      pt={4}
       width={"100vw"}
       display={"flex"}
       flexDirection={"column"}

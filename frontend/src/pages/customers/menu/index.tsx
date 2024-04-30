@@ -28,7 +28,6 @@ const MenuPage: NextPageWithLayout = () => {
 
   return (
     <Box
-      mt={10}
       mb={{ xs: 300, md: 135 }}
       height={"90vh"}
       width={"100vw"}

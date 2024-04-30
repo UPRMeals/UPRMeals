@@ -142,7 +142,7 @@ const ProfileCard = ({
           borderTopLeftRadius: 5,
           borderTopRightRadius: 5,
         }}
-      ></CardHeader>
+      />
       <CardContent
         sx={{
           backgroundColor: "whitesmoke",

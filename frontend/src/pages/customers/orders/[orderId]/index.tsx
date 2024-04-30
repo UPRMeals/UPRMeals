@@ -69,7 +69,6 @@ const OrderStatusPage = () => {
 
   return (
     <Box
-      mt={isMobile ? 10 : 14}
       width={"100vw"}
       height={"90vh"}
       display={"flex"}

@@ -8,7 +8,7 @@ const CustomerHomePage: NextPageWithLayout = () => {
   const router = useRouter();
 
   return (
-    <Box mt={9} pb={10} px={5} alignItems={"center"}>
+    <Box pb={10} px={5} alignItems={"center"}>
       <Box
         display="flex"
         flexDirection={{ xs: "column", md: "row" }}

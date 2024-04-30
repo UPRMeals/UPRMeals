@@ -11,6 +11,10 @@ import { useRouter } from "next/router";
 import { Toaster } from "react-hot-toast";
 import CartProvider from "@/shared/providers/CartProvider";
 import ErrorProvider from "../shared/providers/ErrorProvider";
+import { useUserService } from "@/shared/hooks/useUserService";
+import { UserProfile } from "../../../backend/src/user/user.dto";
+import WarningIcon from "@mui/icons-material/Warning";
+import { Alert, Box } from "@mui/material";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -33,6 +37,20 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const [hasNavbar, setHasNavbar] = useState<boolean>(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const getLayout = Component.getLayout ?? ((page) => page);
+  const [user, setUser] = useState<UserProfile>();
+
+  const { getProfile } = useUserService();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const user = await getProfile();
+      setUser(user);
+    };
+
+    if (!user) {
+      getUser();
+    }
+  }, [getProfile, user]);
 
   const isTokenValid = JWTUtils.isTokenValid;
   const isStaffUser = JWTUtils.isStaffUser;
@@ -76,7 +94,21 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       <ErrorProvider>
         <CartProvider>
           {hasNavbar && <Navbar authenticated={isAuthenticated} />}
-          <Component {...pageProps} />
+          {user && user.isFlagged && (
+            <Alert
+              icon={<WarningIcon fontSize="inherit" />}
+              severity="warning"
+              sx={{ m: 2, mt: 11 }}
+            >
+              Your account has been flagged. Please visit the cafeteria to
+              resolve this issue. You may resume acitivity upon the cafeteria
+              staff member
+              {"'"}s discretion.
+            </Alert>
+          )}
+          <Box sx={{ marginTop: user?.isFlagged ? 0 : 10 }}>
+            <Component {...pageProps} />
+          </Box>
         </CartProvider>
       </ErrorProvider>
       <Toaster
