@@ -31,7 +31,7 @@ const devConfig = {
 };
 
 const prodConfig = {
-  nestBackendUrl: "https://uprmeals-backend.vercel.app",
+  nestBackendUrl: "https://uprmeals-production.up.railway.app",
 };
 
 const getApiConfig = (node_env: string) => {
