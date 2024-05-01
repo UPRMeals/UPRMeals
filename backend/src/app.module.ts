@@ -8,6 +8,8 @@ import { MenuModule } from './menu/menu.module';
 import { ItemModule } from './item/item.module';
 import { ComboModule } from './combo/combo.module';
 import { OrderModule } from './order/order.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth/auth.guard';
 
 @Module({
   imports: [
@@ -22,6 +24,12 @@ import { OrderModule } from './order/order.module';
     OrderModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}
