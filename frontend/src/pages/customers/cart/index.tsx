@@ -30,6 +30,20 @@ import { NextPageWithLayout } from "@/pages/_app";
 import theme, { Colors } from "@/styles/theme";
 import EditButtons from "@/shared/components/ItemAdder";
 import { Item } from "../../../../../backend/src/item/item.dto";
+import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
+
+const EmptyState = () => {
+  return (
+    <Stack display="flex" alignItems={"center"} width={"100%"} pt={3}>
+      <RemoveShoppingCartIcon
+        sx={{ color: Colors.Teal + "bb", fontSize: 64 }}
+      />
+      <Typography fontWeight={600} pt={1}>
+        Your cart is empty.
+      </Typography>
+    </Stack>
+  );
+};
 
 const MyCartPage: NextPageWithLayout = () => {
   const router = useRouter();
@@ -69,6 +83,53 @@ const MyCartPage: NextPageWithLayout = () => {
     );
   };
 
+  const StickyButtons = () => {
+    return (
+      <Paper
+        sx={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: isMobile ? "15%" : "10%",
+          display: "flex",
+          flexDirection: isMobile ? "column" : "row-reverse",
+          justifyContent: "space-between",
+          alignItems: "center",
+          backgroundColor: "#fbfbff",
+          py: isMobile ? 2 : 0,
+        }}
+        elevation={3}
+      >
+        <Button
+          variant={isMobile ? "contained" : "text"}
+          sx={{
+            borderRadius: isMobile ? 4 : 0,
+            height: isMobile ? "45%" : "100%",
+            width: isMobile ? "70%" : "20%",
+          }}
+          endIcon={!isMobile && <DoneIcon />}
+          disabled={cartCount === 0}
+          onClick={submitOrder}
+        >
+          Place Order
+        </Button>
+        <Button
+          variant={isMobile ? "outlined" : "text"}
+          sx={{
+            borderRadius: isMobile ? 4 : 0,
+            height: isMobile ? "45%" : "100%",
+            width: isMobile ? "70%" : "20%",
+          }}
+          startIcon={!isMobile && <ArrowBackIcon />}
+          onClick={() => router.push("/customers/order")}
+        >
+          Edit Items
+        </Button>
+      </Paper>
+    );
+  };
+
   return (
     <Box
       pt={4}
@@ -83,9 +144,16 @@ const MyCartPage: NextPageWithLayout = () => {
         <Typography variant="h3" alignSelf={"start"} fontWeight={600} mb={1}>
           My Cart
         </Typography>
-        <Typography variant="body1" alignSelf={"start"} mb={3} fontWeight={300}>
-          Payment will be processed at the cafeteria.
-        </Typography>
+        {cartCount > 0 && (
+          <Typography
+            variant="body1"
+            alignSelf={"start"}
+            mb={3}
+            fontWeight={300}
+          >
+            Payment will be processed at the cafeteria.
+          </Typography>
+        )}
         <Divider />
         <Table aria-label="cart table" table-layout="fixed" stickyHeader>
           <TableBody>
@@ -147,69 +215,33 @@ const MyCartPage: NextPageWithLayout = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Stack
-        width="100%"
-        direction="row"
-        justifyContent="space-between"
-        sx={{ maxWidth: { xs: "95%", lg: "70%" } }}
-        px={2}
-        pt={2}
-      >
-        <Typography variant={"h5"} fontWeight={500}>
-          Total:
-        </Typography>
-        <Stack direction="row" spacing={1} alignItems="center">
-          <Typography variant="h5" fontWeight={500}>
-            ${totalPrice.toFixed(2)}
-          </Typography>
-          <Tooltip title="Tax not included. It will be calculated during payment at the cafeteria.">
-            <InfoIcon color="action" />
-          </Tooltip>
-        </Stack>
-      </Stack>
-      {cartCount > 0 && (
-        <Paper
-          sx={{
-            position: "fixed",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: isMobile ? "15%" : "10%",
-            display: "flex",
-            flexDirection: isMobile ? "column" : "row-reverse",
-            justifyContent: "space-between",
-            alignItems: "center",
-            backgroundColor: "#fbfbff",
-            py: isMobile ? 2 : 0,
-          }}
-          elevation={3}
-        >
-          <Button
-            variant={isMobile ? "contained" : "text"}
-            sx={{
-              borderRadius: isMobile ? 4 : 0,
-              height: isMobile ? "45%" : "100%",
-              width: isMobile ? "70%" : "20%",
-            }}
-            endIcon={!isMobile && <DoneIcon />}
-            disabled={cartCount === 0}
-            onClick={submitOrder}
+
+      {cartCount > 0 ? (
+        <>
+          <Stack
+            width="100%"
+            direction="row"
+            justifyContent="space-between"
+            sx={{ maxWidth: { xs: "95%", lg: "70%" } }}
+            px={2}
+            pt={2}
           >
-            Place Order
-          </Button>
-          <Button
-            variant={isMobile ? "outlined" : "text"}
-            sx={{
-              borderRadius: isMobile ? 4 : 0,
-              height: isMobile ? "45%" : "100%",
-              width: isMobile ? "70%" : "20%",
-            }}
-            startIcon={!isMobile && <ArrowBackIcon />}
-            onClick={() => router.push("/customers/order")}
-          >
-            Edit Items
-          </Button>
-        </Paper>
+            <Typography variant={"h5"} fontWeight={500}>
+              Total:
+            </Typography>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography variant="h5" fontWeight={500}>
+                ${totalPrice.toFixed(2)}
+              </Typography>
+              <Tooltip title="Tax not included. It will be calculated during payment at the cafeteria.">
+                <InfoIcon color="action" />
+              </Tooltip>
+            </Stack>
+          </Stack>
+          <StickyButtons />
+        </>
+      ) : (
+        <EmptyState />
       )}
     </Box>
   );
