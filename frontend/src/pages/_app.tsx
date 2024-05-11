@@ -48,10 +48,10 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       setUser(user);
     };
 
-    if (!user) {
+    if (!user && isAuthenticated) {
       getUser();
     }
-  }, [getProfile, user]);
+  }, [getProfile, user, isAuthenticated]);
 
   const isTokenValid = JWTUtils.isTokenValid;
   const isStaffUser = JWTUtils.isStaffUser;

@@ -140,6 +140,9 @@ export class OrderService {
           },
         },
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
     const orders = tempOrdersResponse.flatMap((order) => {
