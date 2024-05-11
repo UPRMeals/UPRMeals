@@ -93,8 +93,7 @@ const CustomerAboutUsPage: NextPageWithLayout = () => {
 
   return (
     <Box
-      mb={{ xs: 300, md: 135 }}
-      height={"90vh"}
+      mb={{ xs: 20 }}
       width={"100vw"}
       display={"flex"}
       flexDirection={"column"}
