@@ -31,6 +31,7 @@ const unAuthenticatedPaths = [
   "/customers/menu",
   "/customers/auth/login",
   "/customers/auth/signup",
+  "/customers/aboutUs",
 ];
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {

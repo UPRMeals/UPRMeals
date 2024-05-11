@@ -34,6 +34,11 @@ type NavItemProps = {
 const customerNavBarItems: NavItemProps[] = [
   { text: "Menu", href: "/customers/menu", requiresAuthentication: false },
   { text: "Orders", href: "/customers/orders", requiresAuthentication: true },
+  {
+    text: "About Us",
+    href: "/customers/aboutUs",
+    requiresAuthentication: false,
+  },
 ];
 
 const staffNavBarItems: NavItemProps[] = [
